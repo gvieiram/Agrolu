@@ -8,7 +8,7 @@ export const Container = styled.View`
 `;
 
 export const Title = styled.Text`
-  font-weight: bold;
+  font-family: ${({ theme }) => theme.fonts.bold};
   font-size: 32px;
   color: #fff;
 `;

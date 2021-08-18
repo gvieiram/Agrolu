@@ -53,6 +53,7 @@
       "react/react-in-jsx-scope": "off",
       "react/style-prop-object": "off",
       "prettier/prettier": "error",
+      "camelcase": "warn",
       "import-helpers/order-imports": [   // Organizando os Imports
         "warn",
         {
