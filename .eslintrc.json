@@ -54,6 +54,7 @@
       "react/style-prop-object": "off",
       "prettier/prettier": "error",
       "camelcase": "warn",
+      "global-require": "off",
       "import-helpers/order-imports": [   // Organizando os Imports
         "warn",
         {
