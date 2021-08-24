@@ -10,13 +10,13 @@
 ***
 </br>
 
-* [Como rodar](#construction_worker-como-rodar)
+* [Como instalar](#construction_worker-como-instalar)
 * [Abrindo o emulador](#iphone-abrindo-o-emulador)
 * [Configurações do VSCode para desenvolvimento](#gear-configurações-do-vscode)
 
 </br>
 
-## :construction_worker: Como rodar
+## :construction_worker: Como instalar
 
 ###### Clone o Repositório
 
@@ -27,13 +27,35 @@ git clone https://gitlab.com/agrolu/mobile.git
 ```
 
 
-###### :gear:  Instalando Yarn
+###### :gear:  Instalando Yarn e Expo
 
 - Você precisará ter o [NodeJs](https://nodejs.org/en/) já instalado em seu computador
 
 ```bash
 npm install --global yarn
 ```
+
+Após a instalação, verifique se ela foi realizada com sucesso com o comando:
+
+```bash
+yarn -v
+```
+
+Para que as instalações globais do Yarn funcionem, vamos ter que fazer mais um passo. Execute o comando:
+
+```bash
+yarn global bin
+```
+
+**Anote o caminho retornado** e o insira nas configurações das variáveis ambiente do seu sistema operacional. Se não souber como fazer, acesse este [link](https://react-native.rocketseat.dev/) escolha seu sistema operacional e siga as instruções para a configuração do yarn global.
+
+Após a configuração da variável de ambiente, instale o Expo
+
+```bash
+yarn global add expo-cli
+```
+
+Pronto agora você já pode rodar o projeto :tada:
 
 ###### 💻 Rode o Projeto
 
