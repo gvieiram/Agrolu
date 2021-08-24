@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StatusBar } from 'expo-status-bar';
 
-import LogoHorizontal from '../../assets/img/logoHorizontal';
+import LogoSvg from '../../assets/img/logoHorizontal.svg';
 import Button from '../../components/Button';
 import {
   Container,
@@ -20,7 +20,7 @@ export default function Home() {
       <StatusBar style="light" />
       <Container>
         <Logo>
-          <LogoHorizontal />
+          <LogoSvg />
         </Logo>
         <ContainerText>
           <Button title="Acessar sem cadastro" />
