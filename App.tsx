@@ -12,7 +12,7 @@ import {
 import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
-import Home from './src/screens/Home';
+import Welcome from './src/screens/Welcome';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,6 +20,7 @@ export default function App() {
     Roboto_400Regular,
     Roboto_500Medium,
     Roboto_700Bold,
+    Marlin_Soft_Basic_Regular: require('./src/assets/fonts/MarlinSoftBasic-Regular.otf'),
   });
 
   if (!fontsLoaded) {
@@ -28,7 +29,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <Welcome />
     </ThemeProvider>
   );
 }
