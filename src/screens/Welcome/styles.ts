@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.backgroundGreen};
+  background-color: ${({ theme }) => theme.colors.green_opaque};
 
   justify-content: center;
   flex-direction: column;
@@ -25,14 +25,14 @@ export const Tractor = styled.View`
 `;
 
 export const Title = styled.Text`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   font-family: ${({ theme }) => theme.fonts.Marlin};
   font-size: ${RFValue(36)}px;
   margin: -5px 0 8px 0;
 `;
 
 export const Subtitle = styled.Text`
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   font-family: ${({ theme }) => theme.fonts.light_300};
   font-size: ${RFValue(16)}px;
   margin-bottom: ${RFValue(50)}px;
