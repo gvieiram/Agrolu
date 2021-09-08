@@ -55,6 +55,7 @@
       "prettier/prettier": "error",
       "camelcase": "warn",
       "global-require": "off",
+      "react/jsx-props-no-spreading": "off",
       "import-helpers/order-imports": [   // Organizando os Imports
         "warn",
         {
