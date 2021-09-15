@@ -7,9 +7,9 @@ interface Props extends TouchableOpacityProps {
   title: string;
 }
 
-export default function Button({ title }: Props) {
+export default function Button({ title, ...rest }: Props) {
   return (
-    <Container activeOpacity={0.7}>
+    <Container activeOpacity={0.7} {...rest}>
       <Title>{title}</Title>
     </Container>
   );

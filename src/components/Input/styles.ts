@@ -17,7 +17,7 @@ export const IconContainer = styled.View`
 
 export const Container = styled.View`
   flex-direction: row;
-  background-color: ${({ theme }) => theme.colors.gray_background};
+  background-color: ${({ theme }) => theme.colors.gray_light};
   border-radius: 10px;
 
   margin-bottom: 8px;

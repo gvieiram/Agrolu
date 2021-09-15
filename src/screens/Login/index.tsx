@@ -10,6 +10,12 @@ import {
   Title,
   Subtitle,
   Form,
+  Social,
+  LineView,
+  Line,
+  Text,
+  SocialButton,
+  TextBtn,
 } from './styles';
 
 export default function Login() {
@@ -53,6 +59,18 @@ export default function Login() {
         </Form>
         <Button title="Próximo" />
       </ContainerLogin>
+
+      <Social>
+        <LineView>
+          <Line />
+          <Text>ou</Text>
+          <Line />
+        </LineView>
+
+        <SocialButton>
+          <TextBtn>Entrar com conta Google</TextBtn>
+        </SocialButton>
+      </Social>
     </Container>
   );
 }
