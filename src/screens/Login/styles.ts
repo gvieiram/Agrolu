@@ -47,6 +47,7 @@ export const Social = styled.View`
 export const LineView = styled.View`
   flex-direction: row;
   align-items: center;
+  margin-bottom: 20px;
 `;
 
 export const Line = styled.View`
@@ -63,9 +64,12 @@ export const Text = styled.Text`
 `;
 
 export const SocialButton = styled(TouchableOpacity)`
-  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
   padding: 3px 18px;
+  margin-bottom: 15px;
 
   width: 100%;
   height: 34px;

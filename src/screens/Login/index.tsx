@@ -1,6 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import {
@@ -68,7 +70,13 @@ export default function Login() {
         </LineView>
 
         <SocialButton>
+          <MaterialCommunityIcons name="google" size={24} color="#a0bf1d" />
           <TextBtn>Entrar com conta Google</TextBtn>
+        </SocialButton>
+
+        <SocialButton>
+          <Feather name="facebook" size={24} color="#a0bf1d" />
+          <TextBtn>Entrar com Facebook</TextBtn>
         </SocialButton>
       </Social>
     </Container>
