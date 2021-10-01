@@ -13,7 +13,7 @@ import {
 import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
-import Login from './src/screens/Login';
+import SignUp from './src/screens/SignUp';
 // import Welcome from './src/screens/Welcome';
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       {/* <Welcome /> */}
-      <Login />
+      <SignUp />
     </ThemeProvider>
   );
 }

@@ -6,19 +6,15 @@ import styled from 'styled-components/native';
 import LogoSVG from '../../assets/img/logoHorizontal.svg';
 
 export const Container = styled.View`
-  flex: 1;
   background: ${({ theme }) => theme.colors.green_background};
-`;
-
-export const ContainerLogin = styled.View`
-  flex: 1;
-  margin: 0 ${RFValue(40)}px;
+  padding: 0 ${RFValue(40)}px;
   justify-content: center;
 `;
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-bottom: ${RFValue(40)}px;
+  margin-top: ${RFValue(50)}px;
+  margin-bottom: ${RFValue(20)}px;
 `;
 
 export const Title = styled.Text`
@@ -31,15 +27,16 @@ export const Subtitle = styled.Text`
   color: ${({ theme }) => theme.colors.white};
   font-size: ${RFValue(14)}px;
   font-family: ${({ theme }) => theme.fonts.light_300};
+  line-height: ${RFValue(20)}px;
 `;
 
 export const Form = styled.View`
   width: 100%;
-  margin: 48px 0 24px 0;
+  margin: 40px 0 24px 0;
 `;
 
 export const Social = styled.View`
-  margin: 10px 75px 38px 75px;
+  margin: 10px 35px 15px 35px;
   justify-content: center;
   align-items: center;
 `;
