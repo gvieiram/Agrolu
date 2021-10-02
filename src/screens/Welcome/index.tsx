@@ -1,10 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
-import GradientButton from 'react-native-gradient-buttons';
-import { RFValue } from 'react-native-responsive-fontsize';
 
 import TractorSvg from '../../assets/img/tractor.svg';
-import theme from '../../global/styles/theme';
+import ButtonGradient from '../../components/ButtonGradient';
 import {
   Container,
   BackgroundImage,
@@ -52,20 +50,7 @@ export default function Welcome() {
       </Subtitle>
 
       <ContainerNextPage>
-        <GradientButton
-          gradientBegin="#A2C11C"
-          gradientEnd="#2C5D63"
-          text="Vamos lá!"
-          textStyle={{
-            fontSize: 16,
-            fontFamily: theme.fonts.medium_500,
-          }}
-          height={RFValue(50)}
-          radius={10}
-          impact
-          impactStyle="Light"
-          // onPressAction={() => alert('Go Home!')}
-        />
+        <ButtonGradient title="Vamos lá!" />
 
         <DivText>
           <Text>Ainda não possui conta?</Text>

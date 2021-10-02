@@ -1,4 +1,7 @@
+import { TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+
+import { LinearGradient } from 'expo-linear-gradient';
 
 import styled from 'styled-components/native';
 
@@ -56,10 +59,10 @@ export const ContainerNextPage = styled.View`
 //   margin-bottom: ${RFValue(20)}px;
 // `;
 
-export const TitleBtn = styled.Text`
-  color: #fff;
-  font-family: ${({ theme }) => theme.fonts.medium_500};
-`;
+// export const TitleBtn = styled.Text`
+//   color: #fff;
+//   font-family: ${({ theme }) => theme.fonts.medium_500};
+// `;
 
 export const DivText = styled.View`
   flex-direction: row;
@@ -79,4 +82,23 @@ export const LinkCadastro = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular_400};
   text-decoration-line: underline;
   margin-bottom: 30px;
+`;
+
+export const Button = styled(TouchableOpacity)`
+  width: 100%;
+  height: ${RFValue(55)}px;
+`;
+
+export const Gradient = styled(LinearGradient)`
+  flex: 1;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+`;
+
+export const TitleBtn = styled.Text`
+  color: ${({ theme }) => theme.colors.white};
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  font-size: ${RFValue(15)}px;
 `;

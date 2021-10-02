@@ -13,8 +13,8 @@ import {
 import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
-import SignUp from './src/screens/SignUp';
-// import Welcome from './src/screens/Welcome';
+// import SignUp from './src/screens/SignUp';
+import Welcome from './src/screens/Welcome';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -32,8 +32,8 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Welcome /> */}
-      <SignUp />
+      <Welcome />
+      {/* <SignUp /> */}
     </ThemeProvider>
   );
 }
