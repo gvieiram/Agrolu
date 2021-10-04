@@ -57,6 +57,7 @@
       "camelcase": "warn",
       "global-require": "off",
       "react/jsx-props-no-spreading": "off",
+      "import/prefer-default-export": "off",
       "import-helpers/order-imports": [   // Organizando os Imports
         "warn",
         {

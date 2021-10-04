@@ -10,10 +10,13 @@ import {
   Roboto_500Medium,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
+import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
-// import SignUp from './src/screens/SignUp';
+import { AppRoutes } from './src/routes/app.routes';
+import { AuthRoutes } from './src/routes/auth.routes';
+import SignUp from './src/screens/SignUp';
 import Welcome from './src/screens/Welcome';
 
 export default function App() {
@@ -32,8 +35,11 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Welcome />
-      {/* <SignUp /> */}
+      <NavigationContainer>
+        {/* <SignUp /> */}
+        <AuthRoutes />
+        {/* <AppRoutes /> */}
+      </NavigationContainer>
     </ThemeProvider>
   );
 }
