@@ -1,19 +1,21 @@
-import { TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
 import LogoSVG from '../../assets/img/logoHorizontal.svg';
+import Button from '../../components/Button';
 
-export const Container = styled.View`
+export const Container = styled(KeyboardAvoidingView)`
+  flex: 1;
   background: ${({ theme }) => theme.colors.green_background};
-  padding: 0 ${RFValue(40)}px;
-  justify-content: center;
+  padding: 0 40px;
 `;
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${RFValue(50)}px;
+  margin-top: ${getStatusBarHeight() + 20}px;
   margin-bottom: ${RFValue(20)}px;
 `;
 
@@ -32,11 +34,15 @@ export const Subtitle = styled.Text`
 
 export const Form = styled.View`
   width: 100%;
-  margin: 40px 0 24px 0;
+  margin: 25px 0 0 0;
+`;
+
+export const ButtonForm = styled(Button)`
+  margin-top: 8px;
 `;
 
 export const Social = styled.View`
-  margin: 10px 35px 15px 35px;
+  margin: 0 35px 0 35px;
   justify-content: center;
   align-items: center;
 `;
@@ -44,7 +50,7 @@ export const Social = styled.View`
 export const LineView = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 13px 0;
 `;
 
 export const Line = styled.View`
@@ -66,7 +72,7 @@ export const SocialButton = styled(TouchableOpacity)`
   justify-content: space-evenly;
   align-items: center;
   padding: 3px 18px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 
   width: 100%;
   height: 34px;

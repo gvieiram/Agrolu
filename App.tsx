@@ -1,4 +1,5 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 
 import AppLoading from 'expo-app-loading';
 
@@ -16,8 +17,6 @@ import { ThemeProvider } from 'styled-components';
 import theme from './src/global/styles/theme';
 import { AppRoutes } from './src/routes/app.routes';
 import { AuthRoutes } from './src/routes/auth.routes';
-import SignUp from './src/screens/SignUp';
-import Welcome from './src/screens/Welcome';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -35,8 +34,12 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <NavigationContainer>
-        {/* <SignUp /> */}
         <AuthRoutes />
         {/* <AppRoutes /> */}
       </NavigationContainer>

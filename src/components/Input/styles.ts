@@ -23,12 +23,12 @@ export const Container = styled.View`
   margin-bottom: 8px;
 `;
 
-export const InputText = styled(TextInput)`
+export const Text = styled(TextInput)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.white};
-  font-family: ${({ theme }) => theme.fonts.medium_500};
+  font-family: ${({ theme }) => theme.fonts.regular_400};
   font-size: ${RFValue(15)}px;
-  color: ${({ theme }) => theme.colors.gray_text_light};
+  color: ${({ theme }) => theme.colors.gray_text};
 
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;

@@ -15,6 +15,7 @@ export default {
     gray_background: '#E5E5E5',
 
     gray_text_light: '#A8A8B3',
+    gray_text: '#575757',
 
     white: '#FFFFFF',
     gray: '#737373',

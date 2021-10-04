@@ -1,26 +1,21 @@
 import React from 'react';
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StatusBar,
-  View,
-} from 'react-native';
+import { Keyboard, Platform, StatusBar, StyleSheet } from 'react-native';
 import {
   ScrollView,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTheme } from 'styled-components';
 
-import Button from '../../components/Button';
-import Input from '../../components/Input';
+import { Input } from '../../components/Input';
 import {
   Container,
   Logo,
   Title,
   Subtitle,
   Form,
+  ButtonForm,
   Social,
   LineView,
   Line,
@@ -30,66 +25,79 @@ import {
 } from './styles';
 
 export default function SignUp() {
+  const theme = useTheme();
   return (
-    <KeyboardAvoidingView behavior="position" enabled>
+    <Container behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Container>
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
-          <Logo />
-          <Title>Crie sua{'\n'}conta</Title>
-          <Subtitle>
-            Mais de 1.500 máquinas a sua disposição,{'\n'}
-            sempre mais próximo de você!
-          </Subtitle>
+        <Logo />
+
+        <Title>Crie sua{'\n'}conta</Title>
+        <Subtitle>
+          Mais de 1.500 máquinas a sua disposição,{'\n'}
+          sempre mais próximo de você!
+        </Subtitle>
+
+        <ScrollView>
           <Form>
             <Input
               iconName="user"
+              iconColor={theme.colors.green_dark}
               placeholder="Nome"
-              autoCorrect={false}
               autoCapitalize="words"
+              // onChange={setName}
+              // value={name}
             />
 
             <Input
               iconName="mail"
+              iconColor={theme.colors.green_dark}
               placeholder="E-mail"
               keyboardType="email-address"
               autoCorrect={false}
               autoCapitalize="none"
+              // onChange={setEmail}
+              // value={email}
             />
 
             <Input
               iconName="credit-card"
+              iconColor={theme.colors.green_dark}
               placeholder="CPF"
-              keyboardType="number-pad"
-              autoCorrect={false}
-              autoCapitalize="none"
+              keyboardType="numeric"
+              // onChange={setCPF}
+              // value={CPF}
             />
+
+            <ButtonForm title="Próximo" />
           </Form>
-          <Button title="Próximo" />
+        </ScrollView>
 
-          <Social>
-            <LineView>
-              <Line />
-              <Text>ou</Text>
-              <Line />
-            </LineView>
+        <Social>
+          <LineView>
+            <Line />
+            <Text>ou</Text>
+            <Line />
+          </LineView>
 
-            <SocialButton>
-              <MaterialCommunityIcons name="google" size={24} color="#a0bf1d" />
-              <TextBtn>Entrar com conta Google</TextBtn>
-            </SocialButton>
+          <SocialButton>
+            <MaterialCommunityIcons
+              name="google"
+              size={24}
+              color={theme.colors.green_main}
+            />
+            <TextBtn>Entrar com conta Google</TextBtn>
+          </SocialButton>
 
-            <SocialButton>
-              <Feather name="facebook" size={24} color="#a0bf1d" />
-              <TextBtn>Entrar com Facebook</TextBtn>
-            </SocialButton>
-          </Social>
-        </Container>
+          <SocialButton>
+            <Feather
+              name="facebook"
+              size={24}
+              color={theme.colors.green_main}
+            />
+            <TextBtn>Entrar com Facebook</TextBtn>
+          </SocialButton>
+        </Social>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </Container>
   );
 }
