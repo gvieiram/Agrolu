@@ -4,7 +4,7 @@ import { LinearGradientProps } from 'expo-linear-gradient';
 
 import { Gradient, Button, Title } from './styles';
 
-interface ButtonGradientProps extends LinearGradientProps {
+interface ButtonGradientProps {
   title: string;
 }
 

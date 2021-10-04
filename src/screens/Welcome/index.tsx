@@ -50,12 +50,15 @@ export default function Welcome() {
       </Subtitle>
 
       <ContainerNextPage>
-        <ButtonGradient title="Vamos lá!" />
+        <ButtonGradient
+          title="Vamos lá!"
+          // onPress={() => navigation.navigate('LogIn')}
+        />
 
         <DivText>
           <Text>Ainda não possui conta?</Text>
           <LinkCadastro
-          // onPress={() => {}}  //Link para tela de cadastro
+          // onPress={() => navigation.navigate('Cadastro')}
           >
             Cadastre-se agora!
           </LinkCadastro>
