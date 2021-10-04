@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, Platform, StatusBar, StyleSheet } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 import {
   ScrollView,
   TouchableWithoutFeedback,
@@ -37,40 +37,38 @@ export default function SignUp() {
           sempre mais próximo de você!
         </Subtitle>
 
-        <ScrollView>
-          <Form>
-            <Input
-              iconName="user"
-              iconColor={theme.colors.green_dark}
-              placeholder="Nome"
-              autoCapitalize="words"
-              // onChange={setName}
-              // value={name}
-            />
+        <Form>
+          <Input
+            iconName="person"
+            iconColor={theme.colors.green_dark}
+            placeholder="Nome"
+            autoCapitalize="words"
+            // onChange={setName}
+            // value={name}
+          />
 
-            <Input
-              iconName="mail"
-              iconColor={theme.colors.green_dark}
-              placeholder="E-mail"
-              keyboardType="email-address"
-              autoCorrect={false}
-              autoCapitalize="none"
-              // onChange={setEmail}
-              // value={email}
-            />
+          <Input
+            iconName="alternate-email"
+            iconColor={theme.colors.green_dark}
+            placeholder="E-mail"
+            keyboardType="email-address"
+            autoCorrect={false}
+            autoCapitalize="none"
+            // onChange={setEmail}
+            // value={email}
+          />
 
-            <Input
-              iconName="credit-card"
-              iconColor={theme.colors.green_dark}
-              placeholder="CPF"
-              keyboardType="numeric"
-              // onChange={setCPF}
-              // value={CPF}
-            />
+          <Input
+            iconName="badge"
+            iconColor={theme.colors.green_dark}
+            placeholder="CPF"
+            keyboardType="numeric"
+            // onChange={setCPF}
+            // value={CPF}
+          />
 
-            <ButtonForm title="Próximo" />
-          </Form>
-        </ScrollView>
+          <ButtonForm title="Próximo" />
+        </Form>
 
         <Social>
           <LineView>
@@ -79,7 +77,7 @@ export default function SignUp() {
             <Line />
           </LineView>
 
-          <SocialButton>
+          <SocialButton activeOpacity={0.7}>
             <MaterialCommunityIcons
               name="google"
               size={24}
@@ -88,7 +86,7 @@ export default function SignUp() {
             <TextBtn>Entrar com conta Google</TextBtn>
           </SocialButton>
 
-          <SocialButton>
+          <SocialButton activeOpacity={0.7}>
             <Feather
               name="facebook"
               size={24}
