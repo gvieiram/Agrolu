@@ -16,6 +16,7 @@ export default {
 
     gray_text_light: '#A8A8B3',
     gray_text: '#575757',
+    cinza_apagado: '#929292',
 
     white: '#FFFFFF',
     gray: '#737373',
