@@ -50,27 +50,13 @@ export const ContainerNextPage = styled.View`
   padding: 0 ${RFValue(10)}px;
 `;
 
-// export const Button = styled(TouchableOpacity)`
-//   height: ${RFValue(50)}px;
-//   padding: 0 32px;
-//   border-radius: 4px;
-//   justify-content: center;
-//   align-items: center;
-//   margin-bottom: ${RFValue(20)}px;
-// `;
-
-// export const TitleBtn = styled.Text`
-//   color: #fff;
-//   font-family: ${({ theme }) => theme.fonts.medium_500};
-// `;
-
 export const DivText = styled.View`
   flex-direction: row;
   margin-top: ${RFValue(20)}px;
 `;
 
 export const Text = styled.Text`
-  color: ${({ theme }) => theme.colors.gray};
+  color: ${({ theme }) => theme.colors.cinza_apagado};
   font-size: ${RFValue(14)}px;
   font-family: ${({ theme }) => theme.fonts.regular_400};
   margin-right: 6px;

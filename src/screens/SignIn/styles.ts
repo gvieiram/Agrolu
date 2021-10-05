@@ -32,6 +32,10 @@ export const Subtitle = styled.Text`
   line-height: ${RFValue(20)}px;
 `;
 
+export const Bold = styled.Text`
+  font-weight: bold;
+`;
+
 export const Form = styled.View`
   width: 100%;
   margin: 25px 0 0 0;

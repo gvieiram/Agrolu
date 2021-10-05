@@ -13,6 +13,7 @@ import {
   Logo,
   Title,
   Subtitle,
+  Bold,
   Form,
   ButtonForm,
   TextPassword,
@@ -39,8 +40,8 @@ export default function SignIn() {
 
         <Title>Faça seu login</Title>
         <Subtitle>
-          Se você ja faz parte da família Agrolu, faça{'\n'}
-          seu login e utilize todas as ferramentas disponíveis
+          Se você ja faz parte da <Bold>família Agrolu</Bold>, faça{'\n'}
+          seu <Bold>login</Bold> e utilize todas as ferramentas disponíveis
         </Subtitle>
 
         <Form>
@@ -64,7 +65,13 @@ export default function SignIn() {
             // value={password}
           />
 
-          <TextPassword>Esqueci minha senha</TextPassword>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            // onPress={() => navigation.navigate('ChangePassword')}
+          >
+            <TextPassword>Esqueci minha senha</TextPassword>
+          </TouchableOpacity>
+
           <ButtonForm
             title="Entrar"
             // onPress={() => navigation.navigate('Home')}
