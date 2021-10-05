@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
@@ -12,7 +12,7 @@ export type RootStackParamList = {
   SignIn: undefined;
 };
 
-const { Navigator, Screen } = createStackNavigator();
+const { Navigator, Screen } = createNativeStackNavigator();
 
 export function AuthRoutes() {
   return (

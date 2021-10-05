@@ -3,7 +3,7 @@ import { Keyboard, Platform, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from 'styled-components';
 
 import { Input } from '../../components/Input';
@@ -21,7 +21,7 @@ import {
   LinkCadastro,
 } from './styles';
 
-type signInScreenProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
+type signInScreenProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
 export default function SignIn() {
   const theme = useTheme();

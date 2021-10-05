@@ -2,8 +2,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { useNavigation, RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import TractorSvg from '../../assets/img/tractor.svg';
 import ButtonGradient from '../../components/ButtonGradient';
@@ -27,7 +26,7 @@ type RootStackParamList = {
   Welcome: undefined;
 };
 
-type WelcomeScreenNavigationProp = StackNavigationProp<
+type WelcomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Welcome'
 >;
