@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { TextInputProps } from 'react-native';
 
 import { Feather, MaterialIcons } from '@expo/vector-icons';

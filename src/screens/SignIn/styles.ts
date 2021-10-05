@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
@@ -15,8 +15,8 @@ export const Container = styled(KeyboardAvoidingView)`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${getStatusBarHeight() + 20}px;
-  margin-bottom: ${RFValue(40)}px;
+  margin-top: ${getStatusBarHeight() + 10}px;
+  margin-bottom: ${RFValue(30)}px;
 `;
 
 export const Title = styled.Text`

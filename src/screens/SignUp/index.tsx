@@ -1,9 +1,6 @@
 import React from 'react';
 import { Keyboard, Platform } from 'react-native';
-import {
-  ScrollView,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
@@ -16,7 +13,6 @@ import {
   Subtitle,
   Form,
   ButtonForm,
-  Social,
   LineView,
   Line,
   Text,
@@ -59,7 +55,7 @@ export default function SignUp() {
           />
 
           <Input
-            iconName="badge"
+            iconName="credit-card"
             iconColor={theme.colors.green_dark}
             placeholder="CPF"
             keyboardType="numeric"
@@ -70,31 +66,25 @@ export default function SignUp() {
           <ButtonForm title="Próximo" />
         </Form>
 
-        <Social>
-          <LineView>
-            <Line />
-            <Text>ou</Text>
-            <Line />
-          </LineView>
+        <LineView>
+          <Line />
+          <Text>ou</Text>
+          <Line />
+        </LineView>
 
-          <SocialButton activeOpacity={0.7}>
-            <MaterialCommunityIcons
-              name="google"
-              size={24}
-              color={theme.colors.green_main}
-            />
-            <TextBtn>Entrar com conta Google</TextBtn>
-          </SocialButton>
+        <SocialButton activeOpacity={0.7}>
+          <MaterialCommunityIcons
+            name="google"
+            size={24}
+            color={theme.colors.green_main}
+          />
+          <TextBtn>Entrar com conta Google</TextBtn>
+        </SocialButton>
 
-          <SocialButton activeOpacity={0.7}>
-            <Feather
-              name="facebook"
-              size={24}
-              color={theme.colors.green_main}
-            />
-            <TextBtn>Entrar com Facebook</TextBtn>
-          </SocialButton>
-        </Social>
+        <SocialButton activeOpacity={0.7}>
+          <Feather name="facebook" size={24} color={theme.colors.green_main} />
+          <TextBtn>Entrar com Facebook</TextBtn>
+        </SocialButton>
       </TouchableWithoutFeedback>
     </Container>
   );

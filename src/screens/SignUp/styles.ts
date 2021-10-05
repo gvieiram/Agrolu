@@ -15,8 +15,8 @@ export const Container = styled(KeyboardAvoidingView)`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${getStatusBarHeight() + 20}px;
-  margin-bottom: ${RFValue(20)}px;
+  margin-top: ${getStatusBarHeight() + 10}px;
+  margin-bottom: ${RFValue(15)}px;
 `;
 
 export const Title = styled.Text`
@@ -39,12 +39,6 @@ export const Form = styled.View`
 
 export const ButtonForm = styled(Button)`
   margin-top: 8px;
-`;
-
-export const Social = styled.View`
-  margin: 0 35px 0 35px;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const LineView = styled.View`
@@ -77,10 +71,10 @@ export const SocialButton = styled(TouchableOpacity)`
   width: 100%;
   height: 34px;
 
-  border: 1px solid #a0bf1d;
+  border: 1px solid ${({ theme }) => theme.colors.green_main};
   border-radius: 10px;
 `;
 
 export const TextBtn = styled.Text`
-  color: #a0bf1d;
+  color: ${({ theme }) => theme.colors.green_main};
 `;
