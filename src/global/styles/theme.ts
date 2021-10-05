@@ -20,6 +20,9 @@ export default {
     green_dark_main: '#00412C',
     green_background: '#002519',
 
+    green_linear_light: '#A2C11C',
+    green_linear_dark: '#2C5D63',
+
     error_light: '#F83B3A',
     error_main: '#DB0028',
     error_dark: '#A80505',

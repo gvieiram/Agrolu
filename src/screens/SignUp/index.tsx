@@ -8,6 +8,7 @@ import { useTheme } from 'styled-components';
 import { Input } from '../../components/Input';
 import {
   Container,
+  ContainerKeyboardAvoidingView,
   Logo,
   Title,
   Subtitle,
@@ -23,69 +24,75 @@ import {
 export default function SignUp() {
   const theme = useTheme();
   return (
-    <Container behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
+    <ContainerKeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
+      enabled
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Logo />
+        <Container>
+          <Logo />
 
-        <Title>Crie sua{'\n'}conta</Title>
-        <Subtitle>
-          Mais de 1.500 máquinas a sua disposição,{'\n'}
-          sempre mais próximo de você!
-        </Subtitle>
+          <Title>Crie sua{'\n'}conta</Title>
+          <Subtitle>
+            Mais de 1.500 máquinas a sua disposição,{'\n'}
+            sempre mais próximo de você!
+          </Subtitle>
 
-        <Form>
-          <Input
-            iconName="person"
-            iconColor={theme.colors.green_dark_main}
-            placeholder="Nome"
-            autoCapitalize="words"
-            // onChange={setName}
-            // value={name}
-          />
+          <Form>
+            <Input
+              iconName="person"
+              placeholder="Nome"
+              autoCapitalize="words"
+              // onChange={setName}
+              // value={name}
+            />
 
-          <Input
-            iconName="alternate-email"
-            iconColor={theme.colors.green_dark_main}
-            placeholder="E-mail"
-            keyboardType="email-address"
-            autoCorrect={false}
-            autoCapitalize="none"
-            // onChange={setEmail}
-            // value={email}
-          />
+            <Input
+              iconName="alternate-email"
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCorrect={false}
+              autoCapitalize="none"
+              // onChange={setEmail}
+              // value={email}
+            />
 
-          <Input
-            iconName="credit-card"
-            iconColor={theme.colors.green_dark_main}
-            placeholder="CPF"
-            keyboardType="numeric"
-            // onChange={setCPF}
-            // value={CPF}
-          />
+            <Input
+              iconName="credit-card"
+              placeholder="CPF"
+              keyboardType="numeric"
+              // onChange={setCPF}
+              // value={CPF}
+            />
 
-          <ButtonForm title="Próximo" />
-        </Form>
+            <ButtonForm title="Próximo" />
+          </Form>
 
-        <LineView>
-          <Line />
-          <Text>ou</Text>
-          <Line />
-        </LineView>
+          <LineView>
+            <Line />
+            <Text>ou</Text>
+            <Line />
+          </LineView>
 
-        <SocialButton activeOpacity={0.7}>
-          <MaterialCommunityIcons
-            name="google"
-            size={24}
-            color={theme.colors.green_main}
-          />
-          <TextBtn>Entrar com conta Google</TextBtn>
-        </SocialButton>
+          <SocialButton activeOpacity={0.7}>
+            <MaterialCommunityIcons
+              name="google"
+              size={24}
+              color={theme.colors.green_main}
+            />
+            <TextBtn>Entrar com conta Google</TextBtn>
+          </SocialButton>
 
-        <SocialButton activeOpacity={0.7}>
-          <Feather name="facebook" size={24} color={theme.colors.green_main} />
-          <TextBtn>Entrar com Facebook</TextBtn>
-        </SocialButton>
+          <SocialButton activeOpacity={0.7}>
+            <Feather
+              name="facebook"
+              size={24}
+              color={theme.colors.green_main}
+            />
+            <TextBtn>Entrar com Facebook</TextBtn>
+          </SocialButton>
+        </Container>
       </TouchableWithoutFeedback>
-    </Container>
+    </ContainerKeyboardAvoidingView>
   );
 }

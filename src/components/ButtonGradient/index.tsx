@@ -1,6 +1,8 @@
 import React from 'react';
 import { GestureResponderEvent } from 'react-native';
 
+import { useTheme } from 'styled-components';
+
 import { Gradient, Button, Title } from './styles';
 
 interface ButtonGradientProps {
@@ -13,10 +15,15 @@ export default function ButtonGradient({
   onPress,
   ...rest
 }: ButtonGradientProps) {
+  const theme = useTheme();
+
   return (
     <Button activeOpacity={0.7} onPress={onPress}>
       <Gradient
-        colors={['#A2C11C', '#2C5D63']}
+        colors={[
+          theme.colors.green_linear_light,
+          theme.colors.green_linear_dark,
+        ]}
         start={{ y: 0.0, x: 0.0 }}
         end={{ y: 0.0, x: 1.0 }}
         {...rest}

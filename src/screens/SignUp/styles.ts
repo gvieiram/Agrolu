@@ -7,8 +7,12 @@ import styled from 'styled-components/native';
 import LogoSVG from '../../assets/img/logoHorizontal.svg';
 import Button from '../../components/Button';
 
-export const Container = styled(KeyboardAvoidingView)`
+export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
   flex: 1;
+  background: ${({ theme }) => theme.colors.green_background};
+`;
+
+export const Container = styled.View`
   background: ${({ theme }) => theme.colors.green_background};
   padding: 0 40px;
 `;
