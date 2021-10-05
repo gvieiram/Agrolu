@@ -6,6 +6,12 @@ import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 import Welcome from '../screens/Welcome';
 
+export type RootStackParamList = {
+  Welcome: undefined;
+  SignUp: undefined;
+  SignIn: undefined;
+};
+
 const { Navigator, Screen } = createStackNavigator();
 
 export function AuthRoutes() {

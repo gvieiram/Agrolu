@@ -1,5 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import { useNavigation, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import TractorSvg from '../../assets/img/tractor.svg';
 import ButtonGradient from '../../components/ButtonGradient';
@@ -17,7 +21,29 @@ import {
   LinkCadastro,
 } from './styles';
 
-export default function Welcome() {
+type RootStackParamList = {
+  SignIn: undefined;
+  SignUp: undefined;
+  Welcome: undefined;
+};
+
+type WelcomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Welcome'
+>;
+
+// type WelcomeScreenRouteProp = RouteProp<RootStackParamList, 'Welcome'>;
+
+type WelcomeProps = {
+  navigation: WelcomeScreenNavigationProp;
+  // route: WelcomeScreenRouteProp;
+};
+
+export default function Welcome({ navigation }: WelcomeProps) {
+  function handleSignIn() {
+    navigation.navigate('SignIn');
+  }
+
   return (
     <Container>
       <StatusBar
@@ -52,16 +78,18 @@ export default function Welcome() {
       <ContainerNextPage>
         <ButtonGradient
           title="Vamos lá!"
-          // onPress={() => navigation.navigate('LogIn')}
+          onPress={() => navigation.navigate('SignIn')}
         />
 
         <DivText>
           <Text>Ainda não possui conta?</Text>
-          <LinkCadastro
-          // onPress={() => navigation.navigate('Cadastro')}
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('SignUp')}
           >
-            Cadastre-se agora!
-          </LinkCadastro>
+            <LinkCadastro>Cadastre-se agora!</LinkCadastro>
+          </TouchableOpacity>
         </DivText>
       </ContainerNextPage>
     </Container>

@@ -1,10 +1,13 @@
 import React from 'react';
-import { Keyboard, Platform } from 'react-native';
+import { Keyboard, Platform, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { useTheme } from 'styled-components';
 
 import { Input } from '../../components/Input';
+import { RootStackParamList } from '../../routes/auth.routes';
 import {
   Container,
   Logo,
@@ -18,8 +21,17 @@ import {
   LinkCadastro,
 } from './styles';
 
+type signInScreenProp = StackNavigationProp<RootStackParamList, 'SignIn'>;
+
 export default function SignIn() {
   const theme = useTheme();
+
+  const navigation = useNavigation<signInScreenProp>();
+
+  function handleSignUp() {
+    navigation.navigate('SignUp');
+  }
+
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -53,16 +65,20 @@ export default function SignIn() {
           />
 
           <TextPassword>Esqueci minha senha</TextPassword>
-          <ButtonForm title="Entrar" />
+          <ButtonForm
+            title="Entrar"
+            // onPress={() => navigation.navigate('Home')}
+          />
         </Form>
 
         <DivText>
           <Text>Ainda não possui conta?</Text>
-          <LinkCadastro
-          // onPress={() => navigation.navigate('Cadastro')}
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => navigation.navigate('SignUp')}
           >
-            Cadastre-se agora!
-          </LinkCadastro>
+            <LinkCadastro>Cadastre-se agora!</LinkCadastro>
+          </TouchableOpacity>
         </DivText>
       </TouchableWithoutFeedback>
     </Container>
