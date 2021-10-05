@@ -36,7 +36,7 @@ export default function SignUp() {
         <Form>
           <Input
             iconName="person"
-            iconColor={theme.colors.green_dark}
+            iconColor={theme.colors.green_dark_main}
             placeholder="Nome"
             autoCapitalize="words"
             // onChange={setName}
@@ -45,7 +45,7 @@ export default function SignUp() {
 
           <Input
             iconName="alternate-email"
-            iconColor={theme.colors.green_dark}
+            iconColor={theme.colors.green_dark_main}
             placeholder="E-mail"
             keyboardType="email-address"
             autoCorrect={false}
@@ -56,7 +56,7 @@ export default function SignUp() {
 
           <Input
             iconName="credit-card"
-            iconColor={theme.colors.green_dark}
+            iconColor={theme.colors.green_dark_main}
             placeholder="CPF"
             keyboardType="numeric"
             // onChange={setCPF}

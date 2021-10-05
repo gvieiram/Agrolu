@@ -17,7 +17,7 @@ export const IconContainer = styled.View`
 
 export const Container = styled.View`
   flex-direction: row;
-  background-color: ${({ theme }) => theme.colors.gray_light};
+  background-color: ${({ theme }) => theme.colors.gray_line_input};
   border-radius: 10px;
 
   margin-bottom: 8px;
@@ -28,7 +28,7 @@ export const Text = styled(TextInput)`
   background-color: ${({ theme }) => theme.colors.white};
   font-family: ${({ theme }) => theme.fonts.regular_400};
   font-size: ${RFValue(15)}px;
-  color: ${({ theme }) => theme.colors.gray_text};
+  color: ${({ theme }) => theme.colors.title_item_gray};
 
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;

@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
 export const Container = styled(TouchableOpacity)`
   width: 100%;
   height: ${RFValue(55)}px;
-  background-color: ${({ theme }) => theme.colors.green_vibrant};
+  background-color: ${({ theme }) => theme.colors.success_light};
   justify-content: center;
   align-items: center;
   border-radius: 10px;

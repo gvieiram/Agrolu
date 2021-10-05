@@ -47,7 +47,7 @@ export default function SignIn() {
         <Form>
           <Input
             iconName="alternate-email"
-            iconColor={theme.colors.green_dark}
+            iconColor={theme.colors.green_dark_main}
             placeholder="E-mail"
             keyboardType="email-address"
             autoCorrect={false}
@@ -58,7 +58,7 @@ export default function SignIn() {
 
           <Input
             iconName="vpn-key"
-            iconColor={theme.colors.green_dark}
+            iconColor={theme.colors.green_dark_main}
             placeholder="Senha"
             autoCorrect={false}
             // onChange={setPassword}
