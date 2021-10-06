@@ -4,6 +4,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
+import LogoFacebook from '../../assets/img/facebook.svg';
+import LogoGoogle from '../../assets/img/google.svg';
 import LogoSVG from '../../assets/img/logoHorizontal.svg';
 import Button from '../../components/Button';
 
@@ -36,6 +38,25 @@ export const Subtitle = styled.Text`
   line-height: ${RFValue(20)}px;
 `;
 
+export const ActiveScreen = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 8px 5px -18px 5px;
+`;
+
+export const StepOne = styled.Text`
+  color: ${({ theme }) => theme.colors.green_main};
+  text-decoration: underline;
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  font-size: ${RFValue(16)}px;
+`;
+
+export const StepTwo = styled.Text`
+  color: ${({ theme }) => theme.colors.green_dark_3};
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  font-size: ${RFValue(16)}px;
+`;
+
 export const Form = styled.View`
   width: 100%;
   margin: 25px 0 0 0;
@@ -64,21 +85,29 @@ export const Text = styled.Text`
   margin: 0 6px 0 6px;
 `;
 
-export const SocialButton = styled(TouchableOpacity)`
-  display: flex;
+export const SocialContainer = styled.View`
   flex-direction: row;
   justify-content: space-evenly;
+  height: ${RFValue(70)}px;
   align-items: center;
-  padding: 3px 18px;
-  margin-bottom: 10px;
-
-  width: 100%;
-  height: 34px;
-
-  border: 1px solid ${({ theme }) => theme.colors.green_main};
-  border-radius: 10px;
 `;
 
-export const TextBtn = styled.Text`
-  color: ${({ theme }) => theme.colors.green_main};
+export const SocialButton = styled(TouchableOpacity)`
+  width: 55px;
+  height: 55px;
+  border-radius: 15px;
+  background-color: ${({ theme }) => theme.colors.white};
+
+  justify-content: center;
+  align-items: center;
+`;
+
+export const IconGoogle = styled(LogoGoogle)`
+  width: 35px;
+  height: 35px;
+`;
+
+export const IconFacebook = styled(LogoFacebook)`
+  width: 35px;
+  height: 35px;
 `;

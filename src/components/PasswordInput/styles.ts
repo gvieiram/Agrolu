@@ -5,7 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
 export const IconContainer = styled.View`
-  height: ${RFValue(55)}px;
+  height: ${RFValue(50)}px;
   width: ${RFValue(56)}px;
   background-color: ${({ theme }) => theme.colors.white};
   justify-content: center;

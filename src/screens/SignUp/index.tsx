@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Alert, Keyboard, Platform } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 import * as Yup from 'yup';
 
@@ -19,8 +18,13 @@ import {
   LineView,
   Line,
   Text,
+  SocialContainer,
   SocialButton,
-  TextBtn,
+  IconGoogle,
+  IconFacebook,
+  ActiveScreen,
+  StepOne,
+  StepTwo,
 } from './styles';
 
 export default function SignUp() {
@@ -33,7 +37,13 @@ export default function SignUp() {
   async function handleNextStep() {
     try {
       const schema = Yup.object().shape({
-        identity: Yup.string().required('CPF é obrigatório'),
+        identity: Yup.string()
+          .required('CPF é obrigatório')
+          .test(
+            'CPF length',
+            'CPF deve conter 11 números',
+            val => val.length === 14,
+          ),
         email: Yup.string()
           .required('E-mail obrigatório.')
           .email('Digite um e-mail válido'),
@@ -42,6 +52,8 @@ export default function SignUp() {
 
       const data = { name, email, identity };
       await schema.validate(data);
+
+      Alert.alert('CPF', data.identity);
 
       // Ir para a próxima tela passando os dados do usuário / (prox tela)-> Recuperar informações passadas
       // navigation.navigate('SignUpSecondStep', { user: data });
@@ -66,6 +78,12 @@ export default function SignUp() {
             Mais de 1.500 máquinas a sua disposição,{'\n'}
             sempre mais próximo de você!
           </Subtitle>
+
+          <ActiveScreen>
+            <StepOne>Dados Pessoais</StepOne>
+
+            <StepTwo>Senha de acesso</StepTwo>
+          </ActiveScreen>
 
           <Form>
             <Input
@@ -104,23 +122,15 @@ export default function SignUp() {
             <Line />
           </LineView>
 
-          <SocialButton activeOpacity={0.7}>
-            <MaterialCommunityIcons
-              name="google"
-              size={24}
-              color={theme.colors.green_main}
-            />
-            <TextBtn>Entrar com conta Google</TextBtn>
-          </SocialButton>
+          <SocialContainer>
+            <SocialButton activeOpacity={0.7}>
+              <IconGoogle />
+            </SocialButton>
 
-          <SocialButton activeOpacity={0.7}>
-            <Feather
-              name="facebook"
-              size={24}
-              color={theme.colors.green_main}
-            />
-            <TextBtn>Entrar com Facebook</TextBtn>
-          </SocialButton>
+            <SocialButton activeOpacity={0.7}>
+              <IconFacebook />
+            </SocialButton>
+          </SocialContainer>
         </Container>
       </TouchableWithoutFeedback>
     </ContainerKeyboardAvoidingView>
