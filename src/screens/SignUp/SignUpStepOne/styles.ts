@@ -4,10 +4,10 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
-import LogoFacebook from '../../assets/img/facebook.svg';
-import LogoGoogle from '../../assets/img/google.svg';
-import LogoSVG from '../../assets/img/logoHorizontal.svg';
-import Button from '../../components/Button';
+import LogoFacebook from '../../../assets/img/facebook.svg';
+import LogoGoogle from '../../../assets/img/google.svg';
+import LogoSVG from '../../../assets/img/logoHorizontal.svg';
+import Button from '../../../components/Button';
 
 export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
   flex: 1;

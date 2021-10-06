@@ -3,12 +3,14 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SignIn from '../screens/SignIn';
-import SignUp from '../screens/SignUp';
+import SignUpStepOne from '../screens/SignUp/SignUpStepOne';
+import SignUpStepTwo from '../screens/SignUp/SignUpStepTwo';
 import Welcome from '../screens/Welcome';
 
 export type RootStackParamList = {
   Welcome: undefined;
-  SignUp: undefined;
+  SignUpStepOne: undefined;
+  SignUpStepTwo: undefined;
   SignIn: undefined;
 };
 
@@ -23,7 +25,8 @@ export function AuthRoutes() {
       }}
     >
       <Screen name="Welcome" component={Welcome} />
-      <Screen name="SignUp" component={SignUp} />
+      <Screen name="SignUpStepOne" component={SignUpStepOne} />
+      <Screen name="SignUpStepTwo" component={SignUpStepTwo} />
       <Screen name="SignIn" component={SignIn} />
     </Navigator>
   );

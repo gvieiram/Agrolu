@@ -103,7 +103,7 @@ export default function SignIn() {
             <Text>Ainda não possui conta?</Text>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('SignUp')}
+              onPress={() => navigation.navigate('SignUpStepOne')}
             >
               <LinkCadastro>Cadastre-se agora!</LinkCadastro>
             </TouchableOpacity>

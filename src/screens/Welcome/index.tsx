@@ -22,7 +22,7 @@ import {
 
 type RootStackParamList = {
   SignIn: undefined;
-  SignUp: undefined;
+  SignUpStepOne: undefined;
   Welcome: undefined;
 };
 
@@ -85,7 +85,7 @@ export default function Welcome({ navigation }: WelcomeProps) {
 
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('SignUp')}
+            onPress={() => navigation.navigate('SignUpStepOne')}
           >
             <LinkCadastro>Cadastre-se agora!</LinkCadastro>
           </TouchableOpacity>
