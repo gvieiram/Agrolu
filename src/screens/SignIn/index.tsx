@@ -1,15 +1,17 @@
-import React from 'react';
-import { Keyboard, Platform, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Keyboard, Platform, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTheme } from 'styled-components';
+import * as Yup from 'yup';
 
 import { Input } from '../../components/Input';
+import { PasswordInput } from '../../components/PasswordInput';
 import { RootStackParamList } from '../../routes/auth.routes';
 import {
   Container,
+  ContainerKeyboardAvoidingView,
   Logo,
   Title,
   Subtitle,
@@ -25,69 +27,89 @@ import {
 type signInScreenProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
 
 export default function SignIn() {
-  const theme = useTheme();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const navigation = useNavigation<signInScreenProp>();
 
-  function handleSignUp() {
-    navigation.navigate('SignUp');
+  async function handleSignIn() {
+    try {
+      const schema = Yup.object().shape({
+        password: Yup.string().required('A senha é obrigatória'),
+        email: Yup.string()
+          .required('E-mail obrigatório.')
+          .email('Digite um e-mail válido'),
+      });
+
+      await schema.validate({ email, password });
+
+      // Fazer Login
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        Alert.alert('Erro', error.message);
+      } else {
+        Alert.alert(
+          'Erro na autenticação',
+          'Ocorreu um erro ao fazer login, verifique as credencias',
+        );
+      }
+    }
   }
 
   return (
-    <Container behavior={Platform.OS === 'ios' ? 'padding' : 'position'}>
+    <ContainerKeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
+      enabled
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Logo />
+        <Container>
+          <Logo />
 
-        <Title>Faça seu login</Title>
-        <Subtitle>
-          Se você ja faz parte da <Bold>família Agrolu</Bold>, faça{'\n'}
-          seu <Bold>login</Bold> e utilize todas as ferramentas disponíveis
-        </Subtitle>
+          <Title>Faça seu login</Title>
+          <Subtitle>
+            Se você ja faz parte da <Bold>família Agrolu</Bold>, faça{'\n'}
+            seu <Bold>login</Bold> e utilize todas as ferramentas disponíveis
+          </Subtitle>
 
-        <Form>
-          <Input
-            iconName="alternate-email"
-            iconColor={theme.colors.green_dark_main}
-            placeholder="E-mail"
-            keyboardType="email-address"
-            autoCorrect={false}
-            autoCapitalize="none"
-            // onChange={setEmail}
-            // value={email}
-          />
+          <Form>
+            <Input
+              iconName="alternate-email"
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCorrect={false}
+              autoCapitalize="none"
+              onChangeText={setEmail}
+              value={email}
+            />
 
-          <Input
-            iconName="vpn-key"
-            iconColor={theme.colors.green_dark_main}
-            placeholder="Senha"
-            autoCorrect={false}
-            // onChange={setPassword}
-            // value={password}
-          />
+            <PasswordInput
+              iconName="vpn-key"
+              placeholder="Senha"
+              onChangeText={setPassword}
+              value={password}
+            />
 
-          <TouchableOpacity
-            activeOpacity={0.7}
-            // onPress={() => navigation.navigate('ChangePassword')}
-          >
-            <TextPassword>Esqueci minha senha</TextPassword>
-          </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              // onPress={() => navigation.navigate('ChangePassword')}
+            >
+              <TextPassword>Esqueci minha senha</TextPassword>
+            </TouchableOpacity>
 
-          <ButtonForm
-            title="Entrar"
-            // onPress={() => navigation.navigate('Home')}
-          />
-        </Form>
+            <ButtonForm title="Entrar" onPress={handleSignIn} />
+          </Form>
 
-        <DivText>
-          <Text>Ainda não possui conta?</Text>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('SignUp')}
-          >
-            <LinkCadastro>Cadastre-se agora!</LinkCadastro>
-          </TouchableOpacity>
-        </DivText>
+          <DivText>
+            <Text>Ainda não possui conta?</Text>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('SignUp')}
+            >
+              <LinkCadastro>Cadastre-se agora!</LinkCadastro>
+            </TouchableOpacity>
+          </DivText>
+        </Container>
       </TouchableWithoutFeedback>
-    </Container>
+    </ContainerKeyboardAvoidingView>
   );
 }

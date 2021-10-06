@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextInputProps } from 'react-native';
 import { BorderlessButton } from 'react-native-gesture-handler';
 
-import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 
 import {
@@ -44,11 +44,6 @@ export function PasswordInput({ iconName, ...rest }: Props) {
             size={23}
             color={theme.colors.title_item_gray}
           />
-          {/* <Feather
-            name={isPasswordVisible ? 'eye' : 'eye-off'}
-            size={23}
-            color={theme.colors.title_item_gray}
-          /> */}
         </ChangePasswordVisibilityButton>
       </BorderlessButton>
     </Container>

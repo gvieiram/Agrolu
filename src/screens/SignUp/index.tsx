@@ -1,11 +1,13 @@
-import React from 'react';
-import { Keyboard, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Keyboard, Platform } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
+import * as Yup from 'yup';
 
 import { Input } from '../../components/Input';
+import { InputCpf } from '../../components/InputCpf';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -23,6 +25,33 @@ import {
 
 export default function SignUp() {
   const theme = useTheme();
+
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [identity, setIdentity] = useState('');
+
+  async function handleNextStep() {
+    try {
+      const schema = Yup.object().shape({
+        identity: Yup.string().required('CPF é obrigatório'),
+        email: Yup.string()
+          .required('E-mail obrigatório.')
+          .email('Digite um e-mail válido'),
+        name: Yup.string().required('Nome é obrigatório'),
+      });
+
+      const data = { name, email, identity };
+      await schema.validate(data);
+
+      // Ir para a próxima tela passando os dados do usuário / (prox tela)-> Recuperar informações passadas
+      // navigation.navigate('SignUpSecondStep', { user: data });
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        return Alert.alert('Erro', error.message);
+      }
+    }
+  }
+
   return (
     <ContainerKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
@@ -43,8 +72,8 @@ export default function SignUp() {
               iconName="person"
               placeholder="Nome"
               autoCapitalize="words"
-              // onChange={setName}
-              // value={name}
+              onChangeText={setName}
+              value={name}
             />
 
             <Input
@@ -53,19 +82,20 @@ export default function SignUp() {
               keyboardType="email-address"
               autoCorrect={false}
               autoCapitalize="none"
-              // onChange={setEmail}
-              // value={email}
+              onChangeText={setEmail}
+              value={email}
             />
 
-            <Input
+            <InputCpf
+              type="cpf"
               iconName="credit-card"
               placeholder="CPF"
               keyboardType="numeric"
-              // onChange={setCPF}
-              // value={CPF}
+              value={identity}
+              onChangeText={text => setIdentity(text)}
             />
 
-            <ButtonForm title="Próximo" />
+            <ButtonForm title="Próximo" onPress={handleNextStep} />
           </Form>
 
           <LineView>
