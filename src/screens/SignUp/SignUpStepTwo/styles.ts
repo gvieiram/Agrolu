@@ -76,3 +76,11 @@ export const Text = styled.Text`
 export const ButtonForm = styled(Button)`
   margin-top: 30px;
 `;
+
+export const Error = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  font-size: ${RFValue(14)}px;
+  color: ${({ theme }) => theme.colors.error_dark};
+
+  margin-bottom: 10px;
+`;

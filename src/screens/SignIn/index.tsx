@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Alert, Keyboard, Platform, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
+import * as Yup from 'yup';
+
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import * as Yup from 'yup';
 
 import { Input } from '../../components/Inputs/Input';
 import { InputPassword } from '../../components/Inputs/InputPassword';

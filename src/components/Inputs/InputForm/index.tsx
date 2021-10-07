@@ -5,16 +5,23 @@ import { TextInputProps } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { InputPassword } from '../InputPassword';
-import { Container, Error } from './styles';
+import { Container } from './styles';
 
 interface Props extends TextInputProps {
   control: Control;
   name: string;
   error: string;
+  isErrored?: boolean;
   iconName: React.ComponentProps<typeof MaterialIcons>['name'];
 }
 
-export function InputForm({ control, name, iconName, error, ...rest }: Props) {
+export function InputForm({
+  control,
+  name,
+  iconName,
+  isErrored,
+  ...rest
+}: Props) {
   return (
     <Container>
       <Controller
@@ -22,14 +29,14 @@ export function InputForm({ control, name, iconName, error, ...rest }: Props) {
         render={({ field: { onChange, value } }) => (
           <InputPassword
             iconName={iconName}
-            onChangeText={onChange}
+            onChangeText={text => onChange(text)}
             value={value}
+            isErrored={isErrored}
             {...rest}
           />
         )}
         name={name}
       />
-      {error && <Error>{error}</Error>}
     </Container>
   );
 }

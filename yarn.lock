@@ -3728,11 +3728,6 @@ expo-font@~9.2.1:
     expo-modules-core "~0.2.0"
     fontfaceobserver "^2.1.0"
 
-expo-haptics@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-9.0.0.tgz#a01605634ff9b8a4dc8023f5430278be874f525b"
-  integrity sha512-jBYgclyBVuGiqFPxdYSpIE5OEpWodu1B8fsqDLVIOWjdACnKVGsaBpSF6W4Xq0wVRvoak7C4Oz7ISV08rtPMOw==
-
 expo-image-loader@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-2.2.0.tgz#b5d49ec65e576c033823050b223ef462c5ec5711"
@@ -3743,7 +3738,7 @@ expo-keep-awake@~9.2.0:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-9.2.0.tgz#9cbdcc8264c943ef29a58326236cd34267e98f43"
   integrity sha512-R5jAx5j3MqrhKFB307FBpaHtYSYeVIFX/rVforBF5inKonYjXRWVhjGoBjolF4geAryNamC3NKhMfxyaaB0W6Q==
 
-expo-linear-gradient@^9.0.0, expo-linear-gradient@~9.2.0:
+expo-linear-gradient@~9.2.0:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-9.2.0.tgz#5ae16fcb8f141b1c51dc36bd4493dfd6566a9511"
   integrity sha512-LnW2u9OT6GeyC6T8qEGjFYfNSk4KIBAwU0aRSjM4Y8hckWqhtKngGDz46DqGmJBzvZMSKuZZvj5xKn794r54ag==
@@ -6333,14 +6328,6 @@ react-native-gesture-handler@~1.10.2:
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
     prop-types "^15.7.2"
-
-react-native-gradient-buttons@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-gradient-buttons/-/react-native-gradient-buttons-2.0.2.tgz#cbf944aaddcf0cac94aa521d3d0e67b4b688847f"
-  integrity sha512-XAuyLXSZGZSmFD7stLkoaKVUH6EY6QLU2pSp60vDXafu0VKkVUXH4tdooaYis8o2Zx7KyM22u1w3C3iC5oTduw==
-  dependencies:
-    expo-haptics "^9.0.0"
-    expo-linear-gradient "^9.0.0"
 
 react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"

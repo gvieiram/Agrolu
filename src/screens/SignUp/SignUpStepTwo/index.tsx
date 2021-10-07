@@ -23,6 +23,7 @@ import {
   StepTwo,
   PasswordRules,
   Text,
+  Error,
 } from './styles';
 
 interface FormData {
@@ -30,22 +31,27 @@ interface FormData {
   passwordConfirm: string;
 }
 
+const passLength = 'Mínimo de 8 caracteres';
+const passOneUppercase = 'Pelo menos uma letra maiúscula';
+const passOneLowercase = 'Pelo menos uma letra minúscula';
+const passOneNumber = 'Pelo menos um número';
+const passOneSpecialCharacter = 'Pelo menos um carácter especial ou espaço';
+
+const passConfirmation = 'Senhas não correspondem';
+
 const schema = Yup.object().shape({
   passwordConfirm: Yup.string()
-    .required('Confirmação de senha é obrigatória')
-    .test('passwords-match', 'Senhas não correspondem', function (value) {
+    .required('Senha de confirmação é obrigatória')
+    .test('passwords-match', passConfirmation, function (value) {
       return this.parent.password === value;
     }),
   password: Yup.string()
     .required('Senha é obrigatória')
-    .min(8, 'Mínimo de 8 caracteres')
-    .matches(/(?=.*?[A-Z])/, 'Pelo menos uma letra maiúscula')
-    .matches(/(?=.*?[a-z])/, 'Pelo menos uma letra minúscula')
-    .matches(/(?=.*?[0-9])/, 'Pelo menos um número')
-    .matches(
-      /(?=.*?[#?!@$ %^&*-])/,
-      'Pelo menos um carácter especial ou espaço',
-    ),
+    .min(8, passLength)
+    .matches(/(?=.*?[A-Z])/, passOneUppercase)
+    .matches(/(?=.*?[a-z])/, passOneLowercase)
+    .matches(/(?=.*?[0-9])/, passOneNumber)
+    .matches(/(?=.*?[#?!@$ %^&*-])/, passOneSpecialCharacter),
 });
 
 export default function SignUpStepTwo() {
@@ -65,6 +71,8 @@ export default function SignUpStepTwo() {
 
     console.log(data);
   }
+
+  const passErrorMessage = errors.password && errors.password.message;
 
   return (
     <ContainerKeyboardAvoidingView
@@ -93,6 +101,7 @@ export default function SignUpStepTwo() {
               name="password"
               control={control}
               placeholder="Senha"
+              isErrored={errors.password}
               error={errors.password && errors.password.message}
             />
 
@@ -101,16 +110,22 @@ export default function SignUpStepTwo() {
               name="passwordConfirm"
               control={control}
               placeholder="Repetir Senha"
+              isErrored={errors.passwordConfirm}
               error={errors.passwordConfirm && errors.passwordConfirm.message}
             />
+            {errors.passwordConfirm && (
+              <Error>
+                {errors.passwordConfirm && errors.passwordConfirm.message}
+              </Error>
+            )}
           </Form>
 
           <PasswordRules>
             <MaterialIcons
-              name={errors.password && errors.password.type ? 'close' : 'check'}
+              name={passErrorMessage === passLength ? 'close' : 'check'}
               size={18}
               color={
-                errors.password && errors.password.type
+                passErrorMessage === passLength
                   ? theme.colors.error_dark
                   : theme.colors.success_main
               }
@@ -120,41 +135,56 @@ export default function SignUpStepTwo() {
 
           <PasswordRules>
             <MaterialIcons
-              name={errors.password && errors.password.type ? 'close' : 'check'}
+              name={passErrorMessage === passOneUppercase ? 'close' : 'check'}
               size={18}
               color={
-                errors.password && errors.password.type
+                passErrorMessage === passOneUppercase
                   ? theme.colors.error_dark
                   : theme.colors.success_main
               }
             />
-            <Text>Caracteres especiais (*&%$#@!)</Text>
+            <Text>Letra maiúscula</Text>
           </PasswordRules>
 
           <PasswordRules>
             <MaterialIcons
-              name={errors.password && errors.password.type ? 'close' : 'check'}
+              name={passErrorMessage === passOneLowercase ? 'close' : 'check'}
               size={18}
               color={
-                errors.password && errors.password.type
+                passErrorMessage === passOneLowercase
                   ? theme.colors.error_dark
                   : theme.colors.success_main
               }
             />
-            <Text>Letras maiúsculas</Text>
+            <Text>Letra minúscula</Text>
           </PasswordRules>
 
           <PasswordRules>
             <MaterialIcons
-              name={errors.password && errors.password.type ? 'close' : 'check'}
+              name={passErrorMessage === passOneNumber ? 'close' : 'check'}
               size={18}
               color={
-                errors.password && errors.password.type
+                passErrorMessage === passOneNumber
                   ? theme.colors.error_dark
                   : theme.colors.success_main
               }
             />
             <Text>Número</Text>
+          </PasswordRules>
+
+          <PasswordRules>
+            <MaterialIcons
+              name={
+                passErrorMessage === passOneSpecialCharacter ? 'close' : 'check'
+              }
+              size={18}
+              color={
+                passErrorMessage === passOneSpecialCharacter
+                  ? theme.colors.error_dark
+                  : theme.colors.success_main
+              }
+            />
+            <Text>Caracteres especiais (*&%$#@!)</Text>
           </PasswordRules>
 
           <ButtonForm title="Próximo" onPress={handleSubmit(handleRegister)} />

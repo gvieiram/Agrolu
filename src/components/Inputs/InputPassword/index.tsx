@@ -14,9 +14,10 @@ import {
 
 interface Props extends TextInputProps {
   iconName: React.ComponentProps<typeof MaterialIcons>['name'];
+  isErrored?: boolean;
 }
 
-export function InputPassword({ iconName, ...rest }: Props) {
+export function InputPassword({ iconName, isErrored, ...rest }: Props) {
   const theme = useTheme();
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
@@ -26,7 +27,7 @@ export function InputPassword({ iconName, ...rest }: Props) {
   }
 
   return (
-    <Container>
+    <Container isErrored={isErrored}>
       <IconContainer>
         <MaterialIcons
           name={iconName}
