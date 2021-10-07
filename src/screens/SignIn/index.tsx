@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Yup from 'yup';
 
-import { Input } from '../../components/Input';
-import { PasswordInput } from '../../components/PasswordInput';
+import { Input } from '../../components/Inputs/Input';
+import { InputPassword } from '../../components/Inputs/InputPassword';
 import { RootStackParamList } from '../../routes/auth.routes';
 import {
   Container,
@@ -82,7 +82,7 @@ export default function SignIn() {
               value={email}
             />
 
-            <PasswordInput
+            <InputPassword
               iconName="vpn-key"
               placeholder="Senha"
               onChangeText={setPassword}

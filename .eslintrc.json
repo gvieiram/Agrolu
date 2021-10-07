@@ -67,6 +67,7 @@
           "groups": [
               "/^react/",
               "/^expo/",
+              "/^yup/",
               "module",
               // "/^~/",
               ["parent", "sibling", "index"]

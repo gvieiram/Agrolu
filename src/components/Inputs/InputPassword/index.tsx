@@ -16,7 +16,7 @@ interface Props extends TextInputProps {
   iconName: React.ComponentProps<typeof MaterialIcons>['name'];
 }
 
-export function PasswordInput({ iconName, ...rest }: Props) {
+export function InputPassword({ iconName, ...rest }: Props) {
   const theme = useTheme();
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);

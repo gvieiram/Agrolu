@@ -7,8 +7,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from 'styled-components';
 import * as Yup from 'yup';
 
-import { Input } from '../../../components/Input';
-import { InputCpf } from '../../../components/InputCpf';
+import { Input } from '../../../components/Inputs/Input';
+import { InputCpf } from '../../../components/Inputs/InputCpf';
 import { RootStackParamList } from '../../../routes/auth.routes';
 import {
   Container,
