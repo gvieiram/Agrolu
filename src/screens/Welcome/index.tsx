@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import TractorSvg from '../../assets/img/tractor.svg';
 import ButtonGradient from '../../components/ButtonGradient';
@@ -20,27 +20,11 @@ import {
   LinkCadastro,
 } from './styles';
 
-type RootStackParamList = {
-  SignIn: undefined;
-  SignUpStepOne: undefined;
-  Welcome: undefined;
-};
+export default function Welcome() {
+  const navigation = useNavigation();
 
-type WelcomeScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Welcome'
->;
-
-// type WelcomeScreenRouteProp = RouteProp<RootStackParamList, 'Welcome'>;
-
-type WelcomeProps = {
-  navigation: WelcomeScreenNavigationProp;
-  // route: WelcomeScreenRouteProp;
-};
-
-export default function Welcome({ navigation }: WelcomeProps) {
   function handleSignIn() {
-    navigation.navigate('SignIn');
+    navigation.dispatch(CommonActions.navigate('SignIn'));
   }
 
   return (
@@ -77,7 +61,7 @@ export default function Welcome({ navigation }: WelcomeProps) {
       <ContainerNextPage>
         <ButtonGradient
           title="Vamos lá!"
-          onPress={() => navigation.navigate('SignIn')}
+          onPress={() => navigation.dispatch(CommonActions.navigate('SignIn'))}
         />
 
         <DivText>
@@ -85,7 +69,9 @@ export default function Welcome({ navigation }: WelcomeProps) {
 
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('SignUpStepOne')}
+            onPress={() =>
+              navigation.dispatch(CommonActions.navigate('SignUpStepOne'))
+            }
           >
             <LinkCadastro>Cadastre-se agora!</LinkCadastro>
           </TouchableOpacity>

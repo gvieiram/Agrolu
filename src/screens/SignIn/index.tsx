@@ -4,12 +4,10 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
 
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { Input } from '../../components/Inputs/Input';
 import { InputPassword } from '../../components/Inputs/InputPassword';
-import { RootStackParamList } from '../../routes/auth.routes';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -25,13 +23,11 @@ import {
   LinkCadastro,
 } from './styles';
 
-type signInScreenProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
-
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation<signInScreenProp>();
+  const navigation = useNavigation();
 
   async function handleSignIn() {
     try {
@@ -104,7 +100,9 @@ export default function SignIn() {
             <Text>Ainda não possui conta?</Text>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => navigation.navigate('SignUpStepOne')}
+              onPress={() =>
+                navigation.dispatch(CommonActions.navigate('SignUpStepOne'))
+              }
             >
               <LinkCadastro>Cadastre-se agora!</LinkCadastro>
             </TouchableOpacity>

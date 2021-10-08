@@ -7,6 +7,11 @@ import * as Yup from 'yup';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import { InputForm } from '../../../components/Inputs/InputForm';
@@ -29,6 +34,14 @@ import {
 interface FormData {
   password: string;
   passwordConfirm: string;
+}
+
+interface Params {
+  user: {
+    name: string;
+    email: string;
+    identity: string;
+  };
 }
 
 const passLength = 'Mínimo de 8 caracteres';
@@ -56,6 +69,9 @@ const schema = Yup.object().shape({
 
 export default function SignUpStepTwo() {
   const theme = useTheme();
+  const navigation = useNavigation();
+  // const route = useRoute();
+  // const { user } = route.params as Params;
 
   const {
     control,
@@ -69,7 +85,16 @@ export default function SignUpStepTwo() {
       passwordConfirm: form.passwordConfirm,
     };
 
-    console.log(data);
+    // user + data -> enviar pra api e cadastrar
+
+    navigation.dispatch(
+      CommonActions.navigate('Confirmation', {
+        title: `Sua conta\nfoi criada com\nsucesso!`,
+        message: `Falta pouco para você encontrar o que procura!\nEstá esperando o que?`,
+        nextScreenRoute: 'SignIn',
+        buttonTitle: 'Vamos lá!',
+      }),
+    );
   }
 
   const passErrorMessage = errors.password && errors.password.message;

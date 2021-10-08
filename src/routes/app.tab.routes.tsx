@@ -7,7 +7,7 @@ import Home from '../screens/Home';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
-export function AppRoutes() {
+export function AppTabRoutes() {
   const theme = useTheme();
 
   return (

@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { Alert, Keyboard, Platform } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTheme } from 'styled-components';
 import * as Yup from 'yup';
+
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { Input } from '../../../components/Inputs/Input';
 import { InputCpf } from '../../../components/Inputs/InputCpf';
-import { RootStackParamList } from '../../../routes/auth.routes';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -30,16 +28,12 @@ import {
   StepTwo,
 } from './styles';
 
-type signInScreenProp = NativeStackNavigationProp<RootStackParamList, 'SignIn'>;
-
 export default function SignUpStepOne() {
-  const theme = useTheme();
+  const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState('');
-
-  const navigation = useNavigation<signInScreenProp>();
 
   async function handleNextStep() {
     try {
@@ -60,8 +54,9 @@ export default function SignUpStepOne() {
       const data = { name, email, identity };
       await schema.validate(data);
 
-      // Ir para a próxima tela passando os dados do usuário / (prox tela)-> Recuperar informações passadas
-      navigation.navigate('SignUpStepTwo');
+      navigation.dispatch(
+        CommonActions.navigate('SignUpStepTwo', { user: data }),
+      );
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Erro', error.message);
