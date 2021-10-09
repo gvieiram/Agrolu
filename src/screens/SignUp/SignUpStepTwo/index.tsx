@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, Platform } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
 
-import { MaterialIcons } from '@expo/vector-icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   CommonActions,
@@ -26,10 +25,9 @@ import {
   ActiveScreen,
   StepOne,
   StepTwo,
-  PasswordRules,
-  Text,
   Error,
 } from './styles';
+import PasswordRule from '../../../components/PasswordRule';
 
 interface FormData {
   password: string;
@@ -44,40 +42,78 @@ interface Params {
   };
 }
 
-const passLength = 'Mínimo de 8 caracteres';
-const passOneUppercase = 'Pelo menos uma letra maiúscula';
-const passOneLowercase = 'Pelo menos uma letra minúscula';
-const passOneNumber = 'Pelo menos um número';
-const passOneSpecialCharacter = 'Pelo menos um carácter especial ou espaço';
+interface Validator {
+  description: string;
+  messageError: string;
+  regex: RegExp;
+}
 
-const passConfirmation = 'Senhas não correspondem';
+const validators: Array<Validator> = [
+  {
+    description: 'Mínimo 8 caracteres',
+    messageError: 'Mínimo de 8 caracteres',
+    regex: /^.{8,}$/
+  },
+  {
+    description: 'Letra maiúscula',
+    messageError: 'Pelo menos uma letra maiúscula',
+    regex: /(?=.*?[A-Z])/
+  },
+  {
+    description: 'Letra minúscula',
+    messageError: 'Pelo menos uma letra minúscula',
+    regex: /(?=.*?[a-z])/
+  },
+  {
+    description: 'Número',
+    messageError: 'Pelo menos um número',
+    regex: /(?=.*?[0-9])/
+  },
+  {
+    description: 'Caracteres especiais (*&%$#@!)',
+    messageError: 'Pelo menos um carácter especial ou espaço',
+    regex: /(?=.*?[#?!@$ %^&*-])/
+  }
+];
+
+const createSchemaPassword = (yup) => {
+  yup = yup
+  .required('Senha é obrigatória');
+
+  validators.map((validator) => {
+    yup = yup.matches(validator.regex, validator.messageError)
+  })
+  
+  return yup;
+}
 
 const schema = Yup.object().shape({
+  password: createSchemaPassword(Yup.string()),
   passwordConfirm: Yup.string()
     .required('Senha de confirmação é obrigatória')
-    .test('passwords-match', passConfirmation, function (value) {
+    .test('passwords-match', 'Senhas não correspondem', function (value) {
       return this.parent.password === value;
-    }),
-  password: Yup.string()
-    .required('Senha é obrigatória')
-    .min(8, passLength)
-    .matches(/(?=.*?[A-Z])/, passOneUppercase)
-    .matches(/(?=.*?[a-z])/, passOneLowercase)
-    .matches(/(?=.*?[0-9])/, passOneNumber)
-    .matches(/(?=.*?[#?!@$ %^&*-])/, passOneSpecialCharacter),
+    })
 });
 
+
 export default function SignUpStepTwo() {
-  const theme = useTheme();
   const navigation = useNavigation();
+  const [password, SetPassword] = useState("");
   // const route = useRoute();
   // const { user } = route.params as Params;
 
   const {
+    setValue,
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
+
+  const handlePassword = (value) => {
+    setValue("password", value);
+    SetPassword(value);
+  }
 
   function handleRegister(form: FormData) {
     const data = {
@@ -96,8 +132,6 @@ export default function SignUpStepTwo() {
       }),
     );
   }
-
-  const passErrorMessage = errors.password && errors.password.message;
 
   return (
     <ContainerKeyboardAvoidingView
@@ -128,6 +162,7 @@ export default function SignUpStepTwo() {
               placeholder="Senha"
               isErrored={errors.password}
               error={errors.password && errors.password.message}
+              onChangeText={text => handlePassword(text)}
             />
 
             <InputForm
@@ -143,74 +178,23 @@ export default function SignUpStepTwo() {
                 {errors.passwordConfirm && errors.passwordConfirm.message}
               </Error>
             )}
+            {errors.password && (
+              <Error>
+                {errors.password && errors.password.message}
+              </Error>
+            )}
           </Form>
 
-          <PasswordRules>
-            <MaterialIcons
-              name={passErrorMessage === passLength ? 'close' : 'check'}
-              size={18}
-              color={
-                passErrorMessage === passLength
-                  ? theme.colors.error_dark
-                  : theme.colors.success_main
-              }
-            />
-            <Text>Mínimo 8 caracteres</Text>
-          </PasswordRules>
-
-          <PasswordRules>
-            <MaterialIcons
-              name={passErrorMessage === passOneUppercase ? 'close' : 'check'}
-              size={18}
-              color={
-                passErrorMessage === passOneUppercase
-                  ? theme.colors.error_dark
-                  : theme.colors.success_main
-              }
-            />
-            <Text>Letra maiúscula</Text>
-          </PasswordRules>
-
-          <PasswordRules>
-            <MaterialIcons
-              name={passErrorMessage === passOneLowercase ? 'close' : 'check'}
-              size={18}
-              color={
-                passErrorMessage === passOneLowercase
-                  ? theme.colors.error_dark
-                  : theme.colors.success_main
-              }
-            />
-            <Text>Letra minúscula</Text>
-          </PasswordRules>
-
-          <PasswordRules>
-            <MaterialIcons
-              name={passErrorMessage === passOneNumber ? 'close' : 'check'}
-              size={18}
-              color={
-                passErrorMessage === passOneNumber
-                  ? theme.colors.error_dark
-                  : theme.colors.success_main
-              }
-            />
-            <Text>Número</Text>
-          </PasswordRules>
-
-          <PasswordRules>
-            <MaterialIcons
-              name={
-                passErrorMessage === passOneSpecialCharacter ? 'close' : 'check'
-              }
-              size={18}
-              color={
-                passErrorMessage === passOneSpecialCharacter
-                  ? theme.colors.error_dark
-                  : theme.colors.success_main
-              }
-            />
-            <Text>Caracteres especiais (*&%$#@!)</Text>
-          </PasswordRules>
+          {
+            validators.map((validator, index) => (
+              <PasswordRule
+               text={validator.description}
+               value={password}
+               regex={validator.regex}
+               key={index}
+              />
+            ))
+          }
 
           <ButtonForm title="Próximo" onPress={handleSubmit(handleRegister)} />
         </Container>
