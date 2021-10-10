@@ -14,6 +14,7 @@ import {
 import { useTheme } from 'styled-components';
 
 import { InputForm } from '../../../components/Inputs/InputForm';
+import PasswordRule from '../../../components/PasswordRule';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -27,7 +28,6 @@ import {
   StepTwo,
   Error,
 } from './styles';
-import PasswordRule from '../../../components/PasswordRule';
 
 interface FormData {
   password: string;
@@ -52,40 +52,41 @@ const validators: Array<Validator> = [
   {
     description: 'Mínimo 8 caracteres',
     messageError: 'Mínimo de 8 caracteres',
-    regex: /^.{8,}$/
+    regex: /^.{8,}$/,
   },
   {
     description: 'Letra maiúscula',
     messageError: 'Pelo menos uma letra maiúscula',
-    regex: /(?=.*?[A-Z])/
+    regex: /(?=.*?[A-Z])/,
   },
   {
     description: 'Letra minúscula',
     messageError: 'Pelo menos uma letra minúscula',
-    regex: /(?=.*?[a-z])/
+    regex: /(?=.*?[a-z])/,
   },
   {
     description: 'Número',
     messageError: 'Pelo menos um número',
-    regex: /(?=.*?[0-9])/
+    regex: /(?=.*?[0-9])/,
   },
   {
     description: 'Caracteres especiais (*&%$#@!)',
     messageError: 'Pelo menos um carácter especial ou espaço',
-    regex: /(?=.*?[#?!@$ %^&*-])/
-  }
+    regex: /(?=.*?[#?!@$ %^&*-])/,
+  },
 ];
 
-const createSchemaPassword = (yup) => {
-  yup = yup
-  .required('Senha é obrigatória');
+const createSchemaPassword = (
+  yup: Yup.StringSchema<string, Record<string, any>, string>,
+) => {
+  yup = yup.required('Senha é obrigatória');
 
-  validators.map((validator) => {
-    yup = yup.matches(validator.regex, validator.messageError)
-  })
-  
+  validators.map(validator => {
+    yup = yup.matches(validator.regex, validator.messageError);
+  });
+
   return yup;
-}
+};
 
 const schema = Yup.object().shape({
   password: createSchemaPassword(Yup.string()),
@@ -93,13 +94,12 @@ const schema = Yup.object().shape({
     .required('Senha de confirmação é obrigatória')
     .test('passwords-match', 'Senhas não correspondem', function (value) {
       return this.parent.password === value;
-    })
+    }),
 });
-
 
 export default function SignUpStepTwo() {
   const navigation = useNavigation();
-  const [password, SetPassword] = useState("");
+  const [password, SetPassword] = useState('');
   // const route = useRoute();
   // const { user } = route.params as Params;
 
@@ -110,10 +110,10 @@ export default function SignUpStepTwo() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const handlePassword = (value) => {
-    setValue("password", value);
+  const handlePassword = (value: React.SetStateAction<string>) => {
+    setValue('password', value);
     SetPassword(value);
-  }
+  };
 
   function handleRegister(form: FormData) {
     const data = {
@@ -179,22 +179,18 @@ export default function SignUpStepTwo() {
               </Error>
             )}
             {errors.password && (
-              <Error>
-                {errors.password && errors.password.message}
-              </Error>
+              <Error>{errors.password && errors.password.message}</Error>
             )}
           </Form>
 
-          {
-            validators.map((validator, index) => (
-              <PasswordRule
-               text={validator.description}
-               value={password}
-               regex={validator.regex}
-               key={index}
-              />
-            ))
-          }
+          {validators.map((validator, index) => (
+            <PasswordRule
+              text={validator.description}
+              value={password}
+              regex={validator.regex}
+              key={index}
+            />
+          ))}
 
           <ButtonForm title="Próximo" onPress={handleSubmit(handleRegister)} />
         </Container>

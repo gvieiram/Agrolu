@@ -1,9 +1,10 @@
-import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
+import styled from 'styled-components/native';
+
 export const PasswordRules = styled.View`
-flex-direction: row;
-align-items: center;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const Text = styled.Text`

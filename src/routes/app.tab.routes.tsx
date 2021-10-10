@@ -18,7 +18,7 @@ export function AppTabRoutes() {
         tabBarActiveBackgroundColor: theme.colors.green_light_3,
       }}
     >
-      {/* <Screen name="Home" component={Home} /> */}
+      <Screen name="Home" component={Home} />
     </Navigator>
   );
 }

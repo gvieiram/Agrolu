@@ -3,6 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Confirmation from '../screens/confirmation';
+import Home from '../screens/Home';
 import SignIn from '../screens/SignIn';
 import SignUpStepOne from '../screens/SignUp/SignUpStepOne';
 import SignUpStepTwo from '../screens/SignUp/SignUpStepTwo';
@@ -23,6 +24,7 @@ export function AuthRoutes() {
       <Screen name="SignUpStepTwo" component={SignUpStepTwo} />
       <Screen name="Confirmation" component={Confirmation} />
       <Screen name="SignIn" component={SignIn} />
+      <Screen name="Home" component={Home} />
     </Navigator>
   );
 }

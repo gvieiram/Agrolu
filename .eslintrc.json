@@ -60,6 +60,7 @@
       "import/prefer-default-export": "off",
       "react/require-default-props": "warn",
       "consistent-return": "warn",
+      "react/no-array-index-key": "warn",
       "import-helpers/order-imports": [   // Organizando os Imports
         "warn",
         {

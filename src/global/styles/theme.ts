@@ -18,10 +18,12 @@ export default {
     green_dark_2: '#647B03',
     green_dark_3: '#485900',
     green_dark_main: '#00412C',
+    green_light_main: '#005137',
     green_background: '#002519',
 
     green_linear_light: '#A2C11C',
     green_linear_dark: '#2C5D63',
+    green_linear_dark_opaque: '#70998c',
 
     error_light: '#F83B3A',
     error_main: '#DB0028',

@@ -41,6 +41,7 @@ export default function SignIn() {
       await schema.validate({ email, password });
 
       // Fazer Login
+      navigation.dispatch(CommonActions.navigate('Home'));
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         Alert.alert('Erro', error.message);
