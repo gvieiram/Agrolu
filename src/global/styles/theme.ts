@@ -5,6 +5,7 @@ export default {
     creme_background: '#F3F0EB',
     cinza: '#E0E0E0',
     gray_line_input: '#F4F5F6',
+    gray_line_dark: '#BBBCBD',
     cinza_apagado: '#929292',
     title_item_gray: '#575757',
     preto_titulo: '#151515',

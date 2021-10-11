@@ -3,6 +3,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useTheme } from 'styled-components';
 
+import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -19,6 +20,7 @@ export function AppTabRoutes() {
       }}
     >
       <Screen name="Home" component={Home} />
+      <Screen name="AnnouncementDetails" component={AnnouncementDetails} />
     </Navigator>
   );
 }
