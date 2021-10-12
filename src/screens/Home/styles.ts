@@ -62,6 +62,7 @@ export const Filter = styled(MaterialCommunityIcons)`
 export const AnnouncementList = styled(FlatList).attrs({
   contentContainerStyle: {
     padding: 15,
+    paddingBottom: 90,
   },
   showsVerticalScrollIndicator: false,
 })``;

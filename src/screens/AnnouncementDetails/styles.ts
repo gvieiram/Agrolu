@@ -46,6 +46,8 @@ export const Share = styled(MaterialIcons)`
 export const AnnouncementContent = styled.View`
   height: 100%;
   padding: 0 15px;
+
+  margin-bottom: 60px;
 `;
 
 export const AnnouncementTitle = styled.Text`
