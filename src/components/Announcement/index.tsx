@@ -1,4 +1,7 @@
 import React from 'react';
+import { RectButtonProps } from 'react-native-gesture-handler';
+
+import { useTheme } from 'styled-components';
 
 import {
   Container,
@@ -18,13 +21,15 @@ interface AnnouncementData {
   thumbnail: string;
 }
 
-interface Props {
+interface Props extends RectButtonProps {
   data: AnnouncementData;
 }
 
-export function Announcement({ data }: Props) {
+export function Announcement({ data, ...rest }: Props) {
+  const theme = useTheme();
+
   return (
-    <Container>
+    <Container rippleColor={theme.colors.creme_background} {...rest}>
       <Image
         source={{
           uri: data.thumbnail,

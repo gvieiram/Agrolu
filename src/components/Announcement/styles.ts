@@ -1,9 +1,10 @@
 import FastImage from 'react-native-fast-image';
+import { RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
+export const Container = styled(RectButton)`
   height: 110px;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};

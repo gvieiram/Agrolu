@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useNavigation, CommonActions } from '@react-navigation/native';
+
 import { Announcement } from '../../components/Announcement';
 import {
   Container,
@@ -15,6 +17,8 @@ import {
 } from './styles';
 
 export default function Home() {
+  const navigation = useNavigation();
+
   const announcementData = {
     description: 'Trator Valtra BM',
     price: 190.0,
@@ -22,6 +26,10 @@ export default function Home() {
     status: 'Disponível',
     thumbnail: 'https://imagens-cdn.canalrural.com.br/2019/07/valtra01.jpg',
   };
+
+  function handleAnnouncementDetails() {
+    navigation.dispatch(CommonActions.navigate('AnnouncementDetails'));
+  }
 
   return (
     <Container>
@@ -46,7 +54,12 @@ export default function Home() {
           22, 23, 24, 25,
         ]}
         keyExtractor={item => String(item)}
-        renderItem={({ item }) => <Announcement data={announcementData} />}
+        renderItem={({ item }) => (
+          <Announcement
+            data={announcementData}
+            onPress={handleAnnouncementDetails}
+          />
+        )}
       />
     </Container>
   );
