@@ -34,7 +34,7 @@ export function Announcement({ data, ...rest }: Props) {
         source={{
           uri: data.thumbnail,
         }}
-        resizeMode="contain"
+        resizeMode="cover"
       />
 
       <Details>

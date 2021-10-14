@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import { BackButton } from '../../components/BackButton';
@@ -43,13 +44,19 @@ import {
 } from './styles';
 
 export function AnnouncementDetails() {
+  const navigation = useNavigation();
+
   const theme = useTheme();
+
+  function handleBack() {
+    navigation.goBack();
+  }
 
   return (
     <Container>
       <Header>
         <HeaderContent>
-          <BackButton />
+          <BackButton onPress={handleBack} />
 
           <HeaderTitle>Trator Valtra BM</HeaderTitle>
 
@@ -64,8 +71,8 @@ export function AnnouncementDetails() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageSlider
           imagesUrl={[
-            'https://imagens-cdn.canalrural.com.br/2019/07/valtra01.jpg',
             'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
+            'https://imagens-cdn.canalrural.com.br/2019/07/valtra01.jpg',
             'https://img.olx.com.br/images/11/113182819977960.jpg',
           ]}
         />

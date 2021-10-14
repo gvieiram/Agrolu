@@ -26,18 +26,12 @@ export function AppTabRoutes() {
         tabBarActiveTintColor: theme.colors.green_dark_main,
         tabBarActiveBackgroundColor: theme.colors.green_light_3,
         tabBarInactiveTintColor: theme.colors.green_main,
-        tabBarBackground: () => (
-          <BlurView
-            tint="light"
-            intensity={100}
-            // style={StyleSheet.absoluteFill}
-          />
-        ),
+        tabBarBackground: () => <BlurView tint="light" intensity={100} />,
         tabBarShowLabel: false,
 
         tabBarStyle: {
           position: 'absolute',
-          height: 63,
+          height: 58,
           alignItems: 'center',
           bottom: 15,
           zIndex: 10,

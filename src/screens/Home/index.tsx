@@ -24,7 +24,8 @@ export default function Home() {
     price: 190.0,
     publication: 'Antônio Carlos - Hoje às 8:45',
     status: 'Disponível',
-    thumbnail: 'https://imagens-cdn.canalrural.com.br/2019/07/valtra01.jpg',
+    thumbnail:
+      'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
   };
 
   function handleAnnouncementDetails() {
