@@ -8,6 +8,7 @@ import SignIn from '../screens/SignIn';
 import SignUpStepOne from '../screens/SignUp/SignUpStepOne';
 import SignUpStepTwo from '../screens/SignUp/SignUpStepTwo';
 import Welcome from '../screens/Welcome';
+import { AppStackRoutes } from './app.stack.routes';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -24,7 +25,7 @@ export function AuthRoutes() {
       <Screen name="SignUpStepTwo" component={SignUpStepTwo} />
       <Screen name="Confirmation" component={Confirmation} />
       <Screen name="SignIn" component={SignIn} />
-      <Screen name="Home" component={Home} />
+      <Screen name="Home" component={AppStackRoutes} />
     </Navigator>
   );
 }

@@ -1,13 +1,14 @@
 import React from 'react';
-import { ScrollView, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import IconWechat from '../../assets/img/wechat.svg';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
+import TabBottom from '../../components/TabBottom';
 import {
   Container,
   Header,
@@ -86,25 +87,19 @@ export function AnnouncementDetails() {
           <AnnouncementTitle>
             Trator Valtra BM - 2019 - Em ótimo estado
           </AnnouncementTitle>
-
           <Price>R$ 190,00/dia</Price>
-
           <Survey>
             <SurveyIcon />
 
             <SurveyTitle>Verificar vistoria</SurveyTitle>
           </Survey>
-
           <Information>
             <InformationText>Transporte disponível</InformationText>
 
             <InformationText>Operador disponível</InformationText>
           </Information>
-
           <PublishedAt>Publicado em 17/09/2021 às 8:45</PublishedAt>
-
           <Line />
-
           <Description>
             <Title>Descrição</Title>
 
@@ -114,7 +109,6 @@ export function AnnouncementDetails() {
             </DescriptionContent>
             <Line />
           </Description>
-
           <Details>
             <Title>Detalhes</Title>
 
@@ -131,7 +125,6 @@ export function AnnouncementDetails() {
             </Type>
             <Line />
           </Details>
-
           <Location>
             <Title>Localização</Title>
 
@@ -154,7 +147,6 @@ export function AnnouncementDetails() {
             </Type>
             <Line />
           </Location>
-
           <Title>Anunciante</Title>
           <Advertiser>
             <About>
@@ -183,16 +175,9 @@ export function AnnouncementDetails() {
               <StatusText>Online agora</StatusText>
             </Status>
           </Advertiser>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={handleChat}
-            style={{ backgroundColor: 'red' }}
-          >
-            <Text>Teste</Text>
-          </TouchableOpacity>
         </AnnouncementContent>
       </ScrollView>
+      <TabBottom title="Chat" Icon={IconWechat} onPress={handleChat} />
     </Container>
   );
 }
