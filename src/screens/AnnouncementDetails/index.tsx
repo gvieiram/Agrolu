@@ -1,8 +1,9 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import { BackButton } from '../../components/BackButton';
@@ -50,6 +51,10 @@ export function AnnouncementDetails() {
 
   function handleBack() {
     navigation.goBack();
+  }
+
+  function handleChat() {
+    navigation.dispatch(CommonActions.navigate('Chat'));
   }
 
   return (
@@ -178,6 +183,14 @@ export function AnnouncementDetails() {
               <StatusText>Online agora</StatusText>
             </Status>
           </Advertiser>
+
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={handleChat}
+            style={{ backgroundColor: 'red' }}
+          >
+            <Text>Teste</Text>
+          </TouchableOpacity>
         </AnnouncementContent>
       </ScrollView>
     </Container>
