@@ -15,11 +15,10 @@ import IconWechat from '../assets/img/wechat.svg';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
 import { AppStackRoutes } from './app.stack.routes';
-import { ChatTabRoutes } from './chat.tab.routes';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
-export function AppTabRoutes() {
+export function ChatTabRoutes() {
   const theme = useTheme();
 
   return (
@@ -62,14 +61,14 @@ export function AppTabRoutes() {
     >
       <Screen
         name="Home"
-        component={ChatTabRoutes}
+        component={Home}
         options={{
           tabBarIcon: ({ color }) => (
             <IconHome width={32} height={32} fill={color} />
           ),
         }}
       />
-      {/* <Screen
+      <Screen
         name="AnnouncementDetails"
         component={AnnouncementDetails}
         options={{
@@ -77,7 +76,7 @@ export function AppTabRoutes() {
             <IconPerson width={32} height={32} fill={color} />
           ),
         }}
-      /> */}
+      />
     </Navigator>
   );
 }

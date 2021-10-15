@@ -1,18 +1,22 @@
 import React from 'react';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const { Navigator, Screen } = createNativeStackNavigator();
+import { AnnouncementDetails } from '../screens/AnnouncementDetails';
+import Home from '../screens/Home';
 
-export function AuthRoutes() {
+const { Navigator, Screen } = createStackNavigator();
+
+export function AppStackRoutes() {
   return (
     <Navigator
-      initialRouteName="Welcome"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}
     >
-      {/* <Screen name="" component={} /> */}
+      <Screen name="Home" component={Home} />
+      <Screen name="AnnouncementDetails" component={AnnouncementDetails} />
     </Navigator>
   );
 }
