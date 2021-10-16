@@ -1,0 +1,15 @@
+{
+  "name": "Agrolu",
+  "expo": {
+    "name": "Agrolu",
+    "slug": "Agrolu",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "splash": {
+      "backgroundColor": "#00412C",
+      "resizeMode": "cover"
+    }
+  }
+}
