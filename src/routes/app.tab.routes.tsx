@@ -11,6 +11,7 @@ import IconHome from '../assets/img/home.svg';
 import IconMore from '../assets/img/more.svg';
 import IconPerson from '../assets/img/person.svg';
 import IconWechat from '../assets/img/wechat.svg';
+import { AddAnnouncement } from '../screens/AddAnnoucement';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
 import { AppStackRoutes } from './app.stack.routes';
@@ -67,15 +68,15 @@ export function AppTabRoutes() {
           ),
         }}
       />
-      {/* <Screen
-        name="AnnouncementDetails"
-        component={AnnouncementDetails}
+      <Screen
+        name="AddAnnoucement"
+        component={AddAnnouncement}
         options={{
           tabBarIcon: ({ color }) => (
-            <IconPerson width={32} height={32} fill={color} />
+            <IconAdd width={32} height={32} fill={color} />
           ),
         }}
-      /> */}
+      />
     </Navigator>
   );
 }

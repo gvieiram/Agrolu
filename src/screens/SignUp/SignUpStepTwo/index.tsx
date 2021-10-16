@@ -1,6 +1,8 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Keyboard, Platform } from 'react-native';
+import { Alert, Keyboard, Platform } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
@@ -15,6 +17,7 @@ import { useTheme } from 'styled-components';
 
 import { InputForm } from '../../../components/Inputs/InputForm';
 import PasswordRule from '../../../components/PasswordRule';
+import api from '../../../Services/api';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -100,8 +103,8 @@ const schema = Yup.object().shape({
 export default function SignUpStepTwo() {
   const navigation = useNavigation();
   const [password, SetPassword] = useState('');
-  // const route = useRoute();
-  // const { user } = route.params as Params;
+  const route = useRoute();
+  const { user } = route.params as Params;
 
   const {
     setValue,
@@ -115,22 +118,37 @@ export default function SignUpStepTwo() {
     SetPassword(value);
   };
 
-  function handleRegister(form: FormData) {
+  async function handleRegister(form: FormData) {
     const data = {
       password: form.password,
       passwordConfirm: form.passwordConfirm,
     };
 
-    // user + data -> enviar pra api e cadastrar
+    await api
+      .post('/auth/register', {
+        name: user.name,
+        email: user.email,
+        document: user.identity,
+        password: data.password,
+      })
+      .then(() => {
+        navigation.dispatch(
+          CommonActions.navigate('Confirmation', {
+            title: `Sua conta\nfoi criada com\nsucesso!`,
+            message: `Falta pouco para você encontrar o que procura!\nEstá esperando o que?`,
+            nextScreenRoute: 'SignIn',
+            buttonTitle: 'Vamos lá!',
+          }),
+        );
+      })
+      .catch(error => {
+        console.log(error);
 
-    navigation.dispatch(
-      CommonActions.navigate('Confirmation', {
-        title: `Sua conta\nfoi criada com\nsucesso!`,
-        message: `Falta pouco para você encontrar o que procura!\nEstá esperando o que?`,
-        nextScreenRoute: 'SignIn',
-        buttonTitle: 'Vamos lá!',
-      }),
-    );
+        Alert.alert(
+          'Opa',
+          'Não foi possível cadastrar a sua conta, tente novamente mais tarde!',
+        );
+      });
   }
 
   return (
