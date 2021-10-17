@@ -3,6 +3,7 @@ import { RectButtonProps } from 'react-native-gesture-handler';
 
 import { useTheme } from 'styled-components';
 
+import { AnnouncementData } from '../../interfaces/IAnnouncement';
 import {
   Container,
   Image,
@@ -13,19 +14,12 @@ import {
   Status,
 } from './styles';
 
-interface AnnouncementData {
-  description: string;
-  price: number;
-  publication: string;
-  status: string;
-  thumbnail: string;
-}
-
 interface Props extends RectButtonProps {
   data: AnnouncementData;
+  onPress?: (pointerInside: boolean) => void;
 }
 
-export function Announcement({ data, ...rest }: Props) {
+const Announcement: React.FC<Props> = ({ data, ...rest }: Props) => {
   const theme = useTheme();
 
   return (
@@ -38,14 +32,44 @@ export function Announcement({ data, ...rest }: Props) {
       />
 
       <Details>
-        <Description>{data.description}</Description>
+        <Description>{data.title}</Description>
 
         <Price>{`R$ ${data.price}/dia`}</Price>
 
-        <Publication>{data.publication}</Publication>
+        <Publication>
+          {data.created_date} às {data.created_time}
+        </Publication>
 
         <Status>{data.status}</Status>
       </Details>
     </Container>
   );
-}
+};
+
+export default Announcement;
+// export function Announcement(data, ...rest): Props {
+//   const theme = useTheme();
+
+//   return (
+//     <Container rippleColor={theme.colors.creme_background} {...rest}>
+//       <Image
+//         source={{
+//           uri: data.thumbnail,
+//         }}
+//         resizeMode="cover"
+//       />
+
+//       <Details>
+//         <Description>{data.title}</Description>
+
+//         <Price>{`R$ ${data.price}/dia`}</Price>
+
+//         <Publication>
+//           {data.created_date} às {data.created_time}
+//         </Publication>
+
+//         <Status>{data.status}</Status>
+//       </Details>
+//     </Container>
+//   );
+// }
