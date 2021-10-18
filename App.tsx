@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 import AppLoading from 'expo-app-loading';
 
@@ -31,13 +32,15 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      <Routes />
-    </ThemeProvider>
+    <PaperProvider>
+      <ThemeProvider theme={theme}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        <Routes />
+      </ThemeProvider>
+    </PaperProvider>
   );
 }

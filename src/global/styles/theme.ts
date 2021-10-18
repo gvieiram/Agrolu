@@ -8,6 +8,8 @@ export default {
     gray_line_dark: '#BBBCBD',
     cinza_apagado: '#929292',
     title_item_gray: '#575757',
+    input_text: '#737373',
+    border_input: '#dddddd',
     preto_titulo: '#151515',
     opacityColor: 'rgba(0, 0, 0, 0.7)',
 
