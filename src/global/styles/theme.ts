@@ -4,6 +4,7 @@ export default {
     creme: '#EBE8E4',
     creme_background: '#F3F0EB',
     cinza: '#E0E0E0',
+    gray_background: '#E5E5E5',
     gray_line_input: '#F4F5F6',
     gray_line_dark: '#BBBCBD',
     cinza_apagado: '#929292',
@@ -49,7 +50,6 @@ export default {
     // green_light_1: '#BFE131',
     // beige: '#E6D3A7',
     // gray: '#737373',
-    // gray_background: '#E5E5E5',
 
     // green_opaque: '#283739',
     // green_dark: '#00412C',
