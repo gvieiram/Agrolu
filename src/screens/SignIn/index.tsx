@@ -8,6 +8,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { Input } from '../../components/Inputs/Input';
 import { InputPassword } from '../../components/Inputs/InputPassword';
+import { useAuth } from '../../hooks/auth';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -26,6 +27,7 @@ import {
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn } = useAuth();
 
   const navigation = useNavigation();
 
@@ -40,8 +42,7 @@ export default function SignIn() {
 
       await schema.validate({ email, password });
 
-      // Fazer Login
-      navigation.dispatch(CommonActions.navigate('Home'));
+      signIn({ email, password });
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         Alert.alert('Erro', error.message);
