@@ -1,4 +1,4 @@
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
@@ -8,7 +8,6 @@ import { BackButton as IconBack } from '../../components/BackButton';
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.cinza};
-  align-items: center;
 `;
 
 export const Header = styled.View`
@@ -36,18 +35,17 @@ export const HeaderTitle = styled.Text`
   color: ${({ theme }) => theme.colors.green_main};
 `;
 
-export const AnnouncementRef = styled(RectButton)`
-  height: 100px;
+export const AnnouncementRef = styled(TouchableOpacity)`
+  height: 80px;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.gray_background};
 
   flex-direction: row;
-  align-items: center;
 `;
 
 export const Image = styled.Image`
   height: 100%;
-  width: 110px;
+  width: 90px;
 `;
 
 export const Description = styled.View`
@@ -58,7 +56,7 @@ export const Description = styled.View`
 
 export const Title = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium_500};
-  font-size: ${RFValue(18)}px;
+  font-size: ${RFValue(17)}px;
   color: ${({ theme }) => theme.colors.preto_titulo};
 
   margin-bottom: 6px;
@@ -66,9 +64,7 @@ export const Title = styled.Text`
 
 export const Price = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular_400};
-  font-size: ${RFValue(14)}px;
-
-  margin-bottom: 6px;
+  font-size: ${RFValue(13)}px;
 `;
 
 export const ChatView = styled.View`

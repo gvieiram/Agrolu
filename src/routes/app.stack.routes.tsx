@@ -11,7 +11,7 @@ const { Navigator, Screen } = createStackNavigator();
 export function AppStackRoutes() {
   return (
     <Navigator
-      initialRouteName="_Home"
+      initialRouteName="Chat"
       screenOptions={{
         headerShown: false,
       }}

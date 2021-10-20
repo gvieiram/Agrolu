@@ -12,6 +12,7 @@ export default {
     input_text: '#737373',
     border_input: '#dddddd',
     preto_titulo: '#151515',
+    black: '#000000',
     opacityColor: 'rgba(0, 0, 0, 0.7)',
 
     chumbo: '#283739',
@@ -24,6 +25,7 @@ export default {
     green_dark_main: '#00412C',
     green_light_main: '#005137',
     green_background: '#002519',
+    green_dark_opaque: '#3A7563',
 
     green_linear_light: '#A2C11C',
     green_linear_dark: '#2C5D63',
@@ -46,10 +48,8 @@ export default {
     warning_dark: '#F57C00',
 
     // lightGreen: '#59A985',
-    // darkGreen: '#3A7563',
     // green_light_1: '#BFE131',
     // beige: '#E6D3A7',
-    // gray: '#737373',
 
     // green_opaque: '#283739',
     // green_dark: '#00412C',
