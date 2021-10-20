@@ -3,8 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 
 import Announcement from '../../components/Announcement';
-import { AnnouncementResponse } from '../../interfaces/IAnnouncement';
-import api from '../../services/api';
+import {
+  AnnouncementData,
+  AnnouncementResponse,
+} from '../../interfaces/IAnnouncement';
+import api from '../../Services/api';
 import {
   Container,
   Header,
@@ -55,7 +58,7 @@ export default function Home() {
       <AnnouncementList
         data={announcements}
         keyExtractor={item => String(item)}
-        renderItem={({ item }) => (
+        renderItem={(item: AnnouncementData) => (
           <Announcement
             data={item}
             onPress={() => handleAnnouncementDetails(item.id)}

@@ -17,7 +17,7 @@ import { useTheme } from 'styled-components';
 
 import { InputForm } from '../../../components/Inputs/InputForm';
 import PasswordRule from '../../../components/PasswordRule';
-import api from '../../../services/api';
+import api from '../../../Services/api';
 import {
   Container,
   ContainerKeyboardAvoidingView,

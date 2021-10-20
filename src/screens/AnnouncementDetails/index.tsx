@@ -10,7 +10,7 @@ import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import TabBottom from '../../components/TabBottom';
 import { AnnouncementData } from '../../interfaces/IAnnouncement';
-import api from '../../services/api';
+import api from '../../Services/api';
 import {
   Container,
   Header,
