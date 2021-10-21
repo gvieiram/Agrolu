@@ -35,6 +35,7 @@ interface SignInCredentials {
 
 interface AuthContextData {
   user: User;
+  token: string;
   signIn: (credentials: SignInCredentials) => Promise<void>;
 }
 
@@ -61,9 +62,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   authPromise.then(auth => {
     api.defaults.headers.authorization = `Bearer ${auth.token}`;
 
-    api.get('users/me').then(response => {
-      setData({ token: auth.token, user: response.data });
-    });
+    setData({ token: auth.token, user: auth.user });
   });
 
   async function signIn({ email, password }: SignInCredentials) {
@@ -71,7 +70,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       email,
       password,
     });
-
+    console.log(response.data);
     const { token, user } = response.data;
 
     api.defaults.headers.authorization = `Bearer ${token}`;
@@ -84,6 +83,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         user: data.user,
+        token: data.token,
         signIn,
       }}
     >

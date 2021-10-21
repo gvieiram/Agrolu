@@ -4,6 +4,7 @@ import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
 
 import 'dayjs/locale/pt-br';
 
+import { Text } from 'react-native-paper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import {
@@ -11,8 +12,12 @@ import {
   MaterialCommunityIcons as MaterialCoIcons,
 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js/react-native';
 import { useTheme } from 'styled-components';
 
+import { useAuth } from '../../hooks/auth';
+import api from '../../Services/api';
 import {
   parsePatterns,
   renderBubble,
@@ -64,6 +69,8 @@ interface Message {
 export function Chat({ message, currentUser }: Props) {
   const theme = useTheme();
   const navigation = useNavigation();
+  const { token, user } = useAuth();
+  const [load, setLoad] = useState(false);
 
   function handleBack() {
     navigation.goBack();
@@ -71,40 +78,66 @@ export function Chat({ message, currentUser }: Props) {
 
   const [messages, setMessages] = useState([]);
 
+  const fetchMessages = async () => {
+    const response = await api.get('rooms/1/messages');
+    setMessages(response.data);
+  };
+
+  const addMessage = async messageData => {
+    messages.push(messageData);
+    api
+      .post('rooms/1/messages', {
+        message: messageData,
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e.response);
+      });
+  };
+
+  if (!load) {
+    Pusher.logToConsole = true;
+    const pusher = new Pusher('791041aa436839eaaf80', {
+      cluster: 'us2',
+    });
+    const broadcast = new Echo({
+      broadcaster: 'pusher',
+      key: '791041aa436839eaaf80',
+      cluster: 'us2',
+      encrypted: true,
+      client: pusher,
+      auth: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      },
+      forceTLS: true,
+      authEndpoint: 'http://3.131.152.29/broadcasting/auth',
+    });
+    broadcast.private('chat.1').listen('MessageSent', e => {
+      messages.push({
+        message: e.message,
+      });
+    });
+
+    setLoad(true);
+  }
+
   // ToDo -> Buscar user na api (try/catch)
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hoje eu acordei todo Nicolas Cagezinho',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'Dianho',
-          avatar:
-            'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
-        },
-        // image:
-        //   'https://portalrva.com.br/wp-content/uploads/2020/12/dianho.jpeg',
-        // You can also add a video prop:
-        // video:
-        // 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-        // Mark the message as sent, using one tick
-        sent: true,
-        // Mark the message as received, using two tick
-        received: true,
-        // Mark the message as pending with a clock loader
-        pending: true,
-        // Any additional custom parameters are passed through
-      },
-    ]);
+    fetchMessages();
   }, []);
 
   const onSend = useCallback((_messages = []) => {
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, _messages),
     );
+
+    addMessage(_messages[0].text);
   }, []);
 
   // const renderBubble = props => {
@@ -193,10 +226,13 @@ export function Chat({ message, currentUser }: Props) {
       </AnnouncementRef>
 
       <ChatView>
+        {messages.map(item => {
+          return <Text>{item.message}</Text>;
+        })}
         <GiftedChat
-          messages={messages}
+          // messages={messages}
           onSend={_messages => onSend(_messages)}
-          user={{ _id: 1 }}
+          user={{ _id: user.id }}
           placeholder="Digite uma mensagem..."
           locale="pt-br"
           dateFormat="LL"
