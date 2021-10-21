@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useNavigation, CommonActions } from '@react-navigation/native';
 
-import { Announcement } from '../../components/Announcement';
+import Announcement from '../../components/Announcement';
+import { AnnouncementResponse } from '../../interfaces/IAnnouncement';
+import api from '../../services/api';
 import {
   Container,
   Header,
@@ -18,19 +20,20 @@ import {
 
 export default function Home() {
   const navigation = useNavigation();
+  const [announcements, setAnnouncement] = useState([]);
 
-  const announcementData = {
-    description: 'Trator Valtra BM',
-    price: 190.0,
-    publication: 'Antônio Carlos - Hoje às 8:45',
-    status: 'Disponível',
-    thumbnail:
-      'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
-  };
-
-  function handleAnnouncementDetails() {
-    navigation.dispatch(CommonActions.navigate('AnnouncementDetails'));
+  async function getAnnouncements() {
+    const response = await api.get<AnnouncementResponse>('advertisements');
+    setAnnouncement(response.data.data);
   }
+
+  function handleAnnouncementDetails(id) {
+    navigation.dispatch(CommonActions.navigate('AnnouncementDetails', { id }));
+  }
+
+  useEffect(() => {
+    getAnnouncements();
+  }, []);
 
   return (
     <Container>
@@ -50,15 +53,12 @@ export default function Home() {
       </Header>
 
       <AnnouncementList
-        data={[
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21,
-          22, 23, 24, 25,
-        ]}
+        data={announcements}
         keyExtractor={item => String(item)}
         renderItem={({ item }) => (
           <Announcement
-            data={announcementData}
-            onPress={handleAnnouncementDetails}
+            data={item}
+            onPress={() => handleAnnouncementDetails(item.id)}
           />
         )}
       />

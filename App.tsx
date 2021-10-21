@@ -14,6 +14,7 @@ import {
 import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
+import { AppProvider } from './src/hooks';
 import { Routes } from './src/routes';
 
 export default function App() {
@@ -37,7 +38,9 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <Routes />
+      <AppProvider>
+        <Routes />
+      </AppProvider>
     </ThemeProvider>
   );
 }
