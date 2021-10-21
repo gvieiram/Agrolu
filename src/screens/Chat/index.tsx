@@ -84,23 +84,24 @@ export function Chat({ message, currentUser }: Props) {
   };
 
   const addMessage = async messageData => {
-    messages.push(messageData);
-    api
-      .post('rooms/1/messages', {
-        message: messageData,
-      })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(e => {
-        console.log(e.response);
-      });
+    setMessages([...messages, { message: messageData }]);
+
+    api.post('rooms/1/messages', {
+      message: messageData,
+    });
   };
 
   if (!load) {
     Pusher.logToConsole = true;
     const pusher = new Pusher('791041aa436839eaaf80', {
       cluster: 'us2',
+      auth: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+        },
+      },
+      authEndpoint: 'http://3.131.152.29/broadcasting/auth',
     });
     const broadcast = new Echo({
       broadcaster: 'pusher',
@@ -114,13 +115,13 @@ export function Chat({ message, currentUser }: Props) {
           Accept: 'application/json',
         },
       },
-      forceTLS: true,
+      useTLS: true,
       authEndpoint: 'http://3.131.152.29/broadcasting/auth',
     });
     broadcast.private('chat.1').listen('MessageSent', e => {
-      messages.push({
-        message: e.message,
-      });
+      console.log('chegou', e.message);
+
+      setMessages([...messages, { message: e.message }]);
     });
 
     setLoad(true);
