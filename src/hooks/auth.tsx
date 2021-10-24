@@ -52,13 +52,14 @@ async function getSecureToken(key) {
 
   return JSON.parse(item);
 }
+// SecureStore.deleteItemAsync
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<AuthState>({} as AuthState);
   const authPromise = getSecureToken('auth');
-
+  // SecureStore.deleteItemAsync('auth');
   authPromise.then(auth => {
     api.defaults.headers.authorization = `Bearer ${auth.token}`;
 
@@ -70,7 +71,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       email,
       password,
     });
-    console.log(response.data);
+
     const { token, user } = response.data;
 
     api.defaults.headers.authorization = `Bearer ${token}`;

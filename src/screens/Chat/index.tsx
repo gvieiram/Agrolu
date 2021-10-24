@@ -39,34 +39,7 @@ import {
   ChatView,
 } from './styles';
 
-const date = new Date();
-
-interface Props {
-  currentUser: Array<User>;
-  message: Array<Message>;
-}
-
-interface User {
-  id: number;
-  name: string;
-  avatar: string;
-}
-
-interface Message {
-  id: number;
-  text: string;
-  createdAt: typeof date | number;
-  user: User;
-  image?: string;
-  video?: string;
-  audio?: string;
-  system?: boolean;
-  sent?: boolean;
-  received?: boolean;
-  pending?: boolean;
-}
-
-export function Chat({ message, currentUser }: Props) {
+export function Chat() {
   const theme = useTheme();
   const navigation = useNavigation();
   const { token, user } = useAuth();
@@ -80,19 +53,24 @@ export function Chat({ message, currentUser }: Props) {
 
   const fetchMessages = async () => {
     const response = await api.get('rooms/1/messages');
-    setMessages(response.data);
-  };
 
-  const addMessage = async messageData => {
-    setMessages([...messages, { message: messageData }]);
-
-    api.post('rooms/1/messages', {
-      message: messageData,
-    });
+    response.data.map(message =>
+      setMessages(previousMessages =>
+        GiftedChat.append(previousMessages, [
+          {
+            _id: message.id,
+            text: message.message,
+            createdAt: new Date(message.created_at),
+            user: {
+              _id: message.user_id,
+            },
+          },
+        ]),
+      ),
+    );
   };
 
   if (!load) {
-    Pusher.logToConsole = true;
     const pusher = new Pusher('791041aa436839eaaf80', {
       cluster: 'us2',
       auth: {
@@ -119,9 +97,18 @@ export function Chat({ message, currentUser }: Props) {
       authEndpoint: 'http://3.131.152.29/broadcasting/auth',
     });
     broadcast.private('chat.1').listen('MessageSent', e => {
-      console.log('chegou', e.message);
-
-      setMessages([...messages, { message: e.message }]);
+      setMessages(previousMessages =>
+        GiftedChat.append(previousMessages, [
+          {
+            _id: e.messageId,
+            text: e.messageText,
+            createdAt: new Date(e.createdAt),
+            user: {
+              _id: e.userId,
+            },
+          },
+        ]),
+      );
     });
 
     setLoad(true);
@@ -133,12 +120,12 @@ export function Chat({ message, currentUser }: Props) {
     fetchMessages();
   }, []);
 
-  const onSend = useCallback((_messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, _messages),
-    );
-
-    addMessage(_messages[0].text);
+  const onSend = useCallback((newMessages = []) => {
+    newMessages.map(newMessage => {
+      api.post('rooms/1/messages', {
+        message: newMessage.text,
+      });
+    });
   }, []);
 
   // const renderBubble = props => {
@@ -227,12 +214,9 @@ export function Chat({ message, currentUser }: Props) {
       </AnnouncementRef>
 
       <ChatView>
-        {messages.map(item => {
-          return <Text>{item.message}</Text>;
-        })}
         <GiftedChat
-          // messages={messages}
-          onSend={_messages => onSend(_messages)}
+          messages={messages}
+          onSend={newMessages => onSend(newMessages)}
           user={{ _id: user.id }}
           placeholder="Digite uma mensagem..."
           locale="pt-br"
