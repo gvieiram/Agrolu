@@ -4,6 +4,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 
+import { AnnouncementData } from '../../dtos/AnnouncementDTO';
+
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.creme};
@@ -59,7 +61,9 @@ export const Filter = styled(MaterialCommunityIcons)`
   color: ${({ theme }) => theme.colors.green_main};
 `;
 
-export const AnnouncementList = styled(FlatList).attrs({
+export const AnnouncementList = styled(
+  FlatList as new () => FlatList<AnnouncementData>,
+).attrs({
   contentContainerStyle: {
     padding: 15,
     paddingBottom: 90,

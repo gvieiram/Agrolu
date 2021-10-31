@@ -6,7 +6,7 @@ import Announcement from '../../components/Announcement';
 import {
   AnnouncementData,
   AnnouncementResponse,
-} from '../../interfaces/IAnnouncement';
+} from '../../dtos/AnnouncementDTO';
 import api from '../../Services/api';
 import {
   Container,
@@ -23,20 +23,35 @@ import {
 
 export default function Home() {
   const navigation = useNavigation();
-  const [announcements, setAnnouncement] = useState([]);
-
-  async function getAnnouncements() {
-    const response = await api.get<AnnouncementResponse>('advertisements');
-    setAnnouncement(response.data.data);
-  }
-
-  function handleAnnouncementDetails(id) {
-    navigation.dispatch(CommonActions.navigate('AnnouncementDetails', { id }));
-  }
+  const [announcements, setAnnouncement] = useState<AnnouncementData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    async function getAnnouncements() {
+      try {
+        const res = await api.get<AnnouncementResponse>('advertisements');
+        setAnnouncement(res.data.data);
+        console.log(res.data.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     getAnnouncements();
-  }, []);
+  }, [announcements]);
+
+  function handleAnnouncementDetails(ad: AnnouncementData) {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'AnnouncementDetails',
+        params: {
+          ad,
+        },
+      }),
+    );
+  }
 
   return (
     <Container>
@@ -57,11 +72,11 @@ export default function Home() {
 
       <AnnouncementList
         data={announcements}
-        keyExtractor={item => String(item)}
-        renderItem={(item: AnnouncementData) => (
+        keyExtractor={item => String(item.id)}
+        renderItem={({ item }) => (
           <Announcement
             data={item}
-            onPress={() => handleAnnouncementDetails(item.id)}
+            onPress={() => handleAnnouncementDetails(item)}
           />
         )}
       />

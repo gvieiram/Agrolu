@@ -14,6 +14,7 @@ import IconWechat from '../assets/img/wechat.svg';
 import { AddAnnouncement } from '../screens/AddAnnoucement';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
+import { Messages } from '../screens/Messages';
 import { AppStackRoutes } from './app.stack.routes';
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -74,6 +75,15 @@ export function AppTabRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <IconAdd width={32} height={32} fill={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="MessagesRoom"
+        component={Messages}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <IconWechat width={32} height={32} fill={color} />
           ),
         }}
       />

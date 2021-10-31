@@ -25,7 +25,6 @@ export function AuthRoutes() {
       <Screen name="SignUpStepTwo" component={SignUpStepTwo} />
       <Screen name="Confirmation" component={Confirmation} />
       <Screen name="SignIn" component={SignIn} />
-      {/* <Screen name="Home" component={AppStackRoutes} /> */}
     </Navigator>
   );
 }

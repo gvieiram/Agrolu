@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
-import { Linking, TextInput, View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { Bubble, InputToolbar, Send } from 'react-native-gifted-chat';
 
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -27,9 +27,10 @@ export const renderSend = props => {
         <MaterialIcons
           name="send"
           size={26}
-          color={theme.colors.cinza_apagado}
+          color={theme.colors.green_dark_opaque}
           style={{
-            // marginBottom: 9,
+            paddingTop: 10,
+            marginBottom: 10,
             marginRight: 10,
           }}
         />
@@ -69,13 +70,18 @@ export const renderInputToolbar = props => {
       {...props}
       containerStyle={{
         justifyContent: 'center',
-        borderRadius: 22,
-        marginHorizontal: 5,
-        marginBottom: 5,
         borderTopWidth: 0,
       }}
-      primaryStyle={{
-        borderRadius: 22,
+    />
+  );
+};
+
+export const renderChatFooter = () => {
+  return (
+    <View
+      style={{
+        height: 15,
+        backgroundColor: 'transparent',
       }}
     />
   );

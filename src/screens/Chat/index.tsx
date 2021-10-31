@@ -1,18 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Linking, View } from 'react-native';
-import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
+import { LogBox } from 'react-native';
+import { GiftedChat } from 'react-native-gifted-chat';
 
 import 'dayjs/locale/pt-br';
 
-import { Text } from 'react-native-paper';
-import { RFValue } from 'react-native-responsive-fontsize';
-
-import {
-  MaterialIcons,
-  MaterialCommunityIcons as MaterialCoIcons,
-} from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Echo from 'laravel-echo';
+import _ from 'lodash';
 import Pusher from 'pusher-js/react-native';
 import { useTheme } from 'styled-components';
 
@@ -24,6 +18,7 @@ import {
   renderSend,
   scrollToBottomComponent,
   renderInputToolbar,
+  renderChatFooter,
 } from './ChatStyle';
 import {
   Container,
@@ -38,6 +33,17 @@ import {
   Price,
   ChatView,
 } from './styles';
+
+// Continuando com warning -> yarn add expo-dev-client
+LogBox.ignoreLogs(['Warning:...']); // ignore specific logs
+LogBox.ignoreAllLogs(); // ignore all logs
+// eslint-disable-next-line no-underscore-dangle
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 
 export function Chat() {
   const theme = useTheme();
@@ -114,8 +120,6 @@ export function Chat() {
     setLoad(true);
   }
 
-  // ToDo -> Buscar user na api (try/catch)
-
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -128,69 +132,13 @@ export function Chat() {
     });
   }, []);
 
-  // const renderBubble = props => {
-  //   return (
-  //     <Bubble
-  //       {...props}
-  //       wrapperStyle={{
-  //         right: {
-  //           backgroundColor: theme.colors.green_dark_opaque,
-  //         },
-  //       }}
-  //     />
-  //   );
-  // };
-
-  // const renderSend = props => {
-  //   return (
-  //     <Send {...props}>
-  //       <View>
-  //         <MaterialIcons
-  //           name="send"
-  //           size={26}
-  //           color={theme.colors.cinza_apagado}
-  //           style={{
-  //             marginBottom: 9,
-  //             marginRight: 10,
-  //           }}
-  //         />
-  //       </View>
-  //     </Send>
-  //   );
-  // };
-
-  // const scrollToBottomComponent = () => {
-  //   return (
-  //     <MaterialCoIcons
-  //       name="chevron-double-down"
-  //       size={24}
-  //       color={theme.colors.title_item_gray}
-  //     />
-  //   );
-  // };
-
-  // const parsePatterns = (_linkStyle: any) => {
-  //   return [
-  //     {
-  //       pattern: /#(\w+)/,
-  //       style: _linkStyle,
-  //       onPress: tag => console.log(`Pressed on hashtag: ${tag}`),
-  //     },
-  //     {
-  //       pattern: /([(]\d{2,3}[)]\s?)?\d{4,5}[-]\d{4}/,
-  //       style: _linkStyle,
-  //       onPress: phone => Linking.openURL(`tel: ${phone}`),
-  //     },
-  //   ];
-  // };
-
   return (
     <Container>
       <Header>
         <HeaderContent>
           <BackButton onPress={handleBack} />
 
-          <HeaderTitle>Joaquim Rosa</HeaderTitle>
+          <HeaderTitle>{user.name}</HeaderTitle>
         </HeaderContent>
       </Header>
 
@@ -221,12 +169,12 @@ export function Chat() {
           placeholder="Digite uma mensagem..."
           locale="pt-br"
           dateFormat="LL"
-          // renderAvatar={null}
+          renderAvatar={null}
           renderBubble={renderBubble}
           showAvatarForEveryMessage
           renderSend={renderSend}
           renderInputToolbar={renderInputToolbar}
-          // onLongPress={onLongPress}
+          // renderChatFooter={renderChatFooter} // Typing === true : activated ? disabled
           textInputStyle={{
             padding: 10,
             fontSize: 18,
@@ -236,7 +184,6 @@ export function Chat() {
           scrollToBottom
           scrollToBottomComponent={scrollToBottomComponent}
           parsePatterns={parsePatterns}
-          // onLongPress={message.map(m => m.createdAt.)}
         />
       </ChatView>
     </Container>

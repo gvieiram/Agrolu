@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import { Chat } from '../screens/Chat';
+import { Messages } from '../screens/Messages';
 import { AppTabRoutes } from './app.tab.routes';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -11,7 +12,7 @@ const { Navigator, Screen } = createStackNavigator();
 export function AppStackRoutes() {
   return (
     <Navigator
-      initialRouteName="Chat"
+      initialRouteName="_Home"
       screenOptions={{
         headerShown: false,
       }}

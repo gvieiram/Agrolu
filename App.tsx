@@ -33,8 +33,8 @@ export default function App() {
   }
 
   return (
-    <PaperProvider>
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <PaperProvider>
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"
@@ -43,7 +43,7 @@ export default function App() {
         <AppProvider>
           <Routes />
         </AppProvider>
-      </ThemeProvider>
-    </PaperProvider>
+      </PaperProvider>
+    </ThemeProvider>
   );
 }
