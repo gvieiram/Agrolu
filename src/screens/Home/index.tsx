@@ -39,7 +39,7 @@ export default function Home() {
     }
 
     getAnnouncements();
-  }, [setAnnouncements]);
+  }, []);
 
   function handleAnnouncementDetails(ad: AnnouncementData) {
     navigation.dispatch(

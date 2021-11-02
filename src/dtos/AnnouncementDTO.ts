@@ -1,16 +1,16 @@
-export interface Advertiser {
+interface Advertiser {
   id: number;
   name: string;
   verified: boolean;
   created_at: string;
 }
 
-export interface AnnouncementCategory {
+interface AnnouncementCategory {
   id: number;
   name: string;
 }
 
-export interface AnnouncementType {
+interface AnnouncementType {
   id: number;
   name: string;
   category: AnnouncementCategory;

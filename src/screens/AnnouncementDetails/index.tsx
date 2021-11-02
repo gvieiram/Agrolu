@@ -61,9 +61,12 @@ export function AnnouncementDetails(): ReactElement {
   const route = useRoute();
   const { ad } = route.params as Params;
 
-  const [announcement, setAnnouncement] = useState<AnnouncementData>(
-    {} as AnnouncementData,
-  );
+  const [announcement, setAnnouncement] = useState<AnnouncementData>({
+    advertiser: {},
+    type: {
+      category: {},
+    },
+  } as AnnouncementData);
 
   function handleBack() {
     navigation.goBack();
@@ -220,14 +223,16 @@ export function AnnouncementDetails(): ReactElement {
                 name="fiber-manual-record"
                 size={14}
                 color={
-                  announcement.status
-                    ? theme.colors.success_main
-                    : theme.colors.error_main
+                  theme.colors.success_main
+                  // user.status
+                  //   ? theme.colors.success_main
+                  //   : theme.colors.gray_line_dark
                 }
               />
 
               <StatusText>
-                {announcement.status ? 'Online' : 'Offline'}
+                Online
+                {/* {user.status ? 'Online' : 'Offline'} */}
               </StatusText>
             </Status>
           </Advertiser>
