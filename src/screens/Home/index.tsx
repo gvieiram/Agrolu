@@ -23,15 +23,14 @@ import {
 
 export default function Home() {
   const navigation = useNavigation();
-  const [announcements, setAnnouncement] = useState<AnnouncementData[]>([]);
+  const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getAnnouncements() {
       try {
         const res = await api.get<AnnouncementResponse>('advertisements');
-        setAnnouncement(res.data.data);
-        console.log(res.data.data);
+        setAnnouncements(res.data.data);
       } catch (error) {
         console.log(error);
       } finally {
@@ -40,7 +39,7 @@ export default function Home() {
     }
 
     getAnnouncements();
-  }, [announcements]);
+  }, [setAnnouncements]);
 
   function handleAnnouncementDetails(ad: AnnouncementData) {
     navigation.dispatch(

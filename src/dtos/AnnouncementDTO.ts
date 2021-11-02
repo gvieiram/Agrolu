@@ -13,7 +13,7 @@ export interface AnnouncementCategory {
 export interface AnnouncementType {
   id: number;
   name: string;
-  category: AnnouncementCategory[];
+  category: AnnouncementCategory;
 }
 
 export interface AnnouncementData {
@@ -25,8 +25,8 @@ export interface AnnouncementData {
   created_time: string;
   description: string;
   status?: boolean;
-  type: AnnouncementType[];
-  advertiser: Advertiser[];
+  type: AnnouncementType;
+  advertiser: Advertiser;
 }
 
 export interface AnnouncementResponse {
