@@ -27,6 +27,10 @@ export interface AnnouncementData {
   status?: boolean;
   type: AnnouncementType;
   advertiser: Advertiser;
+  photo?: {
+    id: string;
+    uri: string;
+  };
 }
 
 export interface AnnouncementResponse {

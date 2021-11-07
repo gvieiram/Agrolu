@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { Image as Images, ScrollView, View } from 'react-native';
+
+import * as ImagePicker from 'expo-image-picker';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +10,7 @@ import { useTheme } from 'styled-components';
 import ButtonGradient from '../../components/ButtonGradient';
 import { Checkbox } from '../../components/Checkbox';
 import { InputPicker } from '../../components/Inputs/InputPicker';
+import { useAuth } from '../../hooks/auth';
 import {
   Container,
   ContainerContent,
@@ -30,11 +32,26 @@ export function AddAnnouncement() {
 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedType, setSelectedType] = useState('');
-  // console.log(selectedCategory);
-  // console.log(selectedType);
+  const [images, setImages] = useState('');
 
   function handleBack() {
     navigation.goBack();
+  }
+
+  async function handleSelectPhotos() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      // allowsMultipleSelection: true,
+      aspect: [16, 9],
+      quality: 1,
+    });
+
+    if (result.cancelled === false) {
+      setImages(result.uri);
+    } else {
+      return;
+    }
   }
 
   return (
@@ -49,7 +66,7 @@ export function AddAnnouncement() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <ContainerContent>
-          <Image activeOpacity={0.7}>
+          <Image activeOpacity={0.7} onPress={() => handleSelectPhotos()}>
             <MaterialIcons
               name="add-a-photo"
               size={32}
@@ -58,6 +75,26 @@ export function AddAnnouncement() {
             <TextImage>Adicionar Fotos</TextImage>
             <CountImage>0 / 6 Fotos</CountImage>
           </Image>
+
+          <View
+            style={{
+              width: 180,
+              height: 180,
+
+              marginTop: 48,
+              backgroundColor: theme.colors.gray_background,
+            }}
+          >
+            {!!images && (
+              <Images
+                source={{ uri: images }}
+                style={{
+                  width: 180,
+                  height: 180,
+                }}
+              />
+            )}
+          </View>
 
           <Title>Título do Anúncio *</Title>
           <InputTitle

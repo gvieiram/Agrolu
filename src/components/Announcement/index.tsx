@@ -18,7 +18,7 @@ interface Props extends RectButtonProps {
   data: AnnouncementData;
 }
 
-export default function Announcement({ data, ...rest }: Props) {
+export default function Announcement({ data, ...rest }: Props): ReactElement {
   const theme = useTheme();
 
   return (
@@ -36,7 +36,7 @@ export default function Announcement({ data, ...rest }: Props) {
         <Price>{`R$ ${data.price}/dia`}</Price>
 
         <Publication>
-          {data.created_date} às {data.created_time}
+          {`${data.created_date} às ${data.created_time}`}
         </Publication>
 
         <Status>{data.status}</Status>
