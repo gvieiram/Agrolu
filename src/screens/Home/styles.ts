@@ -70,3 +70,10 @@ export const AnnouncementList = styled(
   },
   showsVerticalScrollIndicator: false,
 })``;
+
+export const TextEndItems = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.green_linear_dark_opaque};
+  text-align: center;
+`;

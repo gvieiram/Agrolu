@@ -35,4 +35,5 @@ export interface AnnouncementData {
 
 export interface AnnouncementResponse {
   data: AnnouncementData[];
+  next_page_url: string | null;
 }

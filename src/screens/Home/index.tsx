@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 
 import Announcement from '../../components/Announcement';
+import { Load } from '../../components/Load';
 import {
   AnnouncementData,
   AnnouncementResponse,
@@ -19,27 +20,46 @@ import {
   Text,
   SearchIcon,
   AnnouncementList,
+  TextEndItems,
 } from './styles';
 
 export default function Home() {
   const navigation = useNavigation();
   const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [endItems, setEndItems] = useState(false);
 
   useEffect(() => {
-    async function getAnnouncements() {
-      try {
-        const res = await api.get<AnnouncementResponse>('advertisements');
-        setAnnouncements(res.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
     getAnnouncements();
   }, []);
+
+  async function getAnnouncements() {
+    if (loading) return;
+
+    try {
+      const res = await api.get<AnnouncementResponse>(
+        `advertisements?page=${page}`,
+      );
+
+      setAnnouncements([...announcements, ...res.data.data]);
+      setPage(page + 1);
+      setLoading(false);
+
+      if (res.data.next_page_url === null) {
+        setEndItems(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function loadMore() {
+    if (endItems) {
+      return <TextEndItems>Não há mais anúncios</TextEndItems>;
+    }
+    return <Load />;
+  }
 
   function handleAnnouncementDetails(ad: AnnouncementData) {
     navigation.dispatch(
@@ -78,6 +98,9 @@ export default function Home() {
             onPress={() => handleAnnouncementDetails(item)}
           />
         )}
+        onEndReached={getAnnouncements}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={!loading ? loadMore : null}
       />
     </Container>
   );
