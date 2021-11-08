@@ -74,6 +74,6 @@ export const AnnouncementList = styled(
 export const TextEndItems = styled.Text`
   font-size: ${RFValue(12)}px;
   font-family: ${({ theme }) => theme.fonts.regular_400};
-  color: ${({ theme }) => theme.colors.green_linear_dark_opaque};
+  color: ${({ theme }) => theme.colors.gray_line_dark};
   text-align: center;
 `;

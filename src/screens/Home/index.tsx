@@ -26,7 +26,7 @@ import {
 export default function Home() {
   const navigation = useNavigation();
   const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [endItems, setEndItems] = useState(false);
 
@@ -35,8 +35,6 @@ export default function Home() {
   }, []);
 
   async function getAnnouncements() {
-    if (loading) return;
-
     try {
       const res = await api.get<AnnouncementResponse>(
         `advertisements?page=${page}`,
@@ -51,6 +49,8 @@ export default function Home() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -89,19 +89,23 @@ export default function Home() {
         </HeaderContent>
       </Header>
 
-      <AnnouncementList
-        data={announcements}
-        keyExtractor={item => String(item.id)}
-        renderItem={({ item }) => (
-          <Announcement
-            data={item}
-            onPress={() => handleAnnouncementDetails(item)}
-          />
-        )}
-        onEndReached={getAnnouncements}
-        onEndReachedThreshold={0.1}
-        ListFooterComponent={!loading ? loadMore : null}
-      />
+      {loading ? (
+        <Load />
+      ) : (
+        <AnnouncementList
+          data={announcements}
+          keyExtractor={item => String(item.id)}
+          renderItem={({ item }) => (
+            <Announcement
+              data={item}
+              onPress={() => handleAnnouncementDetails(item)}
+            />
+          )}
+          onEndReached={getAnnouncements}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={!loading ? loadMore : null}
+        />
+      )}
     </Container>
   );
 }
