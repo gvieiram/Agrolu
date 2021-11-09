@@ -11,7 +11,7 @@ import Pusher from 'pusher-js/react-native';
 import { useTheme } from 'styled-components';
 
 import { useAuth } from '../../hooks/auth';
-import api from '../../Services/api';
+import api from '../../services/api';
 import {
   parsePatterns,
   renderBubble,

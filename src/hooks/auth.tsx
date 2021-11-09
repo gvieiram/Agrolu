@@ -4,7 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
-import api from '../Services/api';
+import api from '../services/api';
 
 interface User {
   id: string;

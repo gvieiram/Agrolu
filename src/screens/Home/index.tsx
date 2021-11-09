@@ -8,7 +8,7 @@ import {
   AnnouncementData,
   AnnouncementResponse,
 } from '../../dtos/AnnouncementDTO';
-import api from '../../Services/api';
+import api from '../../services/api';
 import {
   Container,
   Header,

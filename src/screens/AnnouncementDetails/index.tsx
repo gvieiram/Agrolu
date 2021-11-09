@@ -14,7 +14,7 @@ import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import TabBottom from '../../components/TabBottom';
 import { AnnouncementData } from '../../dtos/AnnouncementDTO';
-import api from '../../Services/api';
+import api from '../../services/api';
 import {
   Container,
   Header,
