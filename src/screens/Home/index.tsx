@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { RefreshControl } from 'react-native';
 
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useTheme } from 'styled-components';
 
 import Announcement from '../../components/Announcement';
 import { Load } from '../../components/Load';
@@ -23,12 +25,21 @@ import {
   TextEndItems,
 } from './styles';
 
+const wait = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout);
+  });
+};
+
 export default function Home() {
   const navigation = useNavigation();
+  const theme = useTheme();
+
   const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [endItems, setEndItems] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     getAnnouncements();
@@ -42,10 +53,11 @@ export default function Home() {
 
       setAnnouncements([...announcements, ...res.data.data]);
       setPage(page + 1);
-      setLoading(false);
 
       if (res.data.next_page_url === null) {
         setEndItems(true);
+      } else {
+        setEndItems(false);
       }
     } catch (error) {
       console.log(error);
@@ -53,6 +65,14 @@ export default function Home() {
       setLoading(false);
     }
   }
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+
+    getAnnouncements();
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   function loadMore() {
     if (endItems) {
@@ -104,6 +124,14 @@ export default function Home() {
           onEndReached={getAnnouncements}
           onEndReachedThreshold={0.1}
           ListFooterComponent={!loading ? loadMore : null}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={theme.colors.green_linear_dark_opaque}
+              colors={[theme.colors.green_linear_dark_opaque]}
+            />
+          }
         />
       )}
     </Container>

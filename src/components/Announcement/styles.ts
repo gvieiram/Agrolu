@@ -26,11 +26,13 @@ export const Image = styled.Image`
 `;
 
 export const Details = styled.View`
+  flex: 1;
   height: 100%;
   padding: 8px 0 8px 10px;
 `;
 
 export const Description = styled.Text`
+  width: 96%;
   font-family: ${({ theme }) => theme.fonts.medium_500};
   font-size: ${RFValue(19)}px;
   color: ${({ theme }) => theme.colors.preto_titulo};
