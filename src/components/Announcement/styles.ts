@@ -19,6 +19,7 @@ export const Container = styled(RectButton)`
 export const Image = styled.Image`
   height: 100%;
   width: 120px;
+  background-color: ${({ theme }) => theme.colors.gray_line_input};
 
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -26,15 +27,15 @@ export const Image = styled.Image`
 
 export const Details = styled.View`
   height: 100%;
-  padding: 8px 0 8px 20px;
+  padding: 8px 0 8px 10px;
 `;
 
 export const Description = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium_500};
-  font-size: ${RFValue(20)}px;
+  font-size: ${RFValue(19)}px;
   color: ${({ theme }) => theme.colors.preto_titulo};
 
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 `;
 
 export const Price = styled.Text`

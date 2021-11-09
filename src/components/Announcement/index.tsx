@@ -31,7 +31,11 @@ export default function Announcement({ data, ...rest }: Props): ReactElement {
       />
 
       <Details>
-        <Description>{data.title}</Description>
+        <Description>
+          {data.title.length >= 20
+            ? `${data.title.slice(0, 19)}...`
+            : data.title}
+        </Description>
 
         <Price>{`R$ ${data.price}/dia`}</Price>
 

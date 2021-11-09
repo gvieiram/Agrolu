@@ -153,12 +153,10 @@ export const DescriptionType = styled.Text`
 `;
 
 export const Advertiser = styled.View`
-  flex-wrap: wrap;
-
   border: 1px solid ${({ theme }) => theme.colors.gray_line_dark};
   border-radius: 10px;
 
-  padding: 15px 20px;
+  padding: 15px;
   margin-bottom: 50px;
 `;
 
@@ -172,11 +170,11 @@ export const Name = styled.Text`
   color: ${({ theme }) => theme.colors.preto_titulo};
   font-size: ${RFValue(16)}px;
   font-family: ${({ theme }) => theme.fonts.medium_500};
+  margin-right: 7px;
 `;
 
 export const ProfileVerification = styled.View`
   flex-direction: row;
-  margin-left: 7px;
   align-items: center;
 `;
 
