@@ -4,12 +4,13 @@ import { GiftedChat } from 'react-native-gifted-chat';
 
 import 'dayjs/locale/pt-br';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Echo from 'laravel-echo';
 import _ from 'lodash';
 import Pusher from 'pusher-js/react-native';
 import { useTheme } from 'styled-components';
 
+import { Room } from '../../dtos/ChatDTO';
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 import {
@@ -45,11 +46,17 @@ console.warn = message => {
   }
 };
 
+interface Params {
+  room: Room;
+}
+
 export function Chat() {
   const theme = useTheme();
   const navigation = useNavigation();
   const { token, user } = useAuth();
   const [load, setLoad] = useState(false);
+  const route = useRoute();
+  const { room } = route.params as Params;
 
   function handleBack() {
     navigation.goBack();
@@ -58,7 +65,7 @@ export function Chat() {
   const [messages, setMessages] = useState([]);
 
   const fetchMessages = async () => {
-    const response = await api.get('rooms/1/messages');
+    const response = await api.get(`rooms/${room.id}/messages`);
 
     response.data.map(message =>
       setMessages(previousMessages =>
@@ -85,7 +92,7 @@ export function Chat() {
           Accept: 'application/json',
         },
       },
-      authEndpoint: 'http://3.131.152.29/broadcasting/auth',
+      authEndpoint: 'https://agrolu.xyz/broadcasting/auth',
     });
     const broadcast = new Echo({
       broadcaster: 'pusher',
@@ -100,9 +107,9 @@ export function Chat() {
         },
       },
       useTLS: true,
-      authEndpoint: 'http://3.131.152.29/broadcasting/auth',
+      authEndpoint: 'https://agrolu.xyz/broadcasting/auth',
     });
-    broadcast.private('chat.1').listen('MessageSent', e => {
+    broadcast.private(`chat.${room.id}`).listen('MessageSent', e => {
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, [
           {
@@ -126,7 +133,7 @@ export function Chat() {
 
   const onSend = useCallback((newMessages = []) => {
     newMessages.map(newMessage => {
-      api.post('rooms/1/messages', {
+      api.post(`rooms/${room.id}/messages`, {
         message: newMessage.text,
       });
     });
@@ -138,7 +145,7 @@ export function Chat() {
         <HeaderContent>
           <BackButton onPress={handleBack} />
 
-          <HeaderTitle>{user.name}</HeaderTitle>
+          <HeaderTitle>{room.advertisement.advertiser.name}</HeaderTitle>
         </HeaderContent>
       </Header>
 
@@ -151,13 +158,13 @@ export function Chat() {
       >
         <Image
           source={{
-            uri: 'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
+            uri: room.advertisement.first_image.url,
           }}
           resizeMode="cover"
         />
         <Description>
-          <Title>Trator Valtra BM</Title>
-          <Price>R$ 190,00/dia</Price>
+          <Title>{room.advertisement.title}</Title>
+          <Price>R$ {room.advertisement.price}/dia</Price>
         </Description>
       </AnnouncementRef>
 

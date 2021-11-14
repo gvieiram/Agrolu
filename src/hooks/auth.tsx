@@ -26,6 +26,7 @@ interface User {
 interface AuthState {
   token: string;
   user: User;
+  signed: boolean;
 }
 
 interface SignInCredentials {
@@ -34,9 +35,11 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: User;
-  token: string;
+  user: User | null;
+  token: string | null;
+  signed: boolean;
   signIn: (credentials: SignInCredentials) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -59,25 +62,49 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<AuthState>({} as AuthState);
   const authPromise = getSecureToken('auth');
-  // SecureStore.deleteItemAsync('auth');
-  authPromise.then(auth => {
-    api.defaults.headers.authorization = `Bearer ${auth.token}`;
 
-    setData({ token: auth.token, user: auth.user });
+  authPromise.then(auth => {
+    if (!auth) {
+      setData({ token: null, user: null, signed: false });
+    } else {
+      api.defaults.headers.authorization = `Bearer ${auth.token}`;
+
+      setData({ token: auth.token, user: auth.user, signed: true });
+    }
   });
 
+  async function signOut() {
+    api
+      .post('auth/logout')
+      .then(() => {
+        SecureStore.deleteItemAsync('auth');
+
+        setData({ token: null, user: null, signed: false });
+      })
+      .catch(error => {
+        console.log('ERROR! ', error.response);
+      });
+  }
+
   async function signIn({ email, password }: SignInCredentials) {
-    const response = await api.post('auth/login', {
-      email,
-      password,
-    });
+    api
+      .post('auth/login', {
+        email,
+        password,
+      })
+      .then(response => {
+        const { token, user } = response.data as AuthState;
 
-    const { token, user } = response.data;
+        api.defaults.headers.authorization = `Bearer ${token}`;
 
-    api.defaults.headers.authorization = `Bearer ${token}`;
+        storeSecureToken('auth', { token, user });
+        setData({ token, user, signed: true });
+      })
+      .catch(error => {
+        console.log('ERROR! ', error.response);
 
-    storeSecureToken('auth', { token, user });
-    setData({ token, user });
+        setData({ token: null, user: null, signed: false });
+      });
   }
 
   return (
@@ -85,7 +112,9 @@ function AuthProvider({ children }: AuthProviderProps) {
       value={{
         user: data.user,
         token: data.token,
+        signed: data.signed,
         signIn,
+        signOut,
       }}
     >
       {children}

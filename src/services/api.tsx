@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://3.131.152.29/api/',
+  baseURL: 'https://agrolu.xyz/api/',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

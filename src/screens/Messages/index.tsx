@@ -1,18 +1,17 @@
-import React from 'react';
-import { FlatList, View } from 'react-native';
-import { Text } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { FlatList } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
+import Message from '../../components/Message';
+import { Room } from '../../dtos/ChatDTO';
+import api from '../../services/api';
 import {
   Container,
   Header,
   HeaderContent,
   HeaderTitle,
   BackButton,
-  MessagesContainer,
-  Image,
-  AnnouncementTitle,
 } from './styles';
 
 export function Messages() {
@@ -22,35 +21,33 @@ export function Messages() {
     navigation.goBack();
   }
 
-  const mockMessages = [
-    {
-      id: 1,
-      firstAnnouncementImage:
-        'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
-      AnnouncementTitle: 'Trator Valtra BM',
-      messageTime: '4 mins atrás',
-      userName: 'John Doe',
-      message: 'Também quero alugar esse trator!! 🚜',
-    },
-    {
-      id: 2,
-      firstAnnouncementImage:
-        'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
-      AnnouncementTitle: 'Trator Valtra BM',
-      messageTime: '2 horas atrás',
-      userName: 'Jenny Doe',
-      message: 'Quero alugar esse trator!! 🚜',
-    },
-    {
-      id: 3,
-      firstAnnouncementImage:
-        'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
-      AnnouncementTitle: 'Trator Valtra BM',
-      messageTime: '1 dia atrás',
-      userName: 'Oliver Doe',
-      message: 'Esse trator é meu!! 🚜',
-    },
-  ];
+  const [rooms, setRooms] = useState<Room[]>([]);
+
+  const fetcRooms = async () => {
+    api
+      .get<Room>('rooms')
+      .then(response => {
+        setRooms(response.data);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  };
+
+  useEffect(() => {
+    fetcRooms();
+  }, []);
+
+  function handleChat(room: Room) {
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Chat',
+        params: {
+          room,
+        },
+      }),
+    );
+  }
 
   return (
     <Container>
@@ -63,14 +60,13 @@ export function Messages() {
       </Header>
 
       <FlatList
-        data={mockMessages}
+        data={rooms}
         keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
-          <MessagesContainer>
-            <Image source={{ uri: item.firstAnnouncementImage }} />
-            <AnnouncementTitle>{item.AnnouncementTitle}</AnnouncementTitle>
-            <Text>{item.userName}</Text>
-          </MessagesContainer>
+          <Message
+            data={item}
+            // onPress={() => handleChat(item)}
+          />
         )}
       />
     </Container>
