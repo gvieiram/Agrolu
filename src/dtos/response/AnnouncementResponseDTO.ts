@@ -59,7 +59,7 @@ export interface AnnouncementsPaginatorResponse extends Paginator {
 }
 
 export interface AnnouncementResponse {
-  id: string;
+  id: number;
   title: string;
   description: string;
   turbo: boolean;

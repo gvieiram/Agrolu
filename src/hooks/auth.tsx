@@ -105,9 +105,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         setData({ token: null, user: null, signed: false });
       })
-      .catch(error => {
-        console.log('ERROR! ', error.response);
-      });
+      .catch(error => console.log('ERROR! ', error.response));
   }
 
   async function signIn({ email, password }: SignInCredentials) {

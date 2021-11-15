@@ -60,10 +60,7 @@ export function Messages() {
         data={rooms}
         keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
-          <Message
-            data={item}
-            // onPress={() => handleChat(item)}
-          />
+          <Message data={item} onPress={() => handleChat(item)} />
         )}
       />
     </Container>

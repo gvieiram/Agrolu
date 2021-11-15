@@ -15,6 +15,7 @@ import { AddAnnouncement } from '../screens/AddAnnoucement';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
 import { Messages } from '../screens/Messages';
+import { More } from '../screens/More';
 import { AppStackRoutes } from './app.stack.routes';
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -84,6 +85,15 @@ export function AppTabRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <IconWechat width={32} height={32} fill={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="More"
+        component={More}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <IconMore width={32} height={32} fill={color} />
           ),
         }}
       />

@@ -11,7 +11,7 @@ interface Props extends RectButtonProps {
 
 export default function Message({ data, ...rest }: Props): ReactElement {
   return (
-    <MessagesContainer>
+    <MessagesContainer {...rest}>
       <Image source={{ uri: data.advertisement.first_image.url }} />
       <AnnouncementTitle>{data.advertisement.title}</AnnouncementTitle>
       <Text>{data.advertisement.advertiser.name}</Text>

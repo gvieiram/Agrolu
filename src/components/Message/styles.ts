@@ -1,9 +1,10 @@
 // import FastImage from 'react-native-fast-image';
+import { RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
-export const MessagesContainer = styled.View`
+export const MessagesContainer = styled(RectButton)`
   flex-direction: row;
   margin: 24px 16px 24px 16px;
 `;

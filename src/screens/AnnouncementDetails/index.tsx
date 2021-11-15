@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import {
@@ -17,6 +17,7 @@ import { AnnouncementData, Image } from '../../dtos/AnnouncementDTO';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import RoomApi from '../../services/api/RoomApi';
+import UserApi from '../../services/api/UserApi';
 import {
   Container,
   Header,
@@ -64,6 +65,7 @@ export function AnnouncementDetails(): ReactElement {
   const { ad } = route.params as Params;
 
   const [announcement, setAnnouncement] = useState<AnnouncementResponse>(null);
+  const [favorite, setFavorite] = useState(false);
 
   function handleBack() {
     navigation.goBack();
@@ -110,11 +112,26 @@ export function AnnouncementDetails(): ReactElement {
     );
   }
 
+  function handleFavorite() {
+    if (favorite) {
+      UserApi.deleteAnnouncementFavorite(announcement.id).then(() => {
+        setFavorite(false);
+      });
+    } else {
+      UserApi.storeAnnouncementFavorite(announcement.id).then(() => {
+        setFavorite(true);
+      });
+    }
+  }
+
   useEffect(() => {
     function getAnnouncementById() {
       AnnouncementApi.find(ad.id)
-        .then(response => setAnnouncement(response.data))
-        .catch(error => console.log('ERROR', error.response.data));
+        .then(response => {
+          setAnnouncement(response.data);
+          setFavorite(response.data.favorite_exists);
+        })
+        .catch(error => console.log('ERROR', error));
     }
 
     getAnnouncementById();
@@ -132,7 +149,12 @@ export function AnnouncementDetails(): ReactElement {
             </HeaderTitle>
 
             <IconsContainer>
-              <Like name="favorite-border" size={24} />
+              <TouchableOpacity onPress={() => handleFavorite()}>
+                <Like
+                  name={favorite ? 'favorite' : 'favorite-border'}
+                  size={24}
+                />
+              </TouchableOpacity>
 
               <Share name="ios-share" size={24} />
             </IconsContainer>
