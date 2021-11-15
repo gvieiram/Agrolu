@@ -66,6 +66,7 @@ export function AnnouncementDetails(): ReactElement {
 
   const [announcement, setAnnouncement] = useState<AnnouncementResponse>(null);
   const [favorite, setFavorite] = useState(false);
+  const [boost, setBoost] = useState(false);
 
   function handleBack() {
     navigation.goBack();
@@ -89,14 +90,14 @@ export function AnnouncementDetails(): ReactElement {
   }
 
   function handleBoost() {
-    AnnouncementApi.boost(announcement.id).catch(error =>
-      console.log('ERROR', error.response.data),
-    );
+    AnnouncementApi.boost(announcement.id)
+      .then(() => setBoost(true))
+      .catch(error => console.log('ERROR', error.response.data));
   }
 
   function handleOwns() {
     if (announcement.owns) {
-      if (announcement.turbo) {
+      if (boost) {
         return <TabBottom title="Anúncio turbinado" Icon={IconWechat} />;
       }
 
@@ -130,6 +131,7 @@ export function AnnouncementDetails(): ReactElement {
         .then(response => {
           setAnnouncement(response.data);
           setFavorite(response.data.favorite_exists);
+          setBoost(response.data.turbo);
         })
         .catch(error => console.log('ERROR', error));
     }
