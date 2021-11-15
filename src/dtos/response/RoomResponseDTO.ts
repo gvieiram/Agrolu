@@ -21,5 +21,6 @@ export interface RoomResponse {
   advertisement_id: number;
   user_id: number;
   advertisement: Announcement;
+  title?: string;
   last_message: MessageResponse | null;
 }

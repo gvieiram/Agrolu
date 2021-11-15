@@ -146,7 +146,7 @@ export function Chat() {
         <HeaderContent>
           <BackButton onPress={handleBack} />
 
-          <HeaderTitle>{room.advertisement.advertiser.name}</HeaderTitle>
+          <HeaderTitle>{room.title}</HeaderTitle>
         </HeaderContent>
       </Header>
 
