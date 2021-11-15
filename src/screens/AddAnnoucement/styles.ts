@@ -96,3 +96,8 @@ export const InputDescription = styled.TextInput`
 
   text-align: justify;
 `;
+
+export const ContainerImageSelection = styled.View`
+  flex: 1;
+  margin-top: 40px;
+`;
