@@ -10,9 +10,9 @@ import _ from 'lodash';
 import Pusher from 'pusher-js/react-native';
 import { useTheme } from 'styled-components';
 
-import { Room } from '../../dtos/ChatDTO';
+import { RoomResponse } from '../../dtos/response/RoomResponseDTO';
 import { useAuth } from '../../hooks/auth';
-import api from '../../services/api';
+import MessageApi from '../../services/api/MessageApi';
 import {
   parsePatterns,
   renderBubble,
@@ -47,7 +47,7 @@ console.warn = message => {
 };
 
 interface Params {
-  room: Room;
+  room: RoomResponse;
 }
 
 export function Chat() {
@@ -64,21 +64,21 @@ export function Chat() {
 
   const [messages, setMessages] = useState([]);
 
-  const fetchMessages = async () => {
-    const response = await api.get(`rooms/${room.id}/messages`);
-
-    response.data.map(message =>
-      setMessages(previousMessages =>
-        GiftedChat.append(previousMessages, [
-          {
-            _id: message.id,
-            text: message.message,
-            createdAt: new Date(message.created_at),
-            user: {
-              _id: message.user_id,
+  const fetchMessages = () => {
+    MessageApi.all(room.id).then(response =>
+      response.data.map(message =>
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, [
+            {
+              _id: message.id,
+              text: message.message,
+              createdAt: new Date(message.created_at),
+              user: {
+                _id: message.user_id,
+              },
             },
-          },
-        ]),
+          ]),
+        ),
       ),
     );
   };
@@ -133,11 +133,11 @@ export function Chat() {
   }, []);
 
   const onSend = useCallback((newMessages = []) => {
-    newMessages.map(newMessage => {
-      api.post(`rooms/${room.id}/messages`, {
+    newMessages.map(newMessage =>
+      MessageApi.store(room.id, {
         message: newMessage.text,
-      });
-    });
+      }),
+    );
   }, []);
 
   return (

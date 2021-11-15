@@ -2,11 +2,11 @@ import React, { ReactElement } from 'react';
 import { RectButtonProps } from 'react-native-gesture-handler';
 import { Text } from 'react-native-paper';
 
-import { Room } from '../../dtos/ChatDTO';
+import { RoomResponse } from '../../dtos/response/RoomResponseDTO';
 import { MessagesContainer, Image, AnnouncementTitle } from './styles';
 
 interface Props extends RectButtonProps {
-  data: Room;
+  data: RoomResponse;
 }
 
 export default function Message({ data, ...rest }: Props): ReactElement {

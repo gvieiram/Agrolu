@@ -14,8 +14,9 @@ import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import TabBottom from '../../components/TabBottom';
 import { AnnouncementData, Image } from '../../dtos/AnnouncementDTO';
-import { Room } from '../../dtos/ChatDTO';
-import api from '../../services/api';
+import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
+import AnnouncementApi from '../../services/api/AnnouncementApi';
+import RoomApi from '../../services/api/RoomApi';
 import {
   Container,
   Header,
@@ -62,18 +63,17 @@ export function AnnouncementDetails(): ReactElement {
   const route = useRoute();
   const { ad } = route.params as Params;
 
-  const [announcement, setAnnouncement] = useState<AnnouncementData>(null);
+  const [announcement, setAnnouncement] = useState<AnnouncementResponse>(null);
 
   function handleBack() {
     navigation.goBack();
   }
 
-  function handleChat() {
-    api
-      .post('rooms', {
-        advertisement_id: announcement.id,
-      })
-      .then(response => {
+  async function handleChat() {
+    RoomApi.store({
+      advertisement_id: announcement.id,
+    })
+      .then(response =>
         navigation.dispatch(
           CommonActions.navigate({
             name: 'Chat',
@@ -81,15 +81,15 @@ export function AnnouncementDetails(): ReactElement {
               room: response.data,
             },
           }),
-        );
-      })
-      .catch(error => {
-        console.log('ERROR', error.response);
-      });
+        ),
+      )
+      .catch(error => console.log('ERROR', error.response.data));
   }
 
   function handleBoost() {
-    api.post(`advertisements/${announcement.id}/boost`);
+    AnnouncementApi.boost(announcement.id).catch(error =>
+      console.log('ERROR', error.response.data),
+    );
   }
 
   function handleOwns() {
@@ -111,11 +111,10 @@ export function AnnouncementDetails(): ReactElement {
   }
 
   useEffect(() => {
-    async function getAnnouncementById() {
-      const response = await api.get<AnnouncementData>(
-        `advertisements/${ad.id}`,
-      );
-      setAnnouncement(response.data);
+    function getAnnouncementById() {
+      AnnouncementApi.find(ad.id)
+        .then(response => setAnnouncement(response.data))
+        .catch(error => console.log('ERROR', error.response.data));
     }
 
     getAnnouncementById();

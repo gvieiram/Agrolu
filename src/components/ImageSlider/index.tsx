@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FlatList, ViewToken } from 'react-native';
 
-import { Image as ImageAnnouncement } from '../../dtos/AnnouncementDTO';
+import { Image as ImageAnnouncement } from '../../dtos/response/AnnouncementResponseDTO';
 import {
   Container,
   ImageIndexes,

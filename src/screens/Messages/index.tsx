@@ -5,7 +5,9 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 
 import Message from '../../components/Message';
 import { Room } from '../../dtos/ChatDTO';
-import api from '../../services/api';
+import { RoomResponse } from '../../dtos/response/RoomResponseDTO';
+import { rooms as RoomsRequest } from '../../services/api';
+import RoomApi from '../../services/api/RoomApi';
 import {
   Container,
   Header,
@@ -21,17 +23,12 @@ export function Messages() {
     navigation.goBack();
   }
 
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<RoomResponse[]>([]);
 
-  const fetcRooms = async () => {
-    api
-      .get<Room>('rooms')
-      .then(response => {
-        setRooms(response.data);
-      })
-      .catch(error => {
-        console.log(error.response);
-      });
+  const fetcRooms = () => {
+    RoomApi.all()
+      .then(response => setRooms(response.data))
+      .catch(error => console.log(error.response.data));
   };
 
   useEffect(() => {
