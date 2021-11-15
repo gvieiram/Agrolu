@@ -133,7 +133,11 @@ export function AnnouncementDetails(): ReactElement {
           setFavorite(response.data.favorite_exists);
           setBoost(response.data.turbo);
         })
-        .catch(error => console.log('ERROR', error));
+        .catch(error => {
+          if (error.response) {
+            alert(error.response.data.message);
+          }
+        });
     }
 
     getAnnouncementById();

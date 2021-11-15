@@ -27,7 +27,9 @@ export function Messages() {
 
   const fetcRooms = () => {
     RoomApi.all()
-      .then(response => setRooms(response.data))
+      .then(response => {
+        setRooms(response.data);
+      })
       .catch(error => console.log(error.response.data));
   };
 
