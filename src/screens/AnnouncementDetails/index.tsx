@@ -96,20 +96,20 @@ export function AnnouncementDetails(): ReactElement {
 
   function handleOwns() {
     if (announcement.owns) {
-      return <TabBottom title="Chat" Icon={IconWechat} onPress={handleChat} />;
+      if (announcement.turbo) {
+        return <TabBottom title="Anúncio turbinado" Icon={IconWechat} />;
+      }
+
+      return (
+        <TabBottom
+          title="Turbinar anúncio"
+          Icon={IconWechat}
+          onPress={handleBoost}
+        />
+      );
     }
 
-    if (announcement.turbo) {
-      return <TabBottom title="Anúncio turbinado" Icon={IconWechat} />;
-    }
-
-    return (
-      <TabBottom
-        title="Turbinar anúncio"
-        Icon={IconWechat}
-        onPress={handleBoost}
-      />
-    );
+    return <TabBottom title="Chat" Icon={IconWechat} onPress={handleChat} />;
   }
 
   function handleFavorite() {
