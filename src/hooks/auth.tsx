@@ -13,7 +13,9 @@ interface User {
   name: string;
   cep?: string;
   ibge?: string;
-  neighborhood?: string;
+  complement?: string;
+  public_place?: string;
+  phone?: string;
   online: boolean;
   photo?: string;
   receive_notification: boolean;
@@ -61,17 +63,39 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<AuthState>({} as AuthState);
+  const [load, setLoad] = useState(false);
   const authPromise = getSecureToken('auth');
 
-  authPromise.then(auth => {
-    if (!auth) {
-      setData({ token: null, user: null, signed: false });
-    } else {
-      api.defaults.headers.authorization = `Bearer ${auth.token}`;
+  if (!load) {
+    authPromise.then(auth => {
+      if (!auth) {
+        setData({ token: null, user: null, signed: false });
+      } else {
+        api
+          .get('users/me', {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          })
+          .then(response => {
+            const user = response.data as User;
 
-      setData({ token: auth.token, user: auth.user, signed: true });
-    }
-  });
+            api.defaults.headers.authorization = `Bearer ${auth.token}`;
+
+            setData({ token: auth.token, user, signed: true });
+          })
+          .catch(error => {
+            console.log('ERROR! ', error.response);
+
+            if (error.response.status === 401) {
+              setData({ token: null, user: null, signed: false });
+            }
+          });
+      }
+    });
+
+    setLoad(true);
+  }
 
   async function signOut() {
     api

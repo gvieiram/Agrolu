@@ -25,7 +25,7 @@ export default function Announcement({ data, ...rest }: Props): ReactElement {
     <Container rippleColor={theme.colors.creme_background} {...rest}>
       <Image
         source={{
-          uri: data.thumbnail,
+          uri: data.first_image.url,
         }}
         resizeMode="cover"
       />

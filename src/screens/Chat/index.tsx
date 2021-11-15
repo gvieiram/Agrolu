@@ -92,6 +92,7 @@ export function Chat() {
           Accept: 'application/json',
         },
       },
+      forceTLS: true,
       authEndpoint: 'https://agrolu.xyz/broadcasting/auth',
     });
     const broadcast = new Echo({

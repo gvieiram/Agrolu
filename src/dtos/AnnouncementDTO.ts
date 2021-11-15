@@ -3,6 +3,8 @@ interface Advertiser {
   name: string;
   verified: boolean;
   created_at: string;
+  created_date: string;
+  created_time: string;
 }
 
 interface AnnouncementCategory {
@@ -14,6 +16,17 @@ interface AnnouncementType {
   id: number;
   name: string;
   category: AnnouncementCategory;
+}
+
+interface AnnouncementTags {
+  title: string;
+  has: boolean;
+}
+
+export interface Image {
+  id: number;
+  advertisement_id: number;
+  url: string;
 }
 
 export interface AnnouncementData {
@@ -31,6 +44,12 @@ export interface AnnouncementData {
     id: string;
     uri: string;
   };
+  first_image?: Image[];
+  images?: Image[];
+  tags: AnnouncementTags[];
+  favorite_exists: boolean;
+  owns: boolean;
+  turbo: boolean;
 }
 
 export interface AnnouncementResponse {

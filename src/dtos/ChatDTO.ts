@@ -22,6 +22,6 @@ interface LastMessage {
 }
 export interface Room {
   id: number;
-  advertisement: Advertisement;
-  last_message: LastMessage | null;
+  advertisement?: Advertisement;
+  last_message?: LastMessage | null;
 }

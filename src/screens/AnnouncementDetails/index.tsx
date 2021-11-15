@@ -13,7 +13,8 @@ import IconWechat from '../../assets/img/wechat.svg';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import TabBottom from '../../components/TabBottom';
-import { AnnouncementData } from '../../dtos/AnnouncementDTO';
+import { AnnouncementData, Image } from '../../dtos/AnnouncementDTO';
+import { Room } from '../../dtos/ChatDTO';
 import api from '../../services/api';
 import {
   Container,
@@ -61,19 +62,52 @@ export function AnnouncementDetails(): ReactElement {
   const route = useRoute();
   const { ad } = route.params as Params;
 
-  const [announcement, setAnnouncement] = useState<AnnouncementData>({
-    advertiser: {},
-    type: {
-      category: {},
-    },
-  } as AnnouncementData);
+  const [announcement, setAnnouncement] = useState<AnnouncementData>(null);
 
   function handleBack() {
     navigation.goBack();
   }
 
   function handleChat() {
-    navigation.dispatch(CommonActions.navigate('Chat'));
+    api
+      .post('rooms', {
+        advertisement_id: announcement.id,
+      })
+      .then(response => {
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'Chat',
+            params: {
+              room: response.data,
+            },
+          }),
+        );
+      })
+      .catch(error => {
+        console.log('ERROR', error.response);
+      });
+  }
+
+  function handleBoost() {
+    api.post(`advertisements/${announcement.id}/boost`);
+  }
+
+  function handleOwns() {
+    if (announcement.owns) {
+      return <TabBottom title="Chat" Icon={IconWechat} onPress={handleChat} />;
+    }
+
+    if (announcement.turbo) {
+      return <TabBottom title="Anúncio turbinado" Icon={IconWechat} />;
+    }
+
+    return (
+      <TabBottom
+        title="Turbinar anúncio"
+        Icon={IconWechat}
+        onPress={handleBoost}
+      />
+    );
   }
 
   useEffect(() => {
@@ -87,158 +121,155 @@ export function AnnouncementDetails(): ReactElement {
     getAnnouncementById();
   }, [ad.id]);
 
+  if (announcement) {
+    return (
+      <Container>
+        <Header>
+          <HeaderContent>
+            <BackButton onPress={handleBack} />
+
+            <HeaderTitle>
+              {ad.title.length >= 25 ? `${ad.title.slice(0, 22)}...` : ad.title}
+            </HeaderTitle>
+
+            <IconsContainer>
+              <Like name="favorite-border" size={24} />
+
+              <Share name="ios-share" size={24} />
+            </IconsContainer>
+          </HeaderContent>
+        </Header>
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <ImageSlider imagesUrl={announcement.images} />
+
+          <AnnouncementContent>
+            <AnnouncementTitle>{ad.title}</AnnouncementTitle>
+            <Price>{`R$ ${ad.price}/dia`}</Price>
+            <Survey>
+              <SurveyIcon />
+
+              <SurveyTitle>Verificar vistoria</SurveyTitle>
+            </Survey>
+            <Information>
+              <InformationText>Transporte disponível</InformationText>
+
+              <InformationText>Operador disponível</InformationText>
+            </Information>
+            <PublishedAt>
+              {`Publicado em ${ad.created_date} às ${ad.created_time}`}
+            </PublishedAt>
+            <Line />
+            <Description>
+              <Title>Descrição</Title>
+
+              <DescriptionContent>
+                {announcement.description}
+              </DescriptionContent>
+              <Line />
+            </Description>
+            <Details>
+              <Title>Detalhes</Title>
+
+              <Type>
+                <TitleType>Categoria</TitleType>
+
+                <DescriptionType>
+                  {announcement.type.category.name}
+                </DescriptionType>
+              </Type>
+
+              <Type>
+                <TitleType>Tipo</TitleType>
+
+                <DescriptionType>{announcement.type.name}</DescriptionType>
+              </Type>
+              <Line />
+            </Details>
+            <Location>
+              <Title>Localização</Title>
+
+              <Type>
+                <TitleType>CEP</TitleType>
+
+                <DescriptionType>88180-000</DescriptionType>
+              </Type>
+
+              <Type>
+                <TitleType>Município</TitleType>
+
+                <DescriptionType>Antônio Carlos</DescriptionType>
+              </Type>
+
+              <Type>
+                <TitleType>Bairro</TitleType>
+
+                <DescriptionType>Usina</DescriptionType>
+              </Type>
+              <Line />
+            </Location>
+            <Title>Anunciante</Title>
+            <Advertiser>
+              <About>
+                <Name>{announcement.advertiser.name}</Name>
+
+                {announcement.advertiser.verified ? (
+                  <ProfileVerification>
+                    <MaterialIcons
+                      name="check"
+                      size={27}
+                      color={theme.colors.success_main}
+                    />
+
+                    <TextVerified>Perfil Verificado</TextVerified>
+                  </ProfileVerification>
+                ) : (
+                  <ProfileVerification>
+                    <MaterialIcons
+                      name="close"
+                      size={24}
+                      color={theme.colors.error_main}
+                    />
+
+                    <TextVerified>Perfil Não Verificado</TextVerified>
+                  </ProfileVerification>
+                )}
+              </About>
+
+              <Entered>{`Entrou na Agrolu em ${announcement.advertiser.created_date}`}</Entered>
+
+              <Status>
+                <MaterialIcons
+                  name="fiber-manual-record"
+                  size={14}
+                  color={
+                    theme.colors.success_main
+                    // user.status
+                    //   ? theme.colors.success_main
+                    //   : theme.colors.gray_line_dark
+                  }
+                />
+
+                <StatusText>
+                  Online
+                  {/* {user.status ? 'Online' : 'Offline'} */}
+                </StatusText>
+              </Status>
+            </Advertiser>
+          </AnnouncementContent>
+        </ScrollView>
+        {handleOwns()}
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <Header>
         <HeaderContent>
           <BackButton onPress={handleBack} />
-
-          <HeaderTitle>
-            {ad.title.length >= 25 ? `${ad.title.slice(0, 22)}...` : ad.title}
-          </HeaderTitle>
-
-          <IconsContainer>
-            <Like name="favorite-border" size={24} />
-
-            <Share name="ios-share" size={24} />
-          </IconsContainer>
         </HeaderContent>
       </Header>
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <ImageSlider
-          imagesUrl={[
-            {
-              id: 'Img_1',
-              photo:
-                'https://www.valtra.com.br/content/dam/public/valtra/pt-br/produtos/tratores/a2s/A2S.jpg',
-            },
-            {
-              id: 'Img_2',
-              photo:
-                'https://imagens-cdn.canalrural.com.br/2019/07/valtra01.jpg',
-            },
-            {
-              id: 'Img_3',
-              photo: 'https://img.olx.com.br/images/11/113182819977960.jpg',
-            },
-          ]}
-        />
-
-        <AnnouncementContent>
-          <AnnouncementTitle>{ad.title}</AnnouncementTitle>
-          <Price>{`R$ ${ad.price}/dia`}</Price>
-          <Survey>
-            <SurveyIcon />
-
-            <SurveyTitle>Verificar vistoria</SurveyTitle>
-          </Survey>
-          <Information>
-            <InformationText>Transporte disponível</InformationText>
-
-            <InformationText>Operador disponível</InformationText>
-          </Information>
-          <PublishedAt>
-            {`Publicado em ${ad.created_date} às ${ad.created_time}`}
-          </PublishedAt>
-          <Line />
-          <Description>
-            <Title>Descrição</Title>
-
-            <DescriptionContent>{announcement.description}</DescriptionContent>
-            <Line />
-          </Description>
-          <Details>
-            <Title>Detalhes</Title>
-
-            <Type>
-              <TitleType>Categoria</TitleType>
-
-              <DescriptionType>
-                {announcement.type.category.name}
-              </DescriptionType>
-            </Type>
-
-            <Type>
-              <TitleType>Tipo</TitleType>
-
-              <DescriptionType>{announcement.type.name}</DescriptionType>
-            </Type>
-            <Line />
-          </Details>
-          <Location>
-            <Title>Localização</Title>
-
-            <Type>
-              <TitleType>CEP</TitleType>
-
-              <DescriptionType>88180-000</DescriptionType>
-            </Type>
-
-            <Type>
-              <TitleType>Município</TitleType>
-
-              <DescriptionType>Antônio Carlos</DescriptionType>
-            </Type>
-
-            <Type>
-              <TitleType>Bairro</TitleType>
-
-              <DescriptionType>Usina</DescriptionType>
-            </Type>
-            <Line />
-          </Location>
-          <Title>Anunciante</Title>
-          <Advertiser>
-            <About>
-              <Name>{announcement.advertiser.name}</Name>
-
-              {announcement.advertiser.verified ? (
-                <ProfileVerification>
-                  <MaterialIcons
-                    name="check"
-                    size={27}
-                    color={theme.colors.success_main}
-                  />
-
-                  <TextVerified>Perfil Verificado</TextVerified>
-                </ProfileVerification>
-              ) : (
-                <ProfileVerification>
-                  <MaterialIcons
-                    name="close"
-                    size={24}
-                    color={theme.colors.error_main}
-                  />
-
-                  <TextVerified>Perfil Não Verificado</TextVerified>
-                </ProfileVerification>
-              )}
-            </About>
-
-            <Entered>{`Entrou na Agrolu em ${announcement.advertiser.created_at}`}</Entered>
-
-            <Status>
-              <MaterialIcons
-                name="fiber-manual-record"
-                size={14}
-                color={
-                  theme.colors.success_main
-                  // user.status
-                  //   ? theme.colors.success_main
-                  //   : theme.colors.gray_line_dark
-                }
-              />
-
-              <StatusText>
-                Online
-                {/* {user.status ? 'Online' : 'Offline'} */}
-              </StatusText>
-            </Status>
-          </Advertiser>
-        </AnnouncementContent>
-      </ScrollView>
-      <TabBottom title="Chat" Icon={IconWechat} onPress={handleChat} />
     </Container>
   );
 }
