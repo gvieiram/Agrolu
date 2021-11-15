@@ -26,6 +26,8 @@ import {
   ActiveScreen,
   StepOne,
   StepTwo,
+  Header,
+  BackButton,
 } from './styles';
 
 export default function SignUpStepOne() {
@@ -34,6 +36,10 @@ export default function SignUpStepOne() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState('');
+
+  function handleBack() {
+    navigation.dispatch(CommonActions.navigate('SignIn'));
+  }
 
   async function handleNextStep() {
     try {
@@ -71,6 +77,12 @@ export default function SignUpStepOne() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
+          {Platform.OS === 'ios' ? (
+            <Header>
+              <BackButton onPress={handleBack} />
+            </Header>
+          ) : null}
+
           <Logo />
 
           <Title>Crie sua{'\n'}conta</Title>

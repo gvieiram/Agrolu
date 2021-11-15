@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Alert, Keyboard, Platform, TouchableOpacity } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Alert, Keyboard, Platform } from 'react-native';
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
 

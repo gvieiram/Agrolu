@@ -30,6 +30,8 @@ import {
   StepOne,
   StepTwo,
   Error,
+  Header,
+  BackButton,
 } from './styles';
 
 interface FormData {
@@ -106,6 +108,10 @@ export default function SignUpStepTwo() {
   const route = useRoute();
   const { user } = route.params as Params;
 
+  function handleBack() {
+    navigation.dispatch(CommonActions.navigate('SignUpStepOne'));
+  }
+
   const {
     setValue,
     control,
@@ -158,6 +164,12 @@ export default function SignUpStepTwo() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
+          {Platform.OS === 'ios' ? (
+            <Header>
+              <BackButton onPress={handleBack} />
+            </Header>
+          ) : null}
+
           <Logo />
 
           <Title>Crie sua{'\n'}conta</Title>
