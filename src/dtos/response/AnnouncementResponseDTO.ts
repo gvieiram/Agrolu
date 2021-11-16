@@ -55,7 +55,7 @@ export interface Advertiser {
 }
 
 export interface AnnouncementsPaginatorResponse extends Paginator {
-  data: Announcement[];
+  data: AnnouncementResponse[];
 }
 
 export interface AnnouncementResponse {
@@ -64,22 +64,23 @@ export interface AnnouncementResponse {
   description: string;
   turbo: boolean;
   user_id: number;
-  price: number;
+  price: string;
   has_operator: boolean;
   last_price: number;
   type_id: number;
-  need_transport: boolean;
-  display_phone: boolean;
+  need_transport?: boolean;
+  display_phone?: boolean;
   available: boolean;
   created_at: string;
-  favorite_exists: boolean;
-  visits: number;
+  favorite_exists?: boolean;
+  visits?: number;
   created_date: string;
   created_time: string;
   tags: Tag[];
   owns: boolean;
-  type: Type;
+  type?: Type;
   images: Image[];
+  first_image?: Image;
   advertiser: Advertiser;
   inspections: Inspection[];
 }

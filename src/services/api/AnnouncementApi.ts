@@ -1,30 +1,33 @@
-import {
-  AnnouncementImageRequest,
-  AnnouncementRequest,
-} from '../../dtos/request/AnnouncementRequestDTO';
+import { Params } from '../../dtos/request/AnnouncementRequestDTO';
 import {
   AnnouncementResponse,
   AnnouncementsPaginatorResponse,
 } from '../../dtos/response/AnnouncementResponseDTO';
 import api from '../api';
 
-const all = () => api.get<AnnouncementsPaginatorResponse>('advertisements');
+const all = (params: Params) =>
+  api.get<AnnouncementsPaginatorResponse>('advertisements', {
+    params,
+  });
 
 const find = (id: number) =>
   api.get<AnnouncementResponse>(`advertisements/${id}`);
 
-const store = (announcementData: AnnouncementRequest) =>
-  api.post<AnnouncementResponse>('advertisements', announcementData);
+const store = (announcementData: FormData) =>
+  api.post<AnnouncementResponse>('advertisements', announcementData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Accept: 'application/json',
+    },
+  });
 
-const update = (id: number, announcementData: AnnouncementRequest) =>
+const update = (id: number, announcementData: FormData) =>
   api.put<AnnouncementResponse>(`advertisements/${id}`, announcementData);
 
 const boost = (id: number) => api.post(`advertisements/${id}/boost`);
 
-const storeImage = (
-  id: number,
-  announcementImageData: AnnouncementImageRequest,
-) => api.post(`advertisements/${id}/images`, announcementImageData);
+const storeImage = (id: number, announcementImageData: FormData) =>
+  api.post(`advertisements/${id}/images`, announcementImageData);
 
 const deleteImage = (id: number) => api.delete(`images/${id}`);
 

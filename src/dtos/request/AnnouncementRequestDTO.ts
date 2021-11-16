@@ -1,19 +1,11 @@
-interface Image {
-  path: string;
-}
-
-interface Inspection {
-  path: string;
-}
-
-export interface AnnouncementRequest {
-  title: string;
-  price: number;
-  description: string;
-  images: Image[];
-  inspections?: Inspection[];
-}
-
-export interface AnnouncementImageRequest {
-  images: Image[];
+export interface Params {
+  page: number;
+  name?: string;
+  price?: number;
+  operator?: boolean;
+  transport?: boolean;
+  available?: boolean;
+  type?: number;
+  category?: number;
+  inspection?: boolean;
 }

@@ -3,7 +3,7 @@ import { RectButtonProps } from 'react-native-gesture-handler';
 
 import { useTheme } from 'styled-components';
 
-import { AnnouncementData } from '../../dtos/AnnouncementDTO';
+import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import {
   Container,
   Image,
@@ -15,7 +15,7 @@ import {
 } from './styles';
 
 interface Props extends RectButtonProps {
-  data: AnnouncementData;
+  data: AnnouncementResponse;
 }
 
 export default function Announcement({ data, ...rest }: Props): ReactElement {
@@ -44,7 +44,7 @@ export default function Announcement({ data, ...rest }: Props): ReactElement {
           {`${data.created_date} às ${data.created_time}`}
         </Publication>
 
-        <Status>{data.status}</Status>
+        <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
       </Details>
     </Container>
   );

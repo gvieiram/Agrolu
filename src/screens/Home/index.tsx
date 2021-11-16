@@ -6,11 +6,9 @@ import { useTheme } from 'styled-components';
 
 import Announcement from '../../components/Announcement';
 import { Load } from '../../components/Load';
-import {
-  AnnouncementData,
-  AnnouncementResponse,
-} from '../../dtos/AnnouncementDTO';
+import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import api from '../../services/api';
+import AnnouncementApi from '../../services/api/AnnouncementApi';
 import {
   Container,
   Header,
@@ -35,7 +33,9 @@ export default function Home() {
   const navigation = useNavigation();
   const theme = useTheme();
 
-  const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
+  const [announcements, setAnnouncements] = useState<AnnouncementResponse[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [endItems, setEndItems] = useState(false);
@@ -46,24 +46,21 @@ export default function Home() {
   }, []);
 
   async function getAnnouncements() {
-    try {
-      const res = await api.get<AnnouncementResponse>(
-        `advertisements?page=${page}`,
-      );
+    AnnouncementApi.all({
+      page,
+    })
+      .then(response => {
+        setAnnouncements([...announcements, ...response.data.data]);
+        setPage(page + 1);
 
-      setAnnouncements([...announcements, ...res.data.data]);
-      setPage(page + 1);
-
-      if (res.data.next_page_url === null) {
-        setEndItems(true);
-      } else {
-        setEndItems(false);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+        if (response.data.next_page_url === null) {
+          setEndItems(true);
+        } else {
+          setEndItems(false);
+        }
+      })
+      .catch(error => console.log(error.response))
+      .finally(() => setLoading(false));
   }
 
   const onRefresh = React.useCallback(async () => {
@@ -81,7 +78,7 @@ export default function Home() {
     return <Load />;
   }
 
-  function handleAnnouncementDetails(ad: AnnouncementData) {
+  function handleAnnouncementDetails(ad: AnnouncementResponse) {
     navigation.dispatch(
       CommonActions.navigate({
         name: 'AnnouncementDetails',

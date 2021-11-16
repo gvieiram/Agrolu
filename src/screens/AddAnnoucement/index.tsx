@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Image as Images, ScrollView, View } from 'react-native';
 
 import { AssetsSelector } from 'expo-images-picker';
@@ -11,7 +11,12 @@ import { useTheme } from 'styled-components';
 import ButtonGradient from '../../components/ButtonGradient';
 import { Checkbox } from '../../components/Checkbox';
 import { InputPicker } from '../../components/Inputs/InputPicker';
-import { useAuth } from '../../hooks/auth';
+import {
+  CategoryResponse,
+  Type,
+} from '../../dtos/response/CategoryResponseDTO';
+import AnnouncementApi from '../../services/api/AnnouncementApi';
+import CategoryApi from '../../services/api/CategoryApi';
 import {
   Container,
   ContainerContent,
@@ -32,11 +37,19 @@ export function AddAnnouncement() {
   const theme = useTheme();
   const navigation = useNavigation();
 
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedType, setSelectedType] = useState('');
-  const [images, setImages] = useState([] as Asset[]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [types, setTypes] = useState<Type[]>([]);
   const [handleSelectPhotosIsOpen, setHandleSelectPhotosIsOpen] =
     useState(false);
+  const [images, setImages] = useState([]);
+  const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [type_id, setType] = useState(null);
+  const [need_transport, setNeedTransport] = useState(false);
+  const [display_phone, setDisplayPhone] = useState(false);
+  const [has_operator, setHasOperator] = useState(false);
 
   function handleBack() {
     navigation.goBack();
@@ -47,14 +60,8 @@ export function AddAnnouncement() {
   }
 
   function onDone(data) {
-    try {
-      setImages(data);
-      console.log('###############', images);
-
-      setHandleSelectPhotosIsOpen(false);
-    } catch (error) {
-      console.log(error);
-    }
+    setImages(data);
+    setHandleSelectPhotosIsOpen(false);
   }
 
   const errors = useMemo(
@@ -99,7 +106,7 @@ export function AddAnnouncement() {
       width: 50,
       compress: 0.7,
       base64: false,
-      saveTo: 'jpeg',
+      saveTo: 'png',
     }),
     [],
   );
@@ -125,11 +132,58 @@ export function AddAnnouncement() {
       minSelection: 1,
       buttonTextStyle: textStyled,
       buttonStyle: buttonStyled,
-      onBack: () => navigation.goBack(),
-      onSuccess: (data: Asset) => onDone(data),
+      onBack: () => setHandleSelectPhotosIsOpen(false),
+      onSuccess: (e: any) => onDone(e),
     }),
     [],
   );
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('type_id', type_id);
+    formData.append('need_transport', need_transport ? '1' : '0');
+    formData.append('display_phone', display_phone ? '1' : '0');
+    formData.append('has_operator', has_operator ? '1' : '0');
+    images.map((image: Asset) => {
+      const localUri = image.uri;
+      const filename = localUri.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : `image`;
+      formData.append('images[]', { uri: localUri, name: filename, type });
+    });
+    formData.append('price', '400.0');
+
+    AnnouncementApi.store(formData)
+      .then(response =>
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'AnnouncementDetails',
+            params: {
+              ad: response.data,
+            },
+          }),
+        ),
+      )
+      .catch(error => console.log(error.response));
+  };
+
+  useEffect(() => {
+    function getCategories() {
+      CategoryApi.all()
+        .then(response => {
+          setCategories(response.data);
+        })
+        .catch(error => {
+          if (error.response) {
+            alert(error.response.data.message);
+          }
+        });
+    }
+
+    getCategories();
+  }, []);
 
   if (handleSelectPhotosIsOpen) {
     return (
@@ -137,7 +191,7 @@ export function AddAnnouncement() {
         <AssetsSelector
           Settings={{
             assetsType: [MediaType.photo],
-            getImageMetaData: true,
+            getImageMetaData: false,
             minSelection: 1,
             maxSelection: 6,
             initialLoad: 100,
@@ -175,7 +229,7 @@ export function AddAnnouncement() {
               color={theme.colors.green_dark_3}
             />
             <TextImage>Adicionar Fotos</TextImage>
-            <CountImage>0 / 6 Fotos</CountImage>
+            <CountImage>{images.length} / 6 Fotos</CountImage>
           </Image>
 
           <View
@@ -202,6 +256,7 @@ export function AddAnnouncement() {
           <InputTitle
             placeholder="Ex: Trator Novo"
             placeholderTextColor={theme.colors.input_text}
+            onChangeText={text => setTitle(text)}
           />
 
           <Title>Descrição *</Title>
@@ -212,47 +267,66 @@ export function AddAnnouncement() {
             underlineColorAndroid="transparent"
             placeholder="Ex: Trator novo com vistoria em dia, motor bom, pneus bons, ótimo para plantio de soja."
             placeholderTextColor={theme.colors.input_text}
+            onChangeText={text => setDescription(text)}
           />
 
           <Title>Categoria *</Title>
           <InputPicker
             selectedValue={selectedCategory}
-            onValueChange={(itemValue: string, itemIndex) =>
-              setSelectedCategory(itemValue)
-            }
+            onValueChange={value => {
+              setSelectedCategory(value);
+              const category = categories.find(item => item.id == value);
+              setTypes(category.types);
+            }}
             labelDisable="Selecione uma categoria"
-            items={[
-              { label: 'Trator', value: 'trator' },
-              { label: 'Tobata', value: 'tobata' },
-              { label: 'Colheitadeira', value: 'colheitadeira' },
-            ]}
+            items={
+              categories
+                ? categories.map(item => {
+                    return { label: item.name, value: item.id };
+                  })
+                : []
+            }
           />
 
           <Title>Tipo *</Title>
           <InputPicker
             selectedValue={selectedType}
-            onValueChange={(itemValue: string, itemIndex) =>
-              setSelectedType(itemValue)
-            }
+            onValueChange={value => {
+              setSelectedType(value);
+
+              setType(value);
+            }}
             labelDisable="Selecione um tipo"
-            items={[
-              { label: 'Tipo 1', value: 'tipo1' },
-              { label: 'Tipo 2', value: 'tipo2' },
-              { label: 'Tipo 3', value: 'tipo3' },
-            ]}
+            items={
+              types
+                ? types.map(item => {
+                    return { label: item.name, value: item.id };
+                  })
+                : []
+            }
           />
 
           <Checkbox
             text="Preciso de transporte para este anúncio"
             style={{ marginTop: 20 }}
+            status={need_transport ? 'checked' : 'unchecked'}
+            onPress={() => setNeedTransport(!need_transport)}
           />
 
           <Checkbox
             text="Exibir meu telefone neste anúncio"
-            style={{ marginBottom: 40 }}
+            status={display_phone ? 'checked' : 'unchecked'}
+            onPress={() => setDisplayPhone(!display_phone)}
           />
 
-          <ButtonGradient title="Anunciar já" />
+          <Checkbox
+            text="Operador disponível"
+            style={{ marginBottom: 40 }}
+            status={has_operator ? 'checked' : 'unchecked'}
+            onPress={() => setHasOperator(!has_operator)}
+          />
+
+          <ButtonGradient title="Anunciar já" onPress={() => handleSubmit()} />
         </ContainerContent>
       </ScrollView>
     </Container>

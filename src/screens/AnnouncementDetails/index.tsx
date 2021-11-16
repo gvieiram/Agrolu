@@ -13,7 +13,6 @@ import IconWechat from '../../assets/img/wechat.svg';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
 import TabBottom from '../../components/TabBottom';
-import { AnnouncementData, Image } from '../../dtos/AnnouncementDTO';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import RoomApi from '../../services/api/RoomApi';
@@ -55,7 +54,7 @@ import {
 } from './styles';
 
 interface Params {
-  ad: AnnouncementData;
+  ad: AnnouncementResponse;
 }
 
 export function AnnouncementDetails(): ReactElement {
@@ -69,7 +68,11 @@ export function AnnouncementDetails(): ReactElement {
   const [boost, setBoost] = useState(false);
 
   function handleBack() {
-    navigation.goBack();
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Home',
+      }),
+    );
   }
 
   async function handleChat() {
@@ -123,6 +126,14 @@ export function AnnouncementDetails(): ReactElement {
         setFavorite(true);
       });
     }
+  }
+
+  function handleTags() {
+    announcement.tags.map(tag => {
+      if (tag.has) {
+        <InformationText>{tag.title}</InformationText>;
+      }
+    });
   }
 
   useEffect(() => {
@@ -179,9 +190,11 @@ export function AnnouncementDetails(): ReactElement {
               <SurveyTitle>Verificar vistoria</SurveyTitle>
             </Survey>
             <Information>
-              <InformationText>Transporte disponível</InformationText>
-
-              <InformationText>Operador disponível</InformationText>
+              {announcement.tags.map(tag => {
+                if (tag.has) {
+                  return <InformationText>{tag.title}</InformationText>;
+                }
+              })}
             </Information>
             <PublishedAt>
               {`Publicado em ${ad.created_date} às ${ad.created_time}`}
