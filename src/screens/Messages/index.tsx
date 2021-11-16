@@ -6,7 +6,7 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 import Message from '../../components/Message';
 import { Room } from '../../dtos/ChatDTO';
 import { RoomResponse } from '../../dtos/response/RoomResponseDTO';
-import { rooms as RoomsRequest } from '../../services/api';
+// import { rooms as RoomsRequest } from '../../services/api';
 import RoomApi from '../../services/api/RoomApi';
 import {
   Container,
@@ -14,6 +14,7 @@ import {
   HeaderContent,
   HeaderTitle,
   BackButton,
+  Line,
 } from './styles';
 
 export function Messages() {
@@ -25,7 +26,7 @@ export function Messages() {
 
   const [rooms, setRooms] = useState<RoomResponse[]>([]);
 
-  const fetcRooms = () => {
+  const fetchRooms = () => {
     RoomApi.all()
       .then(response => {
         setRooms(response.data);
@@ -34,7 +35,7 @@ export function Messages() {
   };
 
   useEffect(() => {
-    fetcRooms();
+    fetchRooms();
   }, []);
 
   function handleChat(room: Room) {
@@ -62,7 +63,10 @@ export function Messages() {
         data={rooms}
         keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
-          <Message data={item} onPress={() => handleChat(item)} />
+          <>
+            <Message data={item} onPress={() => handleChat(item)} />
+            <Line />
+          </>
         )}
       />
     </Container>

@@ -40,10 +40,6 @@ export interface AnnouncementData {
   status?: boolean;
   type: AnnouncementType;
   advertiser: Advertiser;
-  photo?: {
-    id: string;
-    uri: string;
-  };
   first_image?: Image[];
   images?: Image[];
   tags: AnnouncementTags[];

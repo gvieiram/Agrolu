@@ -16,6 +16,8 @@ export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.green_dark_main};
   justify-content: flex-end;
   padding: 15px;
+
+  margin-bottom: 25px;
 `;
 
 export const HeaderContent = styled.View`
@@ -54,3 +56,10 @@ export const AnnouncementTitle = styled.Text`
 export const Time = styled.Text``;
 export const Name = styled.Text``;
 export const LastMessage = styled.Text``;
+
+export const Line = styled.View`
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.gray_line_dark};
+
+  margin: 25px;
+`;
