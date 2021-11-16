@@ -98,7 +98,7 @@ export function AnnouncementDetails(): ReactElement {
       .catch(error => console.log('ERROR', error.response.data));
   }
 
-  function handleOwns() {
+  function handleOwnsChat() {
     if (announcement.owns) {
       if (boost) {
         return <TabBottom title="Anúncio turbinado" Icon={IconWechat} />;
@@ -128,12 +128,31 @@ export function AnnouncementDetails(): ReactElement {
     }
   }
 
-  function handleTags() {
-    announcement.tags.map(tag => {
-      if (tag.has) {
-        <InformationText>{tag.title}</InformationText>;
-      }
-    });
+  function handleOwnsActions() {
+    if (announcement.owns) {
+      return (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.navigate({
+                name: 'EditAnnouncement',
+                params: {
+                  ad: announcement,
+                },
+              }),
+            )
+          }
+        >
+          <Like name="favorite" size={24} />
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <TouchableOpacity onPress={() => handleFavorite()}>
+        <Like name={favorite ? 'favorite' : 'favorite-border'} size={24} />
+      </TouchableOpacity>
+    );
   }
 
   useEffect(() => {
@@ -166,12 +185,7 @@ export function AnnouncementDetails(): ReactElement {
             </HeaderTitle>
 
             <IconsContainer>
-              <TouchableOpacity onPress={() => handleFavorite()}>
-                <Like
-                  name={favorite ? 'favorite' : 'favorite-border'}
-                  size={24}
-                />
-              </TouchableOpacity>
+              {handleOwnsActions()}
 
               <Share name="ios-share" size={24} />
             </IconsContainer>
@@ -298,7 +312,7 @@ export function AnnouncementDetails(): ReactElement {
             </Advertiser>
           </AnnouncementContent>
         </ScrollView>
-        {handleOwns()}
+        {handleOwnsChat()}
       </Container>
     );
   }
