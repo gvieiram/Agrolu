@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 
 import { BlurView } from 'expo-blur';
 
@@ -37,7 +38,7 @@ export function AppTabRoutes() {
           position: 'absolute',
           height: 58,
           alignItems: 'center',
-          bottom: 15,
+          bottom: Platform.OS === 'ios' ? 25 : 15,
           zIndex: 10,
           marginHorizontal: 30,
           backgroundColor: theme.colors.green_dark_main,
@@ -47,6 +48,7 @@ export function AppTabRoutes() {
           shadowOpacity: 0.3,
           elevation: 5,
           shadowOffset: { width: 0, height: 8 },
+          padding: Platform.OS === 'ios' ? 8 : 0,
         },
         tabBarItemStyle: {
           height: 40,
@@ -55,7 +57,7 @@ export function AppTabRoutes() {
 
           justifyContent: 'center',
           alignItems: 'center',
-          alignSelf: 'center',
+          alignSelf: Platform.OS === 'ios' ? 'auto' : 'center',
 
           marginHorizontal: 5,
         },
