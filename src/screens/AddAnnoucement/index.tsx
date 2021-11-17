@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Image as Images, ScrollView, View } from 'react-native';
+import { TextInputMask } from 'react-native-masked-text';
 
 import { AssetsSelector } from 'expo-images-picker';
 import { Asset, MediaType } from 'expo-media-library';
@@ -50,6 +51,7 @@ export function AddAnnouncement() {
   const [need_transport, setNeedTransport] = useState(false);
   const [display_phone, setDisplayPhone] = useState(false);
   const [has_operator, setHasOperator] = useState(false);
+  const [price, setPrice] = useState(0);
 
   function handleBack() {
     navigation.goBack();
@@ -232,26 +234,6 @@ export function AddAnnouncement() {
             <CountImage>{images.length} / 6 Fotos</CountImage>
           </Image>
 
-          <View
-            style={{
-              width: 180,
-              height: 180,
-
-              marginTop: 48,
-              backgroundColor: theme.colors.gray_background,
-            }}
-          >
-            {/* {!!images && (
-              <Images
-                source={{ uri: images }}
-                style={{
-                  width: 180,
-                  height: 180,
-                }}
-              />
-            )} */}
-          </View>
-
           <Title>Título do Anúncio *</Title>
           <InputTitle
             placeholder="Ex: Trator Novo"
@@ -270,12 +252,21 @@ export function AddAnnouncement() {
             onChangeText={text => setDescription(text)}
           />
 
+          <Title>Valor *</Title>
+          <TextInputMask
+            type="money"
+            value={price}
+            onChangeText={text => {
+              setPrice(text);
+            }}
+          />
+
           <Title>Categoria *</Title>
           <InputPicker
             selectedValue={selectedCategory}
             onValueChange={value => {
               setSelectedCategory(value);
-              const category = categories.find(item => item.id == value);
+              const category = categories.find(item => item.id === value);
               setTypes(category.types);
             }}
             labelDisable="Selecione uma categoria"
