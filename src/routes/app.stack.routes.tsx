@@ -4,9 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { AddImages } from '../components/AddImages';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
+import AnnouncementSaved from '../screens/AnnouncementSaved';
 import { Chat } from '../screens/Chat';
-import { EditAnnouncement } from '../screens/EditAnnoucement';
-import { Messages } from '../screens/Messages';
+import { EditAnnouncement } from '../screens/EditAnnouncement';
 import { AppTabRoutes } from './app.tab.routes';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -24,6 +24,7 @@ export function AppStackRoutes() {
       <Screen name="Chat" component={Chat} />
       <Screen name="AddImages" component={AddImages} />
       <Screen name="EditAnnouncement" component={EditAnnouncement} />
+      <Screen name="AnnouncementSaved" component={AnnouncementSaved} />
     </Navigator>
   );
 }

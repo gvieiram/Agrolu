@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, TouchableOpacity } from 'react-native';
 
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
@@ -99,7 +99,17 @@ export default function Home() {
           </Search>
 
           <IconsContainer>
-            <Like name="favorite-border" size={24} />
+            <TouchableOpacity
+              onPress={() =>
+                navigation.dispatch(
+                  CommonActions.navigate({
+                    name: 'AnnouncementSaved',
+                  }),
+                )
+              }
+            >
+              <Like name="favorite-border" size={24} />
+            </TouchableOpacity>
 
             <Filter name="filter-outline" size={24} />
           </IconsContainer>

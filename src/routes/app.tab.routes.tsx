@@ -11,7 +11,7 @@ import IconHome from '../assets/img/home.svg';
 import IconMore from '../assets/img/more.svg';
 import IconPerson from '../assets/img/person.svg';
 import IconWechat from '../assets/img/wechat.svg';
-import { AddAnnouncement } from '../screens/AddAnnoucement';
+import { AddAnnouncement } from '../screens/AddAnnouncement';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
 import { Messages } from '../screens/Messages';
@@ -71,7 +71,7 @@ export function AppTabRoutes() {
         }}
       />
       <Screen
-        name="AddAnnoucement"
+        name="AddAnnouncement"
         component={AddAnnouncement}
         options={{
           tabBarIcon: ({ color }) => (
