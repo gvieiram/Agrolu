@@ -52,7 +52,7 @@ export function AddAnnouncement() {
   const [need_transport, setNeedTransport] = useState(false);
   const [display_phone, setDisplayPhone] = useState(false);
   const [has_operator, setHasOperator] = useState(false);
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState('R$ 0,00');
 
   function handleBack() {
     navigation.goBack();
@@ -253,6 +253,9 @@ export function AddAnnouncement() {
           <InputPrice
             type="money"
             value={price}
+            options={{
+              unit: 'R$ ',
+            }}
             onChangeText={text => {
               setPrice(text);
             }}

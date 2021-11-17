@@ -43,7 +43,7 @@ export const IconLikeOrMore = styled(MaterialIcons)`
 export const MoreContent = styled.View`
   position: absolute;
   z-index: 1;
-  top: 0;
+  top: 115px;
   right: 40px;
   width: 100px;
   padding: 14px;

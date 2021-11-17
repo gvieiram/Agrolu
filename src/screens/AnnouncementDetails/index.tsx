@@ -120,17 +120,17 @@ export function AnnouncementDetails(): ReactElement {
     return <TabBottom title="Chat" Icon={IconWechat} onPress={handleChat} />;
   }
 
-  function handleFavorite() {
-    if (favorite) {
-      UserApi.deleteAnnouncementFavorite(announcement.id).then(() => {
-        setFavorite(false);
-      });
-    } else {
-      UserApi.storeAnnouncementFavorite(announcement.id).then(() => {
-        setFavorite(true);
-      });
-    }
-  }
+  // function handleFavorite() {
+  //   if (favorite) {
+  //     UserApi.deleteAnnouncementFavorite(announcement.id).then(() => {
+  //       setFavorite(false);
+  //     });
+  //   } else {
+  //     UserApi.storeAnnouncementFavorite(announcement.id).then(() => {
+  //       setFavorite(true);
+  //     });
+  //   }
+  // }
 
   function handleDeletion() {
     AnnouncementApi.destroy(announcement.id)
@@ -182,9 +182,18 @@ export function AnnouncementDetails(): ReactElement {
                   <IconLikeOrMore name="more-vert" size={24} />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity onPress={() => handleFavorite()}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setFavorite(!favorite);
+
+                    // eslint-disable-next-line no-unused-expressions
+                    favorite
+                      ? UserApi.deleteAnnouncementFavorite(announcement.id)
+                      : UserApi.storeAnnouncementFavorite(announcement.id);
+                  }}
+                >
                   <IconLikeOrMore
-                    name={favorite ? 'favorite' : 'favorite-border'}
+                    name={favorite ? 'favorite-border' : 'favorite'}
                     size={24}
                   />
                 </TouchableOpacity>
@@ -194,32 +203,33 @@ export function AnnouncementDetails(): ReactElement {
             </IconsContainer>
           </HeaderContent>
         </Header>
+        {showMoreOptions ? (
+          <MoreContent>
+            <Option
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.dispatch(
+                  CommonActions.navigate({
+                    name: 'EditAnnouncement',
+                    params: {
+                      ad: announcement,
+                    },
+                  }),
+                );
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {showMoreOptions ? (
-            <MoreContent>
-              <Option
-                activeOpacity={0.7}
-                onPress={() => {
-                  navigation.dispatch(
-                    CommonActions.navigate({
-                      name: 'EditAnnouncement',
-                      params: {
-                        ad: announcement,
-                      },
-                    }),
-                  );
-
-                  setShowMoreOptions(false);
-                }}
-              >
-                <TextOption>Editar</TextOption>
-              </Option>
-              <Option activeOpacity={0.7} onPress={() => handleDeletion()}>
-                <TextOption>Excluir</TextOption>
-              </Option>
-            </MoreContent>
-          ) : null}
+                setShowMoreOptions(false);
+              }}
+            >
+              <TextOption>Editar</TextOption>
+            </Option>
+            <Option
+              activeOpacity={0.7}
+              onPress={() => handleDeletion()}
+            >
+              <TextOption>Excluir</TextOption>
+            </Option>
+          </MoreContent>
+        ) : null}
 
           <ImageSlider imagesUrl={announcement.images} />
 
