@@ -38,7 +38,7 @@ export function AppTabRoutes() {
           position: 'absolute',
           height: 58,
           alignItems: 'center',
-          bottom: Platform.OS === 'ios' ? 25 : 15,
+          bottom: Platform.OS === 'ios' ? 30 : 15,
           zIndex: 10,
           marginHorizontal: 30,
           backgroundColor: theme.colors.green_dark_main,

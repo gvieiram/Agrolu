@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import IconBolt from '../../assets/img/bolt.svg';
 import IconWechat from '../../assets/img/wechat.svg';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
@@ -72,11 +73,13 @@ export function AnnouncementDetails(): ReactElement {
   const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   function handleBack() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Home',
-      }),
-    );
+    // navigation.dispatch(
+    //   CommonActions.navigate({
+    //     name: 'Home',
+    //   }),
+    // );
+
+    navigation.goBack();
   }
 
   async function handleChat() {
@@ -105,13 +108,13 @@ export function AnnouncementDetails(): ReactElement {
   function handleOwnsChat() {
     if (announcement.owns) {
       if (boost) {
-        return <TabBottom title="Anúncio turbinado" Icon={IconWechat} />;
+        return <TabBottom title="Anúncio turbinado" Icon={IconBolt} />;
       }
 
       return (
         <TabBottom
           title="Turbinar anúncio"
-          Icon={IconWechat}
+          Icon={IconBolt}
           onPress={handleBoost}
         />
       );
@@ -185,7 +188,7 @@ export function AnnouncementDetails(): ReactElement {
                   }}
                 >
                   <IconLikeOrMore
-                    name={favorite ? 'favorite-border' : 'favorite'}
+                    name={favorite ? 'favorite' : 'favorite-border'}
                     size={24}
                   />
                 </TouchableOpacity>

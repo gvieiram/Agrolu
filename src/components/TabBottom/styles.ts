@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
@@ -13,6 +14,8 @@ export const Container = styled.View`
   justify-content: center;
   align-self: center;
   border-radius: 50px;
+
+  margin-bottom: ${Platform.OS === 'ios' ? 15 : 0}px;
 `;
 
 export const Button = styled(TouchableOpacity)`
