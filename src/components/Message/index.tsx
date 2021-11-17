@@ -20,13 +20,6 @@ interface Props extends TouchableOpacityProps {
 }
 
 export default function Message({ data, ...rest }: Props): ReactElement {
-  function lastMessage() {
-    if (data.last_message.message === null) {
-      return 'null';
-    }
-    return data.last_message.message;
-  }
-
   return (
     <MessagesContainer activeOpacity={0.7} {...rest}>
       <ImageWrapper>
@@ -39,10 +32,15 @@ export default function Message({ data, ...rest }: Props): ReactElement {
               ? `${data.advertisement.title.slice(0, 18)}...`
               : data.advertisement.title}
           </Title>
-          <Time>Segunda</Time>
+          <Time>
+            {new Date(data.last_message.created_at).toLocaleDateString(
+              'pt-BR',
+              { year: 'numeric', month: '2-digit', day: '2-digit' },
+            )}
+          </Time>
         </AnnouncementInfoText>
         <UserName>{data.advertisement.advertiser.name}</UserName>
-        <MessageText>{lastMessage}</MessageText>
+        <MessageText>{data.last_message.message}</MessageText>
       </TextSection>
     </MessagesContainer>
   );
