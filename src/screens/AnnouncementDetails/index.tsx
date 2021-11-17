@@ -23,7 +23,7 @@ import {
   HeaderContent,
   HeaderTitle,
   IconsContainer,
-  Like,
+  IconLikeOrMore,
   Share,
   AnnouncementTitle,
   AnnouncementContent,
@@ -51,6 +51,9 @@ import {
   Entered,
   Status,
   StatusText,
+  MoreContent,
+  Option,
+  TextOption,
 } from './styles';
 
 interface Params {
@@ -66,6 +69,7 @@ export function AnnouncementDetails(): ReactElement {
   const [announcement, setAnnouncement] = useState<AnnouncementResponse>(null);
   const [favorite, setFavorite] = useState(false);
   const [boost, setBoost] = useState(false);
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   function handleBack() {
     navigation.dispatch(
@@ -128,33 +132,6 @@ export function AnnouncementDetails(): ReactElement {
     }
   }
 
-  function handleOwnsActions() {
-    if (announcement.owns) {
-      return (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.navigate({
-                name: 'EditAnnouncement',
-                params: {
-                  ad: announcement,
-                },
-              }),
-            )
-          }
-        >
-          <Like name="favorite" size={24} />
-        </TouchableOpacity>
-      );
-    }
-
-    return (
-      <TouchableOpacity onPress={() => handleFavorite()}>
-        <Like name={favorite ? 'favorite' : 'favorite-border'} size={24} />
-      </TouchableOpacity>
-    );
-  }
-
   useEffect(() => {
     function getAnnouncementById() {
       AnnouncementApi.find(ad.id)
@@ -185,7 +162,21 @@ export function AnnouncementDetails(): ReactElement {
             </HeaderTitle>
 
             <IconsContainer>
-              {handleOwnsActions()}
+              {announcement.owns ? (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setShowMoreOptions(!showMoreOptions)}
+                >
+                  <IconLikeOrMore name="more-vert" size={24} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => handleFavorite()}>
+                  <IconLikeOrMore
+                    name={favorite ? 'favorite' : 'favorite-border'}
+                    size={24}
+                  />
+                </TouchableOpacity>
+              )}
 
               <Share name="ios-share" size={24} />
             </IconsContainer>
@@ -193,6 +184,34 @@ export function AnnouncementDetails(): ReactElement {
         </Header>
 
         <ScrollView showsVerticalScrollIndicator={false}>
+          {showMoreOptions ? (
+            <MoreContent>
+              <Option
+                activeOpacity={0.7}
+                onPress={() => {
+                  navigation.dispatch(
+                    CommonActions.navigate({
+                      name: 'EditAnnouncement',
+                      params: {
+                        ad: announcement,
+                      },
+                    }),
+                  );
+
+                  setShowMoreOptions(false);
+                }}
+              >
+                <TextOption>Editar</TextOption>
+              </Option>
+              <Option
+                activeOpacity={0.7}
+                // onPress={() => }
+              >
+                <TextOption>Excluir</TextOption>
+              </Option>
+            </MoreContent>
+          ) : null}
+
           <ImageSlider imagesUrl={announcement.images} />
 
           <AnnouncementContent>

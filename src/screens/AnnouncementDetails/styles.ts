@@ -1,3 +1,4 @@
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -34,9 +35,33 @@ export const IconsContainer = styled.View`
   align-items: center;
 `;
 
-export const Like = styled(MaterialIcons)`
+export const IconLikeOrMore = styled(MaterialIcons)`
   color: ${({ theme }) => theme.colors.green_main};
   margin-right: 10px;
+`;
+
+export const MoreContent = styled.View`
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 40px;
+  width: 100px;
+  padding: 14px;
+  background-color: ${({ theme }) => theme.colors.green_dark_main};
+
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+`;
+
+export const Option = styled(TouchableOpacity)`
+  margin-bottom: 8px;
+`;
+
+export const TextOption = styled.Text`
+  font-size: ${RFValue(14)}px;
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  color: ${({ theme }) => theme.colors.green_main};
+  text-align: center;
 `;
 
 export const Share = styled(MaterialIcons)`
