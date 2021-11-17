@@ -32,6 +32,7 @@ import {
   InputTitle,
   InputDescription,
   ContainerImageSelection,
+  InputPrice,
 } from './styles';
 
 export function AddAnnouncement() {
@@ -45,20 +46,16 @@ export function AddAnnouncement() {
   const [handleSelectPhotosIsOpen, setHandleSelectPhotosIsOpen] =
     useState(false);
   const [images, setImages] = useState([]);
-  const [title, setTitle] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [type_id, setType] = useState(null);
   const [need_transport, setNeedTransport] = useState(false);
   const [display_phone, setDisplayPhone] = useState(false);
   const [has_operator, setHasOperator] = useState(false);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState('');
 
   function handleBack() {
     navigation.goBack();
-  }
-
-  async function handleSelectPhotos() {
-    navigation.dispatch(CommonActions.navigate('AddImages'));
   }
 
   function onDone(data) {
@@ -148,6 +145,7 @@ export function AddAnnouncement() {
     formData.append('need_transport', need_transport ? '1' : '0');
     formData.append('display_phone', display_phone ? '1' : '0');
     formData.append('has_operator', has_operator ? '1' : '0');
+    formData.append('price', price);
     images.map((image: Asset) => {
       const localUri = image.uri;
       const filename = localUri.split('/').pop();
@@ -155,7 +153,6 @@ export function AddAnnouncement() {
       const type = match ? `image/${match[1]}` : `image`;
       formData.append('images[]', { uri: localUri, name: filename, type });
     });
-    formData.append('price', '400.0');
 
     AnnouncementApi.store(formData)
       .then(response =>
@@ -203,7 +200,7 @@ export function AddAnnouncement() {
           Errors={errors}
           Styles={styles}
           Navigator={navigator}
-          // Resize={resize}
+          Resize={resize}
         />
       </ContainerImageSelection>
     );
@@ -253,7 +250,7 @@ export function AddAnnouncement() {
           />
 
           <Title>Valor *</Title>
-          <TextInputMask
+          <InputPrice
             type="money"
             value={price}
             onChangeText={text => {

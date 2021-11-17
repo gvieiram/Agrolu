@@ -1,4 +1,5 @@
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TextInputMask } from 'react-native-masked-text';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
@@ -73,6 +74,18 @@ export const Title = styled.Text`
 `;
 
 export const InputTitle = styled.TextInput`
+  background-color: ${({ theme }) => theme.colors.white};
+  height: 50px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  font-size: ${RFValue(15)}px;
+  color: ${({ theme }) => theme.colors.preto_titulo};
+
+  border-radius: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.border_input};
+  padding: 0 11px;
+`;
+
+export const InputPrice = styled(TextInputMask)`
   background-color: ${({ theme }) => theme.colors.white};
   height: 50px;
   font-family: ${({ theme }) => theme.fonts.regular_400};
