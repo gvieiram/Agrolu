@@ -34,8 +34,8 @@ export default function AnnouncementSaved() {
 
   async function getAnnouncements() {
     UserApi.myAnnouncementsFavorites()
-      .then(response => console.log(response.data))
-      .catch(error => console.log(error));
+      .then(response => setAnnouncements(response.data))
+      .catch(error => console.log(error.response));
   }
 
   function handleAnnouncementDetails(ad: AnnouncementResponse) {
