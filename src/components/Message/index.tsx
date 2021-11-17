@@ -32,12 +32,7 @@ export default function Message({ data, ...rest }: Props): ReactElement {
               ? `${data.advertisement.title.slice(0, 18)}...`
               : data.advertisement.title}
           </Title>
-          <Time>
-            {new Date(data.last_message.created_at).toLocaleDateString(
-              'pt-BR',
-              { year: 'numeric', month: '2-digit', day: '2-digit' },
-            )}
-          </Time>
+          <Time>{data.last_message.created_time}</Time>
         </AnnouncementInfoText>
         <UserName>{data.advertisement.advertiser.name}</UserName>
         <MessageText>{data.last_message.message}</MessageText>

@@ -4,4 +4,5 @@ export interface MessageResponse {
   user_id?: number;
   message: string;
   created_at: string;
+  created_time: string;
 }
