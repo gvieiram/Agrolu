@@ -42,7 +42,9 @@ const storeImage = (id: number, announcementImageData: FormData) =>
     headerFormData,
   );
 
-const deleteImage = (id: number) => api.delete(`images/${id}`);
+const destroyImage = (id: number) => api.delete(`images/${id}`);
+
+const destroy = (id: number) => api.delete(`advertisements/${id}`);
 
 const AnnouncementApi = {
   all,
@@ -51,7 +53,8 @@ const AnnouncementApi = {
   update,
   boost,
   storeImage,
-  deleteImage,
+  destroyImage,
+  destroy,
 };
 
 export default AnnouncementApi;

@@ -132,6 +132,18 @@ export function AnnouncementDetails(): ReactElement {
     }
   }
 
+  function handleDeletion() {
+    AnnouncementApi.destroy(announcement.id)
+      .then(() =>
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'Home',
+          }),
+        ),
+      )
+      .catch(error => alert(error.response.data || error.message));
+  }
+
   useEffect(() => {
     function getAnnouncementById() {
       AnnouncementApi.find(ad.id)
@@ -203,10 +215,7 @@ export function AnnouncementDetails(): ReactElement {
               >
                 <TextOption>Editar</TextOption>
               </Option>
-              <Option
-                activeOpacity={0.7}
-                // onPress={() => }
-              >
+              <Option activeOpacity={0.7} onPress={() => handleDeletion()}>
                 <TextOption>Excluir</TextOption>
               </Option>
             </MoreContent>

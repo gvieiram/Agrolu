@@ -7,6 +7,7 @@ import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import AnnouncementSaved from '../screens/AnnouncementSaved';
 import { Chat } from '../screens/Chat';
 import { EditAnnouncement } from '../screens/EditAnnouncement';
+import MyAnnouncement from '../screens/MyAnnouncement';
 import { AppTabRoutes } from './app.tab.routes';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -25,6 +26,7 @@ export function AppStackRoutes() {
       <Screen name="AddImages" component={AddImages} />
       <Screen name="EditAnnouncement" component={EditAnnouncement} />
       <Screen name="AnnouncementSaved" component={AnnouncementSaved} />
+      <Screen name="MyAnnouncement" component={MyAnnouncement} />
     </Navigator>
   );
 }
