@@ -152,35 +152,27 @@ export function EditAnnouncement() {
   );
 
   const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('type_id', type_id);
-    formData.append('need_transport', need_transport ? '1' : '0');
-    formData.append('display_phone', display_phone ? '1' : '0');
-    formData.append('has_operator', has_operator ? '1' : '0');
-    formData.append('available', available ? '1' : '0');
-    images.map((image: Asset) => {
-      const localUri = image.uri;
-      const filename = localUri.split('/').pop();
-      const match = /\.(\w+)$/.exec(filename);
-      const type = match ? `image/${match[1]}` : `image`;
-      formData.append('images[]', { uri: localUri, name: filename, type });
-    });
-    formData.append('price', '400.0');
-    console.log(formData);
-    // AnnouncementApi.update(announcement.id, formData)
-    //   .then(response =>
-    //     navigation.dispatch(
-    //       CommonActions.navigate({
-    //         name: 'AnnouncementDetails',
-    //         params: {
-    //           ad: response.data,
-    //         },
-    //       }),
-    //     ),
-    //   )
-    //   .catch(error => console.log(error.response));
+    AnnouncementApi.update(announcement.id, {
+      title,
+      description,
+      type_id,
+      need_transport: need_transport ? '1' : '0',
+      display_phone: display_phone ? '1' : '0',
+      has_operator: has_operator ? '1' : '0',
+      available: available ? '1' : '0',
+      price: '400.0',
+    })
+      .then(response =>
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'AnnouncementDetails',
+            params: {
+              ad: response.data,
+            },
+          }),
+        ),
+      )
+      .catch(error => console.log('ERROR', error.response));
   };
 
   useEffect(() => {

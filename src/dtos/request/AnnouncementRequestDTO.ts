@@ -9,3 +9,14 @@ export interface Params {
   category?: number;
   inspection?: boolean;
 }
+
+export interface AnnouncementRequest {
+  title: string;
+  description: string;
+  type_id: string;
+  need_transport: string;
+  display_phone: string;
+  has_operator: string;
+  available: string;
+  price: string;
+}
