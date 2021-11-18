@@ -66,7 +66,7 @@ export interface AnnouncementResponse {
   user_id: number;
   price: string;
   has_operator: boolean;
-  last_price: number;
+  last_price: string;
   type_id: number;
   need_transport?: boolean;
   display_phone?: boolean;
