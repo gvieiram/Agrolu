@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 import React, { ReactElement, useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 
@@ -73,12 +75,6 @@ export function AnnouncementDetails(): ReactElement {
   const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   function handleBack() {
-    // navigation.dispatch(
-    //   CommonActions.navigate({
-    //     name: 'Home',
-    //   }),
-    // );
-
     navigation.goBack();
   }
 

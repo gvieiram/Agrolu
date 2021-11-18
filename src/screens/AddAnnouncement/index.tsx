@@ -1,5 +1,6 @@
+/* eslint-disable array-callback-return */
 import React, { useState, useMemo, useEffect } from 'react';
-import { Image as Images, ScrollView, View } from 'react-native';
+import { Image as Images, ScrollView, StatusBar, View } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 
 import { AssetsSelector } from 'expo-images-picker';
@@ -58,7 +59,7 @@ export function AddAnnouncement() {
     navigation.goBack();
   }
 
-  function onDone(data) {
+  function onDone(data: React.SetStateAction<any[]>) {
     setImages(data);
     setHandleSelectPhotosIsOpen(false);
   }
@@ -125,7 +126,7 @@ export function AddAnnouncement() {
       Texts: {
         finish: 'Feito',
         back: 'Voltar',
-        selected: 'selecionado',
+        selected: 'Fotos',
       },
       midTextColor: 'black',
       minSelection: 1,
@@ -187,6 +188,11 @@ export function AddAnnouncement() {
   if (handleSelectPhotosIsOpen) {
     return (
       <ContainerImageSelection>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
         <AssetsSelector
           Settings={{
             assetsType: [MediaType.photo],
