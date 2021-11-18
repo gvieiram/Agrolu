@@ -1,9 +1,9 @@
-import { FlatList } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 import styled from 'styled-components/native';
 
-import { BackButton as IconBack } from '../../components/BackButton';
+import { BackButton } from '../../components/BackButton';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 
 export const Container = styled.View`
@@ -17,8 +17,6 @@ export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.green_dark_main};
   justify-content: flex-end;
   padding: 15px;
-
-  margin-bottom: 25px;
 `;
 
 export const HeaderContent = styled.View`
@@ -26,7 +24,7 @@ export const HeaderContent = styled.View`
   flex-direction: row;
 `;
 
-export const BackButton = styled(IconBack)`
+export const ButtonBack = styled(BackButton)`
   position: absolute;
   z-index: 1;
   left: 3px;
@@ -45,7 +43,7 @@ export const Text = styled.Text`
 `;
 
 export const AnnouncementList = styled(
-  FlatList as new () => FlatList<AnnouncementResponse>,
+  SwipeListView as new () => SwipeListView<AnnouncementResponse>,
 ).attrs({
   contentContainerStyle: {
     padding: 15,
@@ -53,3 +51,12 @@ export const AnnouncementList = styled(
   },
   showsVerticalScrollIndicator: false,
 })``;
+
+export const HiddenItemContainer = styled.View`
+  height: 110px;
+  justify-content: center;
+  align-items: flex-end;
+  background-color: ${({ theme }) => theme.colors.green_dark_opaque};
+  border-radius: 10px;
+  padding-right: 20px;
+`;

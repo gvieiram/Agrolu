@@ -43,7 +43,7 @@ export const AccountContent = styled.View`
 export const User = styled.View`
   justify-content: center;
   align-items: center;
-  margin-top: ${Platform.OS === 'ios' ? 15 : 5};
+  margin-top: ${Platform.OS === 'ios' ? 15 : 5}px;
 `;
 
 export const ImageWrapper = styled.View`
@@ -100,7 +100,7 @@ export const Card = styled(TouchableOpacity)`
 
   justify-content: center;
   align-items: center;
-  margin-bottom: ${Platform.OS === 'ios' ? 25 : 20};
+  margin-bottom: ${Platform.OS === 'ios' ? 25 : 20}px;
 
   box-shadow: 0 3px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;

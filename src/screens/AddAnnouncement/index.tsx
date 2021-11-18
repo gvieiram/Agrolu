@@ -101,15 +101,15 @@ export function AddAnnouncement() {
     [],
   );
 
-  const resize = useMemo(
-    () => ({
-      width: 50,
-      compress: 0.7,
-      base64: false,
-      saveTo: 'png',
-    }),
-    [],
-  );
+  // const resize = useMemo(
+  //   () => ({
+  //     width: 720,
+  //     compress: 0.7,
+  //     base64: true,
+  //     saveTo: 'png',
+  //   }),
+  //   [],
+  // );
 
   const textStyled = {
     color: theme.colors.white,
@@ -206,7 +206,7 @@ export function AddAnnouncement() {
           Errors={errors}
           Styles={styles}
           Navigator={navigator}
-          Resize={resize}
+          // Resize={resize}
         />
       </ContainerImageSelection>
     );
