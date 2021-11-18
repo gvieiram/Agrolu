@@ -22,6 +22,7 @@ import {
 } from '../../dtos/response/CategoryResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import CategoryApi from '../../services/api/CategoryApi';
+import { InputPrice } from '../AddAnnouncement/styles';
 import {
   Container,
   ContainerContent,
@@ -63,6 +64,7 @@ export function EditAnnouncement() {
   const [has_operator, setHasOperator] = useState(false);
   const [announcement, setAnnouncement] = useState<AnnouncementResponse>(null);
   const [available, setAvailable] = useState(false);
+  const [price, setPrice] = useState('0');
 
   function handleBack() {
     navigation.goBack();
@@ -184,6 +186,7 @@ export function EditAnnouncement() {
 
           setTitle(data.title);
           setDescription(data.description);
+          setPrice(data.price);
           setSelectedCategory(data.type.category_id);
 
           CategoryApi.all()
@@ -284,6 +287,20 @@ export function EditAnnouncement() {
               placeholderTextColor={theme.colors.input_text}
               value={description}
               onChangeText={text => setDescription(text)}
+            />
+
+            <Title>Valor *</Title>
+            <InputPrice
+              type="money"
+              value={price}
+              maxLength={13}
+              options={{
+                unit: 'R$ ',
+              }}
+              includeRawValueInChangeText
+              onChangeText={(maskedText, rawText) => {
+                setPrice(rawText);
+              }}
             />
 
             <Title>Categoria *</Title>
