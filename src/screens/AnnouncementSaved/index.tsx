@@ -25,11 +25,7 @@ export default function AnnouncementSaved() {
   );
 
   function handleBack() {
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Home',
-      }),
-    );
+    navigation.goBack();
   }
 
   async function getAnnouncements() {

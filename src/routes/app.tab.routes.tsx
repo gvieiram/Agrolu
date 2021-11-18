@@ -13,11 +13,10 @@ import IconMore from '../assets/img/more.svg';
 import IconPerson from '../assets/img/person.svg';
 import IconWechat from '../assets/img/wechat.svg';
 import { AddAnnouncement } from '../screens/AddAnnouncement';
-import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import Home from '../screens/Home';
 import { Messages } from '../screens/Messages';
 import { More } from '../screens/More';
-import { AppStackRoutes } from './app.stack.routes';
+import { UserAccount } from '../screens/UserAccount';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -69,6 +68,15 @@ export function AppTabRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <IconHome width={32} height={32} fill={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="UserAccount"
+        component={UserAccount}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <IconPerson width={32} height={32} fill={color} />
           ),
         }}
       />

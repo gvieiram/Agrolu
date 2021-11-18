@@ -23,7 +23,6 @@ export function AppStackRoutes() {
       <Screen name="_Home" component={AppTabRoutes} />
       <Screen name="AnnouncementDetails" component={AnnouncementDetails} />
       <Screen name="Chat" component={Chat} />
-      <Screen name="AddImages" component={AddImages} />
       <Screen name="EditAnnouncement" component={EditAnnouncement} />
       <Screen name="AnnouncementSaved" component={AnnouncementSaved} />
       <Screen name="MyAnnouncement" component={MyAnnouncement} />
