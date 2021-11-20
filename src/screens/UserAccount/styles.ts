@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
@@ -7,8 +7,13 @@ import styled from 'styled-components/native';
 
 import { BackButton } from '../../components/BackButton';
 
-export const Container = styled.View`
+export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
   flex: 1;
+  /* background: ${({ theme }) => theme.colors.green_background}; */
+`;
+
+export const Container = styled.View`
+  padding-bottom: 150px;
 `;
 
 export const Header = styled.View`
@@ -116,4 +121,10 @@ export const CardText = styled.Text`
   color: ${({ theme }) => theme.colors.green_dark_1};
   text-align: center;
   margin-top: 10px;
+`;
+
+export const TileOptionSelected = styled.Text`
+  font-size: ${RFValue(24)}px;
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  color: ${({ theme }) => theme.colors.green_dark_main};
 `;
