@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
-import AnnouncementSwipe from '../../components/AnnouncementSwipe';
+import Announcement from '../../components/Announcement';
 import { Load } from '../../components/Load';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import UserApi from '../../services/api/UserApi';
@@ -91,10 +91,10 @@ export default function AnnouncementSaved() {
           data={announcements}
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
-            <AnnouncementSwipe
+            <Announcement
               data={item}
               onPress={() => handleAnnouncementDetails(item)}
-              onLongPress={e => e}
+              cardSlider
             />
           )}
           onEndReached={getAnnouncements}

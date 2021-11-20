@@ -7,7 +7,7 @@ import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import Bolt from '../../assets/img/bolt.svg';
-import AnnouncementSwipe from '../../components/AnnouncementSwipe';
+import AnnouncementSwipe from '../../components/Announcement';
 import { Load } from '../../components/Load';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
@@ -110,8 +110,10 @@ export default function UserAnnouncements() {
               data={item}
               onPress={() => handleAnnouncementDetails(item)}
               onLongPress={e => e}
+              // delayLongPress={1} // Falta acertar e entender o funcionamento
               iconActive={item.turbo}
               visitorsActive
+              cardSlider
             />
           )}
           onEndReached={getAnnouncements}

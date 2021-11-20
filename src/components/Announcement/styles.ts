@@ -1,5 +1,5 @@
 // import FastImage from 'react-native-fast-image';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, TouchableHighlight } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
@@ -7,6 +7,17 @@ import styled from 'styled-components/native';
 export const Container = styled(RectButton)`
   height: 110px;
   width: 100%;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-radius: 10px;
+
+  flex-direction: row;
+  align-items: center;
+
+  margin-bottom: 15px;
+`;
+
+export const ContainerSlider = styled(TouchableHighlight)`
+  height: 110px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 10px;
 
@@ -57,4 +68,24 @@ export const Status = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium_500};
   font-size: ${RFValue(9)}px;
   color: ${({ theme }) => theme.colors.success_main};
+`;
+
+export const IconActive = styled.View`
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+`;
+
+export const Visitors = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+export const NumberOfVisitors = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.light_300};
+  font-size: ${RFValue(10)}px;
+  color: ${({ theme }) => theme.colors.cinza_apagado};
+
+  margin-left: 5px;
 `;
