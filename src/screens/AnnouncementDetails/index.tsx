@@ -136,7 +136,7 @@ export function AnnouncementDetails(): ReactElement {
           }),
         ),
       )
-      .catch(error => alert(error.response.data || error.message));
+      .catch(error => console.log(error.response.data || error.message));
   }
 
   useEffect(() => {

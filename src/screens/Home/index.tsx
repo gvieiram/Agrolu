@@ -7,7 +7,6 @@ import { useTheme } from 'styled-components';
 import Announcement from '../../components/Announcement';
 import { Load } from '../../components/Load';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
-import api from '../../services/api';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import {
   Container,
@@ -126,6 +125,8 @@ export default function Home() {
             <Announcement
               data={item}
               onPress={() => handleAnnouncementDetails(item)}
+              visitorsActive
+              iconActive
             />
           )}
           onEndReached={getAnnouncements}
