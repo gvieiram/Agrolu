@@ -6,9 +6,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import Bolt from '../../assets/img/bolt.svg';
 import AnnouncementSwipe from '../../components/AnnouncementSwipe';
 import { Load } from '../../components/Load';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
+import AnnouncementApi from '../../services/api/AnnouncementApi';
 import UserApi from '../../services/api/UserApi';
 import {
   Container,
@@ -26,7 +28,7 @@ const wait = timeout => {
   });
 };
 
-export default function AnnouncementSaved() {
+export default function UserAnnouncements() {
   const navigation = useNavigation();
   const theme = useTheme();
 
@@ -40,7 +42,7 @@ export default function AnnouncementSaved() {
   }
 
   async function getAnnouncements() {
-    UserApi.myAnnouncementsFavorites()
+    UserApi.myAnnouncements()
       .then(response => setAnnouncements(response.data))
       .catch(error => console.log(error.response));
   }
@@ -53,13 +55,26 @@ export default function AnnouncementSaved() {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const unFavoriteRow = rowKey => {
+  const deleteAnnouncement = rowID => {
     const newData = [...announcements];
-    const prevIndex = announcements.findIndex(item => item.id === rowKey);
-    newData.splice(prevIndex, 1);
+    const prevIndex = announcements.findIndex(item => item.id === rowID);
 
-    UserApi.deleteAnnouncementFavorite(rowKey);
-    setAnnouncements(newData);
+    AnnouncementApi.destroy(rowID)
+      .then(() => {
+        newData.splice(prevIndex, 1);
+        setAnnouncements(newData);
+      })
+      .catch(error => console.log(error.response.data || error.message));
+  };
+
+  const boostAnnouncement = item => {
+    try {
+      AnnouncementApi.boost(item.id).then(() => {
+        getAnnouncements();
+      });
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
 
   function handleAnnouncementDetails(ad: AnnouncementResponse) {
@@ -82,7 +97,7 @@ export default function AnnouncementSaved() {
       <Header>
         <HeaderContent>
           <ButtonBack onPress={handleBack} />
-          <HeaderTitle>Anúncios salvos</HeaderTitle>
+          <HeaderTitle>Meus anúncios</HeaderTitle>
         </HeaderContent>
       </Header>
 
@@ -95,6 +110,8 @@ export default function AnnouncementSaved() {
               data={item}
               onPress={() => handleAnnouncementDetails(item)}
               onLongPress={e => e}
+              iconActive={item.turbo}
+              visitorsActive
             />
           )}
           onEndReached={getAnnouncements}
@@ -112,19 +129,27 @@ export default function AnnouncementSaved() {
               <HiddenItemContainer>
                 <TouchableOpacity
                   activeOpacity={0.7}
-                  onPress={() => unFavoriteRow(data.item.id)}
+                  onPress={() => deleteAnnouncement(data.item.id)}
                 >
                   <MaterialIcons
-                    name="favorite"
+                    name="delete"
                     size={36}
-                    color={theme.colors.green_main}
+                    color={theme.colors.error_light_2}
                   />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    boostAnnouncement(data.item);
+                  }}
+                >
+                  <Bolt width={36} height={36} fill={theme.colors.green_main} />
                 </TouchableOpacity>
               </HiddenItemContainer>
             );
           }}
           rightOpenValue={-75}
-          disableRightSwipe
+          leftOpenValue={75}
         />
       ) : (
         <Load />

@@ -57,3 +57,23 @@ export const Status = styled.Text`
   font-size: ${RFValue(9)}px;
   color: ${({ theme }) => theme.colors.success_main};
 `;
+
+export const IconActive = styled.View`
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+`;
+
+export const Visitors = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+export const NumberOfVisitors = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.light_300};
+  font-size: ${RFValue(10)}px;
+  color: ${({ theme }) => theme.colors.cinza_apagado};
+
+  margin-left: 5px;
+`;

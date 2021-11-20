@@ -65,7 +65,16 @@ export function UserAccount() {
             <CardText>Editar perfil</CardText>
           </Card>
 
-          <Card activeOpacity={0.7}>
+          <Card
+            activeOpacity={0.7}
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: 'UserAnnouncements',
+                }),
+              )
+            }
+          >
             <CardIcon name="folder-shared" size={32} />
             <CardText>Meus anúncios</CardText>
           </Card>

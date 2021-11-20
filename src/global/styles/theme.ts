@@ -32,6 +32,7 @@ export default {
     green_linear_dark_opaque: '#70998c',
 
     error_light: '#F83B3A',
+    error_light_2: '#ee4747',
     error_main: '#DB0028',
     error_dark: '#A80505',
 

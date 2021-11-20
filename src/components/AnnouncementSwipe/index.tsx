@@ -1,8 +1,10 @@
 import React, { ReactElement } from 'react';
 import { TouchableHighlightProps } from 'react-native';
 
+import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
 
+import Bolt from '../../assets/img/bolt.svg';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import {
   Container,
@@ -12,14 +14,21 @@ import {
   Price,
   Publication,
   Status,
+  IconActive,
+  Visitors,
+  NumberOfVisitors,
 } from './styles';
 
 interface Props extends TouchableHighlightProps {
   data: AnnouncementResponse;
+  iconActive?: boolean;
+  visitorsActive?: boolean;
 }
 
 export default function AnnouncementSwipe({
   data,
+  iconActive,
+  visitorsActive,
   ...rest
 }: Props): ReactElement {
   const theme = useTheme();
@@ -43,8 +52,25 @@ export default function AnnouncementSwipe({
             {`${data.created_date} às ${data.created_time}`}
           </Publication>
 
-          <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
+          {visitorsActive ? (
+            <Visitors>
+              <MaterialIcons
+                name="supervisor-account"
+                size={16}
+                color={theme.colors.cinza_apagado}
+              />
+              <NumberOfVisitors>{data.visits}</NumberOfVisitors>
+            </Visitors>
+          ) : (
+            <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
+          )}
         </Details>
+
+        <IconActive>
+          {iconActive ? (
+            <Bolt width={28} height={28} fill={theme.colors.green_main} />
+          ) : null}
+        </IconActive>
       </>
     </Container>
   );
