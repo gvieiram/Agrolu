@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
@@ -25,4 +26,5 @@ export const Error = styled.Text`
 
 export const ButtonForm = styled(Button)`
   margin-top: 30px;
+  margin-bottom: ${Platform.OS === 'ios' ? 350 : 450}px;
 `;

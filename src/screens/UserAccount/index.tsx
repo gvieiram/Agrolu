@@ -129,7 +129,7 @@ export function UserAccount() {
 
   function exchangeTitles() {
     if (option === 'dataEdit') {
-      return 'Alterar Perfil';
+      return 'Alterar Conta';
     }
     if (option === 'passwordEdit') {
       return 'Alterar Senha';
@@ -138,42 +138,40 @@ export function UserAccount() {
   }
 
   return (
-    // <ContainerKeyboardAvoidingView
-    //   behavior={Platform.OS === 'ios' ? null : 'position'}
-    //   enabled
-    // >
-    <>
-      <Header>
-        <HeaderContent>
-          <ButtonBack onPress={handleBack} />
-          <HeaderTitle>{exchangeTitles()}</HeaderTitle>
-        </HeaderContent>
-      </Header>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <ContainerKeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
+      enabled
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
-          {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-          <AccountContent>
-            <User>
-              <ImageWrapper>
-                {user.photo ? (
-                  <UserImage source={{ uri: user.photo }} />
-                ) : (
-                  <UserIconWrapper>
-                    <UserImageIcon name="account-circle" />
-                  </UserIconWrapper>
-                )}
-              </ImageWrapper>
-              <UserName>{user.name}</UserName>
-            </User>
+          <Header>
+            <HeaderContent>
+              <ButtonBack onPress={handleBack} />
+              <HeaderTitle>{exchangeTitles()}</HeaderTitle>
+            </HeaderContent>
+          </Header>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <AccountContent>
+              <User>
+                <ImageWrapper>
+                  {user.photo ? (
+                    <UserImage source={{ uri: user.photo }} />
+                  ) : (
+                    <UserIconWrapper>
+                      <UserImageIcon name="account-circle" />
+                    </UserIconWrapper>
+                  )}
+                </ImageWrapper>
+                <UserName>{user.name}</UserName>
+              </User>
 
-            <Line />
+              <Line />
 
-            <ExchangeOption />
-          </AccountContent>
-          {/* </TouchableWithoutFeedback> */}
-          {/* </ContainerKeyboardAvoidingView> */}
+              <ExchangeOption />
+            </AccountContent>
+          </ScrollView>
         </Container>
-      </ScrollView>
-    </>
+      </TouchableWithoutFeedback>
+    </ContainerKeyboardAvoidingView>
   );
 }

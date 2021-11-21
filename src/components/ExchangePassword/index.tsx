@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useTheme } from 'styled-components';
 
 import PasswordRegex from '../../utils/PasswordRegex';
 import { InputForm } from '../Inputs/InputForm';
@@ -36,11 +37,12 @@ const schema = Yup.object().shape({
   passwordConfirm: Yup.string()
     .required('Senha de confirmação é obrigatória')
     .test('passwords-match', 'Senhas não correspondem', function (value) {
-      return this.parent.password === value;
+      return this.parent.newPassword === value;
     }),
 });
 
 function ExchangePassword() {
+  const theme = useTheme();
   const [newPassword, setNewPassword] = useState('');
 
   function handleRegister(form: FormData) {
@@ -74,7 +76,8 @@ function ExchangePassword() {
         iconName="vpn-key"
         name="password"
         control={control}
-        placeholder="Senha"
+        placeholder="Senha Antiga"
+        isErrored={errors.password}
         error={errors.password && errors.password.message}
         onChangeText={text => handleConfirmOldPassword(text)}
       />
@@ -87,7 +90,7 @@ function ExchangePassword() {
         iconName="vpn-key"
         name="newPassword"
         control={control}
-        placeholder="Senha"
+        placeholder="Nova Senha"
         isErrored={errors.newPassword}
         error={errors.newPassword && errors.newPassword.message}
         onChangeText={text => handleNewPassword(text)}
@@ -117,6 +120,7 @@ function ExchangePassword() {
           value={newPassword}
           regex={validator.regex}
           key={index}
+          styleText={{ color: theme.colors.green_dark_main }}
         />
       ))}
 

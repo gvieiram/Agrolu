@@ -12,9 +12,7 @@ export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
   /* background: ${({ theme }) => theme.colors.green_background}; */
 `;
 
-export const Container = styled.View`
-  padding-bottom: 150px;
-`;
+export const Container = styled.View``;
 
 export const Header = styled.View`
   width: 100%;
