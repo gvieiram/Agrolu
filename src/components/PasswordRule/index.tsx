@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, StyleSheetProperties, TextStyle } from 'react-native';
+import { StyleProp, TextStyle } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';

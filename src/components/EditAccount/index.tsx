@@ -2,22 +2,19 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert } from 'react-native';
 
 import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from 'styled-components';
 
-import { useAuth } from '../../hooks/auth';
-import UserApi from '../../services/api/UserApi';
 import PasswordRegex from '../../utils/PasswordRegex';
 import { InputForm } from '../Inputs/InputForm';
 import PasswordRule from '../PasswordRule';
 import { Container, Label, Error, ButtonForm } from './styles';
 
 interface FormData {
-  oldPassword: string;
+  password: string;
   newPassword: string;
   passwordConfirm: string;
 }
@@ -35,7 +32,7 @@ const createSchemaPassword = (
 };
 
 const schema = Yup.object().shape({
-  oldPassword: createSchemaPassword(Yup.string()),
+  password: Yup.string().required('Senha é blau'),
   newPassword: createSchemaPassword(Yup.string()),
   passwordConfirm: Yup.string()
     .required('Senha de confirmação é obrigatória')
@@ -44,24 +41,16 @@ const schema = Yup.object().shape({
     }),
 });
 
-function ExchangePassword() {
+export default function ExchangePassword() {
   const theme = useTheme();
   const [newPassword, setNewPassword] = useState('');
 
-  function handleExchange(form: FormData) {
+  function handleRegister(form: FormData) {
     const data = {
-      oldPassword: form.oldPassword,
+      password: form.password,
       newPassword: form.newPassword,
       passwordConfirm: form.passwordConfirm,
     };
-
-    UserApi.resetMyPassword({
-      current_password: data.oldPassword,
-      password: data.newPassword,
-      password_confirmation: data.passwordConfirm,
-    })
-      .then(() => Alert.alert('Senha Alterada!'))
-      .catch(error => console.log(error.response));
   }
 
   const {
@@ -71,21 +60,26 @@ function ExchangePassword() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const handleConfirmNewPassword = (value: React.SetStateAction<string>) => {
+  const handleNewPassword = (value: React.SetStateAction<string>) => {
     setValue('newPassword', value);
     setNewPassword(value);
+  };
+
+  const handleConfirmOldPassword = value => {
+    // Todo
   };
 
   return (
     <Container>
       <Label>Digite sua senha antiga</Label>
-      <InputForm
+      <InputForm // Não ta exibindo a mensagem de erro correta
         iconName="vpn-key"
         name="password"
         control={control}
         placeholder="Senha Antiga"
         isErrored={errors.password}
         error={errors.password && errors.password.message}
+        onChangeText={text => handleConfirmOldPassword(text)}
       />
       {errors.password && (
         <Error>{errors.password && errors.password.message}</Error>
@@ -99,7 +93,7 @@ function ExchangePassword() {
         placeholder="Nova Senha"
         isErrored={errors.newPassword}
         error={errors.newPassword && errors.newPassword.message}
-        onChangeText={text => handleConfirmNewPassword(text)}
+        onChangeText={text => handleNewPassword(text)}
       />
       {errors.newPassword && (
         <Error>{errors.newPassword && errors.newPassword.message}</Error>
@@ -130,9 +124,7 @@ function ExchangePassword() {
         />
       ))}
 
-      <ButtonForm title="Próximo" onPress={handleSubmit(handleExchange)} />
+      <ButtonForm title="Próximo" onPress={handleSubmit(handleRegister)} />
     </Container>
   );
 }
-
-export default ExchangePassword;
