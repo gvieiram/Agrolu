@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from 'styled-components';
 
-import { useAuth } from '../../hooks/auth';
 import UserApi from '../../services/api/UserApi';
 import PasswordRegex from '../../utils/PasswordRegex';
 import { InputForm } from '../Inputs/InputForm';
@@ -35,7 +34,7 @@ const createSchemaPassword = (
 };
 
 const schema = Yup.object().shape({
-  oldPassword: createSchemaPassword(Yup.string()),
+  oldPassword: Yup.string().required('Senha é obrigatória'),
   newPassword: createSchemaPassword(Yup.string()),
   passwordConfirm: Yup.string()
     .required('Senha de confirmação é obrigatória')
@@ -44,7 +43,7 @@ const schema = Yup.object().shape({
     }),
 });
 
-function ExchangePassword() {
+export default function ExchangePassword() {
   const theme = useTheme();
   const [newPassword, setNewPassword] = useState('');
 
@@ -84,11 +83,12 @@ function ExchangePassword() {
         name="password"
         control={control}
         placeholder="Senha Antiga"
-        isErrored={errors.password}
-        error={errors.password && errors.password.message}
+        isErrored={errors.oldPassword}
+        error={errors.oldPassword && errors.oldPassword.message}
+        onChangeText={text => setValue('oldPassword', text)}
       />
-      {errors.password && (
-        <Error>{errors.password && errors.password.message}</Error>
+      {errors.oldPassword && (
+        <Error>{errors.oldPassword && errors.oldPassword.message}</Error>
       )}
 
       <Label>Agora, digite uma nova senha</Label>
@@ -113,6 +113,7 @@ function ExchangePassword() {
         placeholder="Repetir Senha"
         isErrored={errors.passwordConfirm}
         error={errors.passwordConfirm && errors.passwordConfirm.message}
+        onChangeText={text => setValue('passwordConfirm', text)}
       />
       {errors.passwordConfirm && (
         <Error>
@@ -130,9 +131,7 @@ function ExchangePassword() {
         />
       ))}
 
-      <ButtonForm title="Próximo" onPress={handleSubmit(handleExchange)} />
+      <ButtonForm title="Alterar" onPress={handleSubmit(handleExchange)} />
     </Container>
   );
 }
-
-export default ExchangePassword;
