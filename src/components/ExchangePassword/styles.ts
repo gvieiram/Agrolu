@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
 import Button from '../Button';
 
 export const Container = styled.View`
-  margin-top: 25px;
+  margin-top: 15px;
 `;
 
 export const Label = styled.Text`

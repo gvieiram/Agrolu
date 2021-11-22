@@ -9,6 +9,7 @@ import { MaterialCommunityIcons as FaceIcon } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import { EditAccount } from '../../components/EditAccount';
 import ExchangePassword from '../../components/ExchangePassword';
 import { useAuth } from '../../hooks/auth';
 import {
@@ -61,7 +62,7 @@ export function UserAccount() {
       return (
         <>
           <TileOptionSelected>Dados pessoais</TileOptionSelected>
-          {/* <ExchangePassword /> */}
+          <EditAccount />
         </>
       );
     }

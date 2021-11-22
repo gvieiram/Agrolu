@@ -8,7 +8,7 @@ export const Container = styled.View`
 `;
 
 export const Text = styled.Text`
-  color: ${({ theme }) => theme.colors.cinza_apagado};
+  width: 90%;
   font-family: ${({ theme }) => theme.fonts.regular_400};
   font-size: ${RFValue(16)}px;
   flex-wrap: wrap;

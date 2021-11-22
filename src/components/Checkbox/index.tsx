@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { CheckBoxProps, StyleProp, ViewStyle } from 'react-native';
+import { CheckBoxProps, StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { Checkbox as Check } from 'react-native-paper';
 
 import { useTheme } from 'styled-components';
@@ -9,9 +9,10 @@ import { Container, Text } from './styles';
 interface Props extends CheckBoxProps {
   text: string;
   style?: StyleProp<ViewStyle>;
+  textStyle: StyleProp<TextStyle>;
 }
 
-export function Checkbox({ text, style, ...rest }: Props) {
+export function Checkbox({ text, style, textStyle, ...rest }: Props) {
   const theme = useTheme();
 
   const [checked, setChecked] = useState(false);
@@ -28,7 +29,7 @@ export function Checkbox({ text, style, ...rest }: Props) {
         {...rest}
       />
 
-      <Text>{text}</Text>
+      <Text style={textStyle}>{text}</Text>
     </Container>
   );
 }

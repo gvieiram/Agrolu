@@ -79,6 +79,7 @@ export default function ExchangePassword() {
     <Container>
       <Label>Digite sua senha antiga</Label>
       <InputForm
+        inputType="password"
         iconName="vpn-key"
         name="password"
         control={control}
@@ -93,6 +94,7 @@ export default function ExchangePassword() {
 
       <Label>Agora, digite uma nova senha</Label>
       <InputForm
+        inputType="password"
         iconName="vpn-key"
         name="newPassword"
         control={control}
@@ -107,6 +109,7 @@ export default function ExchangePassword() {
 
       <Label>Digite novamente a nova senha</Label>
       <InputForm
+        inputType="password"
         iconName="vpn-key"
         name="passwordConfirm"
         control={control}

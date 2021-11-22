@@ -193,6 +193,8 @@ export default function SignUpStepTwo() {
               isErrored={errors.password}
               error={errors.password && errors.password.message}
               onChangeText={text => handlePassword(text)}
+              inputType="password"
+              isEditable
             />
 
             <InputForm
@@ -202,6 +204,8 @@ export default function SignUpStepTwo() {
               placeholder="Repetir Senha"
               isErrored={errors.passwordConfirm}
               error={errors.passwordConfirm && errors.passwordConfirm.message}
+              inputType="password"
+              isEditable
             />
             {errors.passwordConfirm && (
               <Error>

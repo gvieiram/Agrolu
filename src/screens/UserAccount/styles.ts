@@ -122,7 +122,7 @@ export const CardText = styled.Text`
 `;
 
 export const TileOptionSelected = styled.Text`
-  font-size: ${RFValue(24)}px;
+  font-size: ${RFValue(20)}px;
   font-family: ${({ theme }) => theme.fonts.medium_500};
   color: ${({ theme }) => theme.colors.green_dark_main};
 `;
