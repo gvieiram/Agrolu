@@ -121,7 +121,7 @@ export function UserAccount() {
           activeOpacity={0.7}
           onPress={() => handleOptionChange('passwordEdit')}
         >
-          <CardIcon name="edit" size={32} />
+          <CardIcon name="vpn-key" size={32} />
           <CardText>Alterar{'\n'}senha</CardText>
         </Card>
       </UserOptions>

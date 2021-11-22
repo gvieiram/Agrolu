@@ -84,6 +84,7 @@ export default function ExchangePassword() {
         name="password"
         control={control}
         placeholder="Senha Antiga"
+        isEditable
         isErrored={errors.oldPassword}
         error={errors.oldPassword && errors.oldPassword.message}
         onChangeText={text => setValue('oldPassword', text)}
@@ -99,6 +100,7 @@ export default function ExchangePassword() {
         name="newPassword"
         control={control}
         placeholder="Nova Senha"
+        isEditable
         isErrored={errors.newPassword}
         error={errors.newPassword && errors.newPassword.message}
         onChangeText={text => handleConfirmNewPassword(text)}
@@ -114,6 +116,7 @@ export default function ExchangePassword() {
         name="passwordConfirm"
         control={control}
         placeholder="Repetir Senha"
+        isEditable
         isErrored={errors.passwordConfirm}
         error={errors.passwordConfirm && errors.passwordConfirm.message}
         onChangeText={text => setValue('passwordConfirm', text)}
