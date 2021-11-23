@@ -6,18 +6,16 @@ import { useTheme } from 'styled-components';
 
 import Announcement from '../../components/Announcement';
 import { Load } from '../../components/Load';
+import { SearchBar } from '../../components/Search';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import {
   Container,
   Header,
   HeaderContent,
-  Search,
   IconsContainer,
   Like,
   Filter,
-  Text,
-  SearchIcon,
   AnnouncementList,
   TextEndItems,
 } from './styles';
@@ -39,6 +37,8 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [endItems, setEndItems] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [search, setSearch] = useState('');
+  console.log(search);
 
   useEffect(() => {
     getAnnouncements();
@@ -92,10 +92,12 @@ export default function Home() {
     <Container>
       <Header>
         <HeaderContent>
-          <Search>
-            <Text>Procurar</Text>
-            <SearchIcon name="search" size={24} />
-          </Search>
+          <SearchBar
+            platform="ios"
+            placeholder="Procurar"
+            onChangeText={setSearch}
+            value={search}
+          />
 
           <IconsContainer>
             <TouchableOpacity

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AppLoading from 'expo-app-loading';
 
@@ -34,16 +35,18 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <PaperProvider>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        <AppProvider>
-          <Routes />
-        </AppProvider>
-      </PaperProvider>
+      <SafeAreaProvider>
+        <PaperProvider>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+          <AppProvider>
+            <Routes />
+          </AppProvider>
+        </PaperProvider>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

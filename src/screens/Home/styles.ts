@@ -16,35 +16,12 @@ export const Header = styled.View`
   height: 115px;
   background-color: ${({ theme }) => theme.colors.green_dark_main};
   justify-content: flex-end;
-  padding: 15px;
+  padding: 15px 15px 10px 15px;
 `;
 
 export const HeaderContent = styled.View`
   justify-content: space-between;
   flex-direction: row;
-`;
-
-export const Search = styled.View`
-  height: 36px;
-  width: 70%;
-  background-color: ${({ theme }) => theme.colors.green_light_main};
-  border-radius: 10px;
-
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-
-  padding: 0 15px;
-`;
-
-export const Text = styled.Text`
-  font-size: ${RFValue(20)}px;
-  font-family: ${({ theme }) => theme.fonts.regular_400};
-  color: ${({ theme }) => theme.colors.green_linear_dark_opaque};
-`;
-
-export const SearchIcon = styled(MaterialIcons)`
-  color: ${({ theme }) => theme.colors.green_linear_dark_opaque};
 `;
 
 export const IconsContainer = styled.View`
