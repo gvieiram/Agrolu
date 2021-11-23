@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -10,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from 'styled-components';
 
 import UserApi from '../../services/api/UserApi';
-import PasswordRegex from '../../utils/PasswordRegex';
+import { PasswordRegex } from '../../utils/Regex';
 import { InputForm } from '../Inputs/InputForm';
 import PasswordRule from '../PasswordRule';
 import { Container, Label, Error, ButtonForm } from './styles';

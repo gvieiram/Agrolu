@@ -9,6 +9,7 @@ import { Load } from '../../components/Load';
 import { SearchBar } from '../../components/Search';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
+import { convertToSlug } from '../../utils/Regex';
 import {
   Container,
   Header,
@@ -20,7 +21,7 @@ import {
   TextEndItems,
 } from './styles';
 
-const wait = timeout => {
+const wait = (timeout: number) => {
   return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
@@ -33,12 +34,12 @@ export default function Home() {
   const [announcements, setAnnouncements] = useState<AnnouncementResponse[]>(
     [],
   );
+  const [originalData, setOriginalData] = useState<AnnouncementResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [endItems, setEndItems] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [search, setSearch] = useState('');
-  console.log(search);
 
   useEffect(() => {
     getAnnouncements();
@@ -50,6 +51,7 @@ export default function Home() {
     })
       .then(response => {
         setAnnouncements([...announcements, ...response.data.data]);
+        setOriginalData([...originalData, ...response.data.data]);
         setPage(page + 1);
 
         if (response.data.next_page_url === null) {
@@ -88,6 +90,19 @@ export default function Home() {
     );
   }
 
+  const handleSearch = (s: string) => {
+    const text = convertToSlug(s).toLowerCase();
+    const arr: AnnouncementResponse[] = JSON.parse(
+      JSON.stringify(originalData),
+    );
+
+    setAnnouncements(
+      arr.filter(data =>
+        convertToSlug(data.title).toLowerCase().includes(text),
+      ),
+    );
+  };
+
   return (
     <Container>
       <Header>
@@ -95,7 +110,10 @@ export default function Home() {
           <SearchBar
             platform="ios"
             placeholder="Procurar"
-            onChangeText={setSearch}
+            onChangeText={text => {
+              setSearch(text);
+              handleSearch(text);
+            }}
             value={search}
           />
 
