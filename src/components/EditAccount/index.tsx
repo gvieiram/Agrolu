@@ -3,91 +3,96 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert } from 'react-native';
 
+import AppLoading from 'expo-app-loading';
+
 import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTheme } from 'styled-components';
 
+import { UpdateRequest } from '../../dtos/request/UserRequestDTO';
 import { CityResponse } from '../../dtos/response/CityResponseDTO';
+import { StatesResponse } from '../../dtos/response/StateResponseDTO';
+import { UserResponse } from '../../dtos/response/UserResponseDTO';
+import CityApi from '../../services/api/CityApi';
+import StateApi from '../../services/api/StateApi';
 import UserApi from '../../services/api/UserApi';
 import { Checkbox } from '../Checkbox';
 import { InputForm } from '../Inputs/InputForm';
 import { InputPicker } from '../Inputs/InputPicker';
 import { Container, Label, Error, ButtonForm, Title } from './styles';
 
-interface FormData {
-  name: string;
-  identity: string;
-  email: string;
-  cep: string;
-  state: string;
-  city: string;
-  street: string;
-  number: string;
-  complement: string;
-}
-
 export function EditAccount() {
   const theme = useTheme();
-  const [name, setName] = useState('Gustavo');
-  const [cpf, setCpf] = useState('073.338.777-99');
-  const [email, setEmail] = useState('agrolu@teste.com');
-  const [phone, setPhone] = useState('(48) 98445-9898');
-  const [cep, setCep] = useState('88065999');
-  const [state, setState] = useState(null);
-  const [city, setCity] = useState(null);
-  const [street, setStreet] = useState('Rua Estou Com Fome');
-  const [number, setNumber] = useState('239');
-  const [complement, setComplement] = useState('Do lado da rua Hambúrguer');
-  const [notification, setNotification] = useState(false);
-
+  const [user, setUser] = useState<UserResponse>(null);
   const [cities, setCities] = useState<CityResponse[]>([]);
-  const [states, setStates] = useState<CityResponse[]>([]);
+  const [states, setStates] = useState<StatesResponse[]>([]);
+  const [stateSelected, setStateSelected] = useState(null);
+  const { control } = useForm();
 
-  const {
-    setValue,
-    control,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm(); // { resolver: yupResolver(schema) }
+  const handleChange = (name, value) => {
+    setUser(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-  function handleEditAccount(form: FormData) {
-    const data = {
-      name: form.name,
-      cpf: form.identity,
-      email: form.email,
-      cep: form.cep,
-      estate: state,
-      city: city,
-      street: form.street,
-      number: form.number,
-      complement: form.complement,
-      notification: notification ? '1' : '0',
-    };
+  function handleEditAccount() {
+    const {
+      email,
+      phone,
+      cep,
+      city_id,
+      public_place,
+      complement,
+      number,
+      receive_notification,
+    } = user;
 
-    console.log([data]);
+    UserApi.update({
+      email,
+      phone,
+      cep,
+      city_id,
+      public_place,
+      complement,
+      number,
+      receive_notification: receive_notification ? 1 : 0,
+    });
+  }
 
-    // UserApi.resetMyPassword({
-    //   current_password: data.oldPassword,
-    //   password: data.newPassword,
-    //   password_confirmation: data.passwordConfirm,
-    // })
-    //   .then(() => Alert.alert('Senha Alterada!'))
-    //   .catch(error => console.log(error.response));
+  function getCitiesByState(stateId: number) {
+    StateApi.find(stateId).then(response => setCities(response.data.cities));
+  }
+
+  function getStates() {
+    StateApi.all().then(response => {
+      setStates(response.data);
+
+      if (user.city) {
+        setStateSelected(user.city.state_id);
+        getCitiesByState(user.city.state_id);
+      }
+    });
+  }
+
+  function getProfile() {
+    UserApi.me().then(response => {
+      const { data } = response;
+      setUser(data);
+      getStates();
+    });
   }
 
   useEffect(() => {
-    setValue('name', name);
-    setValue('identity', cpf);
-    setValue('email', email);
-    setValue('phone', phone);
-    setValue('cep', cep);
-    // setValue('state', state);
-    // setValue('city', city);
-    setValue('street', street);
-    setValue('number', number);
-    setValue('complement', complement);
+    getProfile();
+
+    return () => setUser(null);
   }, []);
+
+  if (!user) {
+    return <AppLoading />;
+  }
 
   return (
     <Container>
@@ -97,19 +102,21 @@ export function EditAccount() {
         name="name"
         control={control}
         isEditable={false}
-        defaultValue={name}
+        onChangeText={text => handleChange('name', text)}
+        value={user.name}
       />
 
       <Label>CPF</Label>
       <InputForm
         inputType="withMask"
         maskType="cpf"
-        name="identity"
+        name="document"
         control={control}
         placeholder="CPF"
         keyboardType="numeric"
         isEditable={false}
-        defaultValue={cpf}
+        onChangeText={text => handleChange('document', text)}
+        value={user.document}
       />
 
       <Label>E-mail</Label>
@@ -122,10 +129,9 @@ export function EditAccount() {
         autoCorrect={false}
         autoCapitalize="none"
         isEditable
-        defaultValue={email}
+        value={user.email}
         onChangeText={text => {
-          setValue('email', text);
-          setEmail(text);
+          handleChange('email', text);
         }}
       />
 
@@ -139,10 +145,9 @@ export function EditAccount() {
         keyboardType="numeric"
         maxLength={15}
         isEditable
-        defaultValue={phone}
+        value={user.phone}
         onChangeText={text => {
-          setValue('phone', text);
-          setPhone(text);
+          handleChange('phone', text);
         }}
       />
 
@@ -158,52 +163,55 @@ export function EditAccount() {
         keyboardType="numeric"
         isEditable
         maxLength={9}
-        defaultValue={cep}
+        value={user.cep}
         onChangeText={text => {
-          setValue('cep', text);
-          setCep(text);
+          handleChange('cep', text);
         }}
       />
 
       <Label>Estado</Label>
       <InputPicker
         labelDisable="Selecione um Estado"
-        defaultValue={state}
+        selectedValue={stateSelected}
         items={
           states
-            ? states.map(s => {
-                return { label: s.name, value: s.id };
+            ? states.map(item => {
+                return { label: item.name, value: item.id };
               })
             : []
         }
         onValueChange={value => {
-          setState(value);
+          setStateSelected(value);
+          getCitiesByState(Number(value));
         }}
       />
 
       <Label>Cidade</Label>
       <InputPicker
         labelDisable="Selecione uma Cidade"
-        defaultValue={city}
+        selectedValue={user.city_id}
         items={
           cities
-            ? cities.map(c => {
-                return { label: c.name, value: c.id };
+            ? cities.map(item => {
+                return { label: item.name, value: item.id };
               })
             : []
         }
         onValueChange={value => {
-          setCity(value);
+          handleChange('city_id', value);
         }}
       />
 
       <Label>Rua</Label>
       <InputForm
         inputType="text"
-        name="street"
+        name="public_place"
         control={control}
-        isEditable={false}
-        defaultValue={street}
+        isEditable
+        onChangeText={text => {
+          handleChange('public_place', text);
+        }}
+        value={user.public_place}
       />
 
       <Label>Número</Label>
@@ -215,10 +223,9 @@ export function EditAccount() {
         maxLength={5}
         isEditable
         placeholder="123"
-        defaultValue={number}
+        value={user.number}
         onChangeText={text => {
-          setValue('number', text);
-          setNumber(text);
+          handleChange('number', text);
         }}
       />
 
@@ -229,11 +236,10 @@ export function EditAccount() {
         control={control}
         isEditable
         placeholder="Casa, Apartamento"
-        defaultValue={complement}
+        value={user.complement}
         maxLength={60}
         onChangeText={text => {
-          setValue('complement', text);
-          setComplement(text);
+          handleChange('complement', text);
         }}
       />
 
@@ -242,14 +248,13 @@ export function EditAccount() {
         text="Quero receber notificações com dicas de colheita"
         style={{ marginTop: 20 }}
         textStyle={{ color: theme.colors.green_dark_main, fontSize: 15 }}
-        status={notification ? 'checked' : 'unchecked'}
-        onPress={() => setNotification(!notification)}
+        status={user.receive_notification ? 'checked' : 'unchecked'}
+        onPress={() =>
+          handleChange('receive_notification', !user.receive_notification)
+        }
       />
 
-      <ButtonForm
-        title="Salvar Alterações"
-        onPress={handleSubmit(handleEditAccount)}
-      />
+      <ButtonForm title="Salvar Alterações" onPress={handleEditAccount()} />
     </Container>
   );
 }

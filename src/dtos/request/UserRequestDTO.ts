@@ -14,3 +14,14 @@ export interface ResetMyPasswordRequest {
   password: string;
   password_confirmation: string;
 }
+
+export interface UpdateRequest {
+  email: string;
+  cep: string;
+  phone: string;
+  city_id: number;
+  public_place: string;
+  complement: string;
+  number: number;
+  receive_notification: number;
+}

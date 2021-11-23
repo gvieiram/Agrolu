@@ -2,6 +2,7 @@ import {
   CheckDocumentRequest,
   ReportRequest,
   ResetMyPasswordRequest,
+  UpdateRequest,
 } from '../../dtos/request/UserRequestDTO';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import { UserResponse } from '../../dtos/response/UserResponseDTO';
@@ -9,6 +10,8 @@ import api from '../api';
 
 const checkDocument = (images: CheckDocumentRequest) =>
   api.post('users/me/check-document', images);
+
+const update = (data: UpdateRequest) => api.put<UserResponse>('users/me', data);
 
 const me = () => api.get<UserResponse>('users/me');
 
@@ -30,8 +33,14 @@ const reportAnnouncement = (id: number, report: ReportRequest) =>
 const resetMyPassword = (data: ResetMyPasswordRequest) =>
   api.post('users/me/reset-password', data);
 
+const storeToken = (token: string) =>
+  api.post('users/me/token', {
+    exponent_push_token: token,
+  });
+
 const UserApi = {
   checkDocument,
+  update,
   me,
   myAnnouncements,
   myAnnouncementsFavorites,
@@ -39,6 +48,7 @@ const UserApi = {
   deleteAnnouncementFavorite,
   reportAnnouncement,
   resetMyPassword,
+  storeToken,
 };
 
 export default UserApi;
