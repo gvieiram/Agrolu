@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { RefreshControl, TouchableOpacity } from 'react-native';
 
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import axios from 'axios';
 import { useTheme } from 'styled-components';
 
 import Announcement from '../../components/Announcement';
 import { Load } from '../../components/Load';
 import { SearchBar } from '../../components/Search';
+import { Params } from '../../dtos/request/AnnouncementRequestDTO';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import { convertToSlug } from '../../utils/Regex';
@@ -34,40 +36,44 @@ export default function Home() {
   const [announcements, setAnnouncements] = useState<AnnouncementResponse[]>(
     [],
   );
-  const [originalData, setOriginalData] = useState<AnnouncementResponse[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [params, setParams] = useState<Params>({ page: 1 } as Params);
   const [endItems, setEndItems] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    getAnnouncements();
-  }, []);
+  const handleChangeParams = (name, value) => {
+    setParams(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-  async function getAnnouncements() {
-    AnnouncementApi.all({
-      page,
-    })
-      .then(response => {
-        setAnnouncements([...announcements, ...response.data.data]);
-        setOriginalData([...originalData, ...response.data.data]);
-        setPage(page + 1);
+  // async function getAnnouncements(isPaginate = false) {
+  //   AnnouncementApi.all(params)
+  //     .then(response => {
+  //       if (isPaginate) {
+  //         setAnnouncements([...announcements, ...response.data.data]);
+  //       } else {
+  //         setAnnouncements(response.data.data);
+  //       }
 
-        if (response.data.next_page_url === null) {
-          setEndItems(true);
-        } else {
-          setEndItems(false);
-        }
-      })
-      .catch(error => console.log(error.response))
-      .finally(() => setLoading(false));
-  }
+  //       if (response.data.next_page_url === null) {
+  //         handleChangeParams('page', params.page);
+  //         setEndItems(true);
+  //       } else {
+  //         handleChangeParams('page', params.page + 1);
+  //         setEndItems(false);
+  //       }
+  //     })
+  //     .catch(error => console.log(error.response))
+  //     .finally(() => setLoading(false));
+  // }
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
-    getAnnouncements();
+    setAnnouncements([]);
+    setParams({ page: 1 });
 
     wait(2000).then(() => setRefreshing(false));
   }, []);
@@ -91,17 +97,42 @@ export default function Home() {
   }
 
   const handleSearch = (s: string) => {
-    const text = convertToSlug(s).toLowerCase();
-    const arr: AnnouncementResponse[] = JSON.parse(
-      JSON.stringify(originalData),
-    );
-
-    setAnnouncements(
-      arr.filter(data =>
-        convertToSlug(data.title).toLowerCase().includes(text),
-      ),
-    );
+    setAnnouncements([]);
+    handleChangeParams('page', 1);
+    handleChangeParams('name', s);
   };
+
+  const handleEndReached = () => {
+    if (!endItems) {
+      handleChangeParams('page', params.page + 1);
+    }
+  };
+
+  useEffect(() => {
+    async function getAnnouncements() {
+      setLoading(true);
+
+      AnnouncementApi.all(params)
+        .then(response => {
+          setAnnouncements([...announcements, ...response.data.data]);
+
+          if (response.data.next_page_url === null) {
+            setEndItems(true);
+          } else {
+            setEndItems(false);
+          }
+        })
+        .catch(error => console.log(error.response))
+        .finally(() => setLoading(false));
+    }
+
+    getAnnouncements();
+
+    return () => {
+      setAnnouncements([]);
+      axios.CancelToken.source().cancel();
+    };
+  }, [params.name, params.page]);
 
   return (
     <Container>
@@ -110,11 +141,9 @@ export default function Home() {
           <SearchBar
             platform="ios"
             placeholder="Procurar"
-            onChangeText={text => {
-              setSearch(text);
-              handleSearch(text);
-            }}
-            value={search}
+            onCancel={() => setParams({ page: 1 })}
+            onChangeText={text => handleSearch(text)}
+            value={params.name}
           />
 
           <IconsContainer>
@@ -149,8 +178,8 @@ export default function Home() {
               iconActive
             />
           )}
-          onEndReached={getAnnouncements}
-          onEndReachedThreshold={0.1}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0}
           ListFooterComponent={!loading ? loadMore : null}
           refreshControl={
             <RefreshControl
