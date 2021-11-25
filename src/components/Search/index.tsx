@@ -24,7 +24,6 @@ export function SearchBar({ value, onChangeText }: SearchProps) {
         onChangeText={onChangeText}
         value={value}
         cancelButtonTitle="Cancelar"
-        showLoading
         containerStyle={{
           height: RFValue(40),
           backgroundColor: theme.colors.green_dark_main,

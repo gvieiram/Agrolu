@@ -3,19 +3,17 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Confirmation from '../screens/Confirmation';
-import Home from '../screens/Home';
 import SignIn from '../screens/SignIn';
 import SignUpStepOne from '../screens/SignUp/SignUpStepOne';
 import SignUpStepTwo from '../screens/SignUp/SignUpStepTwo';
 import Welcome from '../screens/Welcome';
-import { AppStackRoutes } from './app.stack.routes';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
 export function AuthRoutes() {
   return (
     <Navigator
-      initialRouteName="SignIn"
+      initialRouteName="Welcome"
       screenOptions={{
         headerShown: false,
       }}

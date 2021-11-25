@@ -63,19 +63,6 @@ export default function Welcome() {
           title="Vamos lá!"
           onPress={() => navigation.dispatch(CommonActions.navigate('SignIn'))}
         />
-
-        <DivText>
-          <Text>Ainda não possui conta?</Text>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() =>
-              navigation.dispatch(CommonActions.navigate('SignUpStepOne'))
-            }
-          >
-            <LinkCadastro>Cadastre-se agora!</LinkCadastro>
-          </TouchableOpacity>
-        </DivText>
       </ContainerNextPage>
     </Container>
   );
