@@ -109,7 +109,16 @@ export function UserAccount() {
           <CardIcon name="favorite" size={32} />
           <CardText>Anúncios favoritos</CardText>
         </Card>
-        <Card activeOpacity={0.7}>
+        <Card
+          activeOpacity={0.7}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.navigate({
+                name: 'UserVerification',
+              }),
+            )
+          }
+        >
           <FaceIcon
             name="face-recognition"
             size={32}
