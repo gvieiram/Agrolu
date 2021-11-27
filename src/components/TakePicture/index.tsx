@@ -1,34 +1,52 @@
 /* eslint-disable no-else-return */
-import React, { useState, useEffect } from 'react';
-import { Alert, View } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Alert, Dimensions, ImageBackground, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Camera } from 'expo-camera';
 
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 
+import { BackButton } from '../BackButton';
 import {
   CameraContainer,
   CameraContent,
   ItemsContainer,
   TakePictureIcon,
+  GoBack,
+  Steps,
+  Description,
+  DescText,
 } from './styles';
 
 interface Props {
   onlyType?: 'back' | 'front';
   cameraRef: React.MutableRefObject<any>;
   onTakePicture(): Promise<void>;
+  handleBack(): void;
 }
 
-export function TakePicture({
+interface PhotoPreviewPros {
+  photoUri: any;
+  stepDone(): void;
+  previewVisibilityOnRetake(): void;
+}
+
+function TakePicture({
   onlyType,
   cameraRef,
   onTakePicture,
+  handleBack,
+
   ...rest
 }: Props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [hasPermission, setHasPermission] = useState(null);
   const [flash, setFlash] = useState(0);
+
+  const dimensions = useRef(Dimensions.get('window'));
+  const screenWidth = dimensions.current.width;
+  const screenHeight = Math.round((screenWidth * 16) / 9);
 
   useEffect(() => {
     (async () => {
@@ -63,7 +81,8 @@ export function TakePicture({
   return (
     <CameraContainer>
       <Camera
-        style={{ flex: 1 }}
+        ratio="16:9"
+        style={{ flex: 1, width: screenWidth, height: screenHeight }}
         type={onlyType || type}
         ref={cameraRef}
         autoFocus="on"
@@ -71,6 +90,23 @@ export function TakePicture({
         {...rest}
       >
         <CameraContent>
+          <GoBack>
+            <BackButton color="white" onPress={handleBack} />
+          </GoBack>
+          <Steps>
+            <MaterialIcons name="face" size={50} color="white" />
+            <FontAwesome
+              name="id-card-o"
+              size={46}
+              color="white"
+              style={{ alignSelf: 'flex-start' }}
+            />
+
+            <MaterialIcons name="credit-card" size={50} color="white" />
+          </Steps>
+          <Description>
+            <DescText>Centralize o rosto</DescText>
+          </Description>
           <ItemsContainer>
             {onlyType !== null ? (
               <MaterialIcons
@@ -117,3 +153,75 @@ export function TakePicture({
     </CameraContainer>
   );
 }
+
+const PhotoPreview = ({
+  photoUri,
+  stepDone,
+  previewVisibilityOnRetake,
+}: PhotoPreviewPros) => {
+  return (
+    <ImageBackground
+      source={{ uri: photoUri }}
+      style={{
+        flex: 1,
+      }}
+    >
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          padding: 15,
+          justifyContent: 'flex-end',
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <TouchableOpacity
+            onPress={previewVisibilityOnRetake}
+            style={{
+              width: 130,
+              height: 40,
+
+              alignItems: 'center',
+              borderRadius: 4,
+            }}
+          >
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 20,
+              }}
+            >
+              Re-take
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={stepDone}
+            style={{
+              width: 130,
+              height: 40,
+
+              alignItems: 'center',
+              borderRadius: 4,
+            }}
+          >
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 20,
+              }}
+            >
+              save photo
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ImageBackground>
+  );
+};
+
+export { PhotoPreview, TakePicture };

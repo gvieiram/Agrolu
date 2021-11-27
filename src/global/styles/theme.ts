@@ -14,6 +14,8 @@ export default {
     preto_titulo: '#151515',
     black: '#000000',
     opacityColor: 'rgba(0, 0, 0, 0.7)',
+    opacityColorCamera: 'rgba(0, 0, 0, 0.4)',
+    opacityColorCamera_2: 'rgba(0, 0, 0, 0.2)',
 
     chumbo: '#283739',
     green_main: '#A0BF1D',
