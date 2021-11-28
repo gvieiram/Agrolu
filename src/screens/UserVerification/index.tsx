@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Image } from 'react-native';
+import { Dimensions, Image } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -31,15 +31,7 @@ export function UserVerification() {
   const [capturedPhoto, setCapturedPhoto] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
-  const [nextButtonVisible, setNextButtonVisible] = useState(false);
-
-  const photoOldState = [...capturedPhoto];
-
-  if (capturedPhoto > photoOldState) {
-    setNextButtonVisible(true);
-  } else if (capturedPhoto < photoOldState) {
-    setNextButtonVisible(false);
-  }
+  const [nextButtonVisible, setNextButtonVisible] = useState(true);
 
   function handleBack() {
     navigation.goBack();
@@ -63,16 +55,11 @@ export function UserVerification() {
     );
   }
 
-  function stepDone() {
-    setCameraIsOpen(false);
-    setPreviewVisible(false);
-  }
-
   const slides = [
     {
       key: '1',
       title: 'Tire uma foto do seu rosto',
-      text: 'Vá para um local iluminado\nMantenha o rosto centralizado',
+      text: 'Vá para um local iluminado\nMantenha o rosto centralizado na câmera',
       camType: 'front',
       image: require('../../assets/img/selfie.png'),
     },
@@ -132,7 +119,10 @@ export function UserVerification() {
       <PhotoPreview
         photoUri={photoPreview}
         previewVisibilityOnRetake={retake}
-        stepDone={stepDone}
+        stepDone={() => {
+          setCameraIsOpen(false);
+          setPreviewVisible(false);
+        }}
       />
     ) : (
       <TakePicture
@@ -150,11 +140,13 @@ export function UserVerification() {
         <HeaderContent>
           <ButtonBack onPress={handleBack} />
           <HeaderTitle>Verificar Documento</HeaderTitle>
-          {console.log('Photos', [capturedPhoto])}
+          {/* {console.log('Photos', [capturedPhoto])} */}
         </HeaderContent>
       </Header>
       <AppIntroSlider
         keyExtractor={item => item.key}
+        scrollEnabled={false}
+        dotClickEnabled={false}
         renderItem={renderItem}
         data={slides}
         renderNextButton={renderNextButton}

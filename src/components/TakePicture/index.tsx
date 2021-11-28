@@ -164,6 +164,7 @@ const PhotoPreview = ({
       source={{ uri: photoUri }}
       style={{
         flex: 1,
+        zIndex: 99,
       }}
     >
       <View
