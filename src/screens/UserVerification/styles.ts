@@ -1,4 +1,3 @@
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
@@ -35,21 +34,6 @@ export const HeaderTitle = styled.Text`
   color: ${({ theme }) => theme.colors.green_main};
 `;
 
-export const NextButton = styled.View`
-  height: ${RFValue(44)}px;
-  width: ${RFValue(44)}px;
-  background-color: ${({ theme }) => theme.colors.gray_line_dark};
-  justify-content: center;
-  align-items: center;
-  border-radius: 22px;
-`;
-
-export const ButtonText = styled.Text`
-  color: ${({ theme }) => theme.colors.white};
-  font-family: ${({ theme }) => theme.fonts.medium_500};
-  font-size: ${RFValue(15)}px;
-`;
-
 export const Content = styled.View`
   flex: 1;
   justify-content: space-around;
@@ -72,14 +56,7 @@ export const Text = styled.Text`
   margin-top: 15px;
 `;
 
-export const CamButton = styled(TouchableOpacity)`
-  width: 100%;
-  height: ${RFValue(48)}px;
-  width: ${RFValue(48)}px;
-  background-color: ${({ theme }) => theme.colors.success_light};
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-
-  margin: 20px 0 80px 0;
+export const Image = styled.Image`
+  height: 60%;
+  width: 90%;
 `;

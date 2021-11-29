@@ -1,24 +1,26 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/destructuring-assignment */
 import React, { useState, useRef } from 'react';
-import { Dimensions, Image } from 'react-native';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import { Alert } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 
-import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import Stepper from '../../components/Steps';
 import { TakePicture, PhotoPreview } from '../../components/TakePicture';
+import { CheckDocumentRequest } from '../../dtos/request/UserRequestDTO';
+import UserApi from '../../services/api/UserApi';
 import {
   Container,
   Header,
   HeaderContent,
   HeaderTitle,
   ButtonBack,
-  NextButton,
-  ButtonText,
   Content,
   Title,
   Text,
-  CamButton,
+  Image,
 } from './styles';
 
 export function UserVerification() {
@@ -31,9 +33,11 @@ export function UserVerification() {
   const [capturedPhoto, setCapturedPhoto] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
-  const [nextButtonVisible, setNextButtonVisible] = useState(true);
+  const [active, setActive] = useState(0);
 
   function handleBack() {
+    setCapturedPhoto([]);
+    setPhotoPreview(null);
     navigation.goBack();
   }
 
@@ -55,64 +59,62 @@ export function UserVerification() {
     );
   }
 
-  const slides = [
-    {
-      key: '1',
-      title: 'Tire uma foto do seu rosto',
-      text: 'Vá para um local iluminado\nMantenha o rosto centralizado na câmera',
-      camType: 'front',
-      image: require('../../assets/img/selfie.png'),
-    },
-    {
-      key: '2',
-      title: 'Tire uma foto da frente da CNH',
-      text: 'Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis',
-      camType: null,
-    },
-    {
-      key: '3',
-      title: 'Tire uma foto de trás da CNH',
-      text: 'Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis',
-      camType: null,
-    },
-  ];
+  function onDone() {
+    const data = {
+      selfie: capturedPhoto[0],
+      documentFront: capturedPhoto[1],
+      documentBack: capturedPhoto[2],
+    };
 
-  const renderItem = ({ item }) => {
+    if (capturedPhoto.length === 3) {
+      try {
+        UserApi.checkDocument(data).then(() => {
+          console.log('Deu boa');
+        });
+      } catch (error) {
+        console.log('Deu ruim', error);
+      }
+    } else {
+      // Mais de 3 fotos user refaz as steps
+      setActive(p => p - 2);
+      setCapturedPhoto([]);
+      setPhotoPreview(null);
+
+      Alert.alert(
+        'Erro',
+        'Houve um erro ao registrar suas fotos\nTente novamente e não se esqueça de tirar fotos nítidas',
+      );
+    }
+  }
+
+  const MyComponent = props => {
     return (
       <Content>
-        <Image
-          source={item.image}
-          style={{ resizeMode: 'contain', height: '60%', width: '90%' }}
-        />
-        <Title>{item.title}</Title>
-        <Text>{item.text}</Text>
-        <CamButton
-          onPress={() => {
-            setCameraIsOpen(true);
-            setType(item.camType);
-          }}
-        >
-          <MaterialIcons
-            name="photo-camera"
-            color={theme.colors.white}
-            size={32}
-          />
-        </CamButton>
+        <Image style={{ resizeMode: 'contain' }} source={props.image} />
+        <Title>{props.title}</Title>
+        <Text>{props.text}</Text>
       </Content>
     );
   };
 
-  function renderNextButton() {
-    return (
-      <NextButton>
-        <MaterialIcons
-          name="chevron-right"
-          color={theme.colors.green_dark_main}
-          size={26}
-        />
-      </NextButton>
-    );
-  }
+  const content = [
+    <MyComponent
+      image={require('../../assets/img/selfie.png')}
+      type="back"
+      title="Tire uma foto do seu rosto"
+      text={`Vá para um local iluminado\nMantenha o rosto centralizado na câmera`}
+    />,
+    <MyComponent
+      image={require('../../assets/img/selfie.png')}
+      title="Tire uma foto da frente do documento"
+      text={`Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis`}
+    />,
+    <MyComponent
+      image={require('../../assets/img/selfie.png')}
+      title="Tire uma foto de trás do documento"
+      text={`Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis`}
+    />,
+  ];
 
   if (cameraIsOpen) {
     return previewVisible ? (
@@ -122,6 +124,12 @@ export function UserVerification() {
         stepDone={() => {
           setCameraIsOpen(false);
           setPreviewVisible(false);
+
+          if (active === 2) {
+            onDone();
+          } else {
+            setActive(p => p + 1);
+          }
         }}
       />
     ) : (
@@ -129,7 +137,7 @@ export function UserVerification() {
         cameraRef={camRef}
         onTakePicture={takePicture}
         onlyType={type}
-        handleBack={handleBack}
+        handleBack={() => setCameraIsOpen(false)}
       />
     );
   }
@@ -143,18 +151,36 @@ export function UserVerification() {
           {/* {console.log('Photos', [capturedPhoto])} */}
         </HeaderContent>
       </Header>
-      <AppIntroSlider
-        keyExtractor={item => item.key}
-        scrollEnabled={false}
-        dotClickEnabled={false}
-        renderItem={renderItem}
-        data={slides}
-        renderNextButton={renderNextButton}
-        activeDotStyle={{
-          backgroundColor: theme.colors.green_dark_1,
-          paddingHorizontal: 10,
+      <Stepper
+        active={active}
+        content={content}
+        onBack={() => setActive(p => p)}
+        onFinish={() => setCameraIsOpen(true)}
+        onNext={() => {
+          setCameraIsOpen(true);
+          setType(() => {
+            active === 0 ? setType(1) : setType(0);
+          });
         }}
-        showNextButton={nextButtonVisible}
+        showBackButton={false}
+        disableScroll
+        stepStyle={{ display: 'none' }}
+        stepLineStyle={{ display: 'none' }}
+        stepTextStyle={{ display: 'none' }}
+        buttonStyle={{
+          height: RFValue(48),
+          width: RFValue(48),
+          backgroundColor: theme.colors.success_main,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 10,
+          marginVertical: 50,
+        }}
+        buttonIcon="photo-camera"
+        wrapperStyle={{
+          flex: 1,
+          justifyContent: 'space-around',
+        }}
       />
     </Container>
   );
