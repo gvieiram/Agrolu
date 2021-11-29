@@ -9,7 +9,12 @@ import { UserResponse } from '../../dtos/response/UserResponseDTO';
 import api from '../api';
 
 const checkDocument = (images: CheckDocumentRequest) =>
-  api.post('users/me/check-document', images);
+  api.post('users/me/check-document', images, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Accept: 'application/json',
+    },
+  });
 
 const update = (data: UpdateRequest) => api.put<UserResponse>('users/me', data);
 
