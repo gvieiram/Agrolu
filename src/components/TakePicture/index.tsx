@@ -14,9 +14,6 @@ import {
   ItemsContainer,
   TakePictureIcon,
   GoBack,
-  Steps,
-  Description,
-  DescText,
 } from './styles';
 
 interface Props {
@@ -93,20 +90,6 @@ function TakePicture({
           <GoBack>
             <BackButton color="white" onPress={handleBack} />
           </GoBack>
-          <Steps>
-            <MaterialIcons name="face" size={50} color="white" />
-            <FontAwesome
-              name="id-card-o"
-              size={46}
-              color="white"
-              style={{ alignSelf: 'flex-start' }}
-            />
-
-            <MaterialIcons name="credit-card" size={50} color="white" />
-          </Steps>
-          <Description>
-            <DescText>Centralize o rosto</DescText>
-          </Description>
           <ItemsContainer>
             {onlyType !== null ? (
               <MaterialIcons

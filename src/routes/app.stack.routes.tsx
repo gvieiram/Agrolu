@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AnnouncementDetails } from '../screens/AnnouncementDetails';
 import AnnouncementSaved from '../screens/AnnouncementSaved';
 import { Chat } from '../screens/Chat';
+import Confirmation from '../screens/Confirmation';
 import { EditAnnouncement } from '../screens/EditAnnouncement';
 import UserAnnouncements from '../screens/UserAnnouncements';
 import { UserVerification } from '../screens/UserVerification';
@@ -27,6 +28,7 @@ export function AppStackRoutes() {
       <Screen name="AnnouncementSaved" component={AnnouncementSaved} />
       <Screen name="UserAnnouncements" component={UserAnnouncements} />
       <Screen name="UserVerification" component={UserVerification} />
+      <Screen name="Confirmation" component={Confirmation} />
     </Navigator>
   );
 }

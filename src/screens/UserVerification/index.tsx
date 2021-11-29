@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import Stepper from '../../components/Steps';
@@ -23,6 +23,10 @@ import {
   Image,
 } from './styles';
 
+interface Props {
+  uri: string;
+}
+
 export function UserVerification() {
   const navigation = useNavigation();
   const theme = useTheme();
@@ -30,64 +34,80 @@ export function UserVerification() {
   const camRef = useRef(null);
   const [cameraIsOpen, setCameraIsOpen] = useState(false);
   const [type, setType] = useState(null);
-  const [capturedPhoto, setCapturedPhoto] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [active, setActive] = useState(0);
+  const [selfieImg, setSelfieImg] = useState(null);
+  const [documentFrontImg, setDocumentFrontImg] = useState(null);
+  const [documentBackImg, setDocumentBackImg] = useState(null);
+
+  function setCapturedPhotos(param: string) {
+    if (active === 0) {
+      setSelfieImg(param);
+    } else if (active === 1) {
+      setDocumentFrontImg(param);
+    } else if (active === 2) {
+      setDocumentBackImg(param);
+    }
+  }
 
   function handleBack() {
-    setCapturedPhoto([]);
     setPhotoPreview(null);
+    setCapturedPhotos(null);
     navigation.goBack();
   }
 
   async function takePicture() {
     if (camRef) {
-      const data = await camRef.current.takePictureAsync();
+      const data: Props = await camRef.current.takePictureAsync();
       setPreviewVisible(true);
       setPhotoPreview(data.uri);
-      setCapturedPhoto(oldState => [...oldState, data.uri]);
+      setCapturedPhotos(data.uri);
     }
   }
 
   function retake() {
     setPreviewVisible(false);
     setPhotoPreview(null);
-
-    setCapturedPhoto(oldState =>
-      oldState.filter(photo => photo !== photoPreview),
-    );
+    setCapturedPhotos(null);
   }
 
   function onDone() {
     const data = {
-      selfie: capturedPhoto[0],
-      documentFront: capturedPhoto[1],
-      documentBack: capturedPhoto[2],
+      selfie: selfieImg,
+      documentFront: documentFrontImg,
+      documentBack: documentBackImg,
     };
 
-    if (capturedPhoto.length === 3) {
-      try {
-        UserApi.checkDocument(data).then(() => {
-          console.log('Deu boa');
-        });
-      } catch (error) {
-        console.log('Deu ruim', error);
-      }
-    } else {
-      // Mais de 3 fotos user refaz as steps
-      setActive(p => p - 2);
-      setCapturedPhoto([]);
-      setPhotoPreview(null);
+    const formData = new FormData();
+    formData.append('selfie[]', data.selfie);
+    formData.append('documentFront[]', data.selfie);
+    formData.append('documentBack[]', data.selfie);
+    console.log(formData);
 
-      Alert.alert(
-        'Erro',
-        'Houve um erro ao registrar suas fotos\nTente novamente e não se esqueça de tirar fotos nítidas',
-      );
-    }
+    UserApi.checkDocument(formData)
+      .then(() => {
+        navigation.dispatch(
+          CommonActions.navigate('Confirmation', {
+            title: `Sua conta\nfoi verificada!`,
+            message: `Confirmamos que está todo ok!\nAgora você pode aproveitar 100% do app 🎉`,
+            nextScreenRoute: 'UserAccount',
+            buttonTitle: 'Vamos lá!',
+          }),
+        );
+      })
+      .catch(error => {
+        Alert.alert(
+          'Erro',
+          'Houve um erro ao registrar suas fotos\nTente novamente!!\n💡 Não se esqueça de tirar fotos nítidas',
+        );
+        setActive(p => p - 2);
+        setCapturedPhotos(null);
+        console.log(error.response.data);
+      });
   }
 
-  const MyComponent = props => {
+  const Steps = props => {
     return (
       <Content>
         <Image style={{ resizeMode: 'contain' }} source={props.image} />
@@ -98,19 +118,19 @@ export function UserVerification() {
   };
 
   const content = [
-    <MyComponent
+    <Steps
       image={require('../../assets/img/selfie.png')}
       type="back"
       title="Tire uma foto do seu rosto"
       text={`Vá para um local iluminado\nMantenha o rosto centralizado na câmera`}
     />,
-    <MyComponent
-      image={require('../../assets/img/selfie.png')}
+    <Steps
+      image={require('../../assets/img/documentFront.jpg')}
       title="Tire uma foto da frente do documento"
       text={`Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis`}
     />,
-    <MyComponent
-      image={require('../../assets/img/selfie.png')}
+    <Steps
+      image={require('../../assets/img/documentFront.jpg')}
       title="Tire uma foto de trás do documento"
       text={`Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis`}
     />,
@@ -148,7 +168,6 @@ export function UserVerification() {
         <HeaderContent>
           <ButtonBack onPress={handleBack} />
           <HeaderTitle>Verificar Documento</HeaderTitle>
-          {/* {console.log('Photos', [capturedPhoto])} */}
         </HeaderContent>
       </Header>
       <Stepper

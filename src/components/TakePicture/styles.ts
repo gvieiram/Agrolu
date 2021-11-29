@@ -40,30 +40,3 @@ export const GoBack = styled.View`
   padding: 0 35px;
   margin-top: 40px;
 `;
-
-export const Steps = styled.View`
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-around;
-  align-items: center;
-  height: 100px;
-  padding: 0 70px;
-`;
-
-export const Description = styled.View`
-  position: absolute;
-  bottom: 15%;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0 40px;
-  flex-wrap: wrap;
-  border-radius: 7px;
-  background-color: ${({ theme }) => theme.colors.opacityColor};
-`;
-
-export const DescText = styled.Text`
-  font-size: ${RFValue(16)}px;
-  font-family: ${({ theme }) => theme.fonts.regular_400};
-  color: ${({ theme }) => theme.colors.green_main};
-`;
