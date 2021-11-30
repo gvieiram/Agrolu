@@ -4,12 +4,12 @@ import React, { useState, useRef } from 'react';
 import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import Stepper from '../../components/Steps';
 import { TakePicture, PhotoPreview } from '../../components/TakePicture';
-import { CheckDocumentRequest } from '../../dtos/request/UserRequestDTO';
 import UserApi from '../../services/api/UserApi';
 import {
   Container,
@@ -19,6 +19,8 @@ import {
   ButtonBack,
   Content,
   Title,
+  Tutorials,
+  TextContent,
   Text,
   Image,
 } from './styles';
@@ -33,7 +35,7 @@ export function UserVerification() {
 
   const camRef = useRef(null);
   const [cameraIsOpen, setCameraIsOpen] = useState(false);
-  const [type, setType] = useState(null);
+  const [typeCam, setTypeCam] = useState(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [active, setActive] = useState(0);
@@ -41,13 +43,19 @@ export function UserVerification() {
   const [documentFrontImg, setDocumentFrontImg] = useState(null);
   const [documentBackImg, setDocumentBackImg] = useState(null);
 
-  function setCapturedPhotos(param: string) {
-    if (active === 0) {
+  function setCapturedPhotos(param: string | null) {
+    if (active === 0 && param) {
       setSelfieImg(param);
-    } else if (active === 1) {
+    } else if (active === 1 && param) {
       setDocumentFrontImg(param);
-    } else if (active === 2) {
+    } else if (active === 2 && param) {
       setDocumentBackImg(param);
+    }
+
+    if (param === null) {
+      setSelfieImg(null);
+      setDocumentFrontImg(null);
+      setDocumentBackImg(null);
     }
   }
 
@@ -72,25 +80,45 @@ export function UserVerification() {
     setCapturedPhotos(null);
   }
 
-  function onDone() {
+  function fileParams(param: string) {
+    const fileName = param.split('/').pop();
+    const match = /\.(\w+)$/.exec(fileName);
+    const type = match ? `image/${match[1]}` : `image`;
     const data = {
-      selfie: selfieImg,
-      documentFront: documentFrontImg,
-      documentBack: documentBackImg,
+      fileName,
+      type,
     };
+    return data;
+  }
 
+  function onDone() {
     const formData = new FormData();
-    formData.append('selfie[]', data.selfie);
-    formData.append('documentFront[]', data.selfie);
-    formData.append('documentBack[]', data.selfie);
-    console.log(formData);
+    const selfieParams = fileParams(selfieImg);
+    const docFrontParams = fileParams(documentFrontImg);
+    const docBackParams = fileParams(documentBackImg);
+
+    formData.append('selfie', {
+      uri: selfieImg,
+      name: selfieParams.fileName,
+      type: selfieParams.type,
+    });
+    formData.append('documentFront', {
+      uri: documentFrontImg,
+      name: docFrontParams.fileName,
+      type: docFrontParams.type,
+    });
+    formData.append('documentBack', {
+      uri: documentBackImg,
+      name: docBackParams.fileName,
+      type: docBackParams.type,
+    });
 
     UserApi.checkDocument(formData)
       .then(() => {
         navigation.dispatch(
           CommonActions.navigate('Confirmation', {
             title: `Sua conta\nfoi verificada!`,
-            message: `Confirmamos que está todo ok!\nAgora você pode aproveitar 100% do app 🎉`,
+            message: `Confirmamos que está tudo ok!\nAgora você pode aproveitar 100% do app 🎉`,
             nextScreenRoute: 'UserAccount',
             buttonTitle: 'Vamos lá!',
           }),
@@ -110,9 +138,40 @@ export function UserVerification() {
   const Steps = props => {
     return (
       <Content>
-        <Image style={{ resizeMode: 'contain' }} source={props.image} />
+        <Image
+          style={{ resizeMode: 'contain', marginTop: 20 }}
+          source={props.image}
+        />
         <Title>{props.title}</Title>
-        <Text>{props.text}</Text>
+        <Tutorials>
+          <TextContent>
+            <MaterialIcons
+              name="check"
+              size={24}
+              color={theme.colors.green_dark_1}
+              style={{ marginBottom: -10 }}
+            />
+            <Text>{props.textOne}</Text>
+          </TextContent>
+          <TextContent>
+            <MaterialIcons
+              name="check"
+              size={24}
+              color={theme.colors.green_dark_1}
+              style={{ marginBottom: -10 }}
+            />
+            <Text>{props.textTwo}</Text>
+          </TextContent>
+          <TextContent>
+            <MaterialIcons
+              name="check"
+              size={24}
+              color={theme.colors.green_dark_1}
+              style={{ marginBottom: -10 }}
+            />
+            <Text>{props.textThree}</Text>
+          </TextContent>
+        </Tutorials>
       </Content>
     );
   };
@@ -120,19 +179,24 @@ export function UserVerification() {
   const content = [
     <Steps
       image={require('../../assets/img/selfie.png')}
-      type="back"
       title="Tire uma foto do seu rosto"
-      text={`Vá para um local iluminado\nMantenha o rosto centralizado na câmera`}
+      textOne="Certifique-se de estar em um local bem iluminado"
+      textTwo="Mantenha uma expressão neutra"
+      textThree="Evite usar óculos e máscara"
     />,
     <Steps
       image={require('../../assets/img/documentFront.jpg')}
       title="Tire uma foto da frente do documento"
-      text={`Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis`}
+      textOne="Certifique-se de estar em um local bem iluminado"
+      textTwo="Centralize a parte da frente do documento na tela do dispositivo"
+      textThree="Certifique-se de que todos os dados estejam visíveis"
     />,
     <Steps
       image={require('../../assets/img/documentFront.jpg')}
-      title="Tire uma foto de trás do documento"
-      text={`Vá para um local iluminado\nEncaixe o documento na tela\nCertifique-se se os dados estão legíveis`}
+      title="Tire uma foto do verso do documento"
+      textOne="Certifique-se de estar em um local bem iluminado"
+      textTwo="Centralize a parte do verso do documento na tela do dispositivo"
+      textThree="Certifique-se de que todos os dados estejam visíveis"
     />,
   ];
 
@@ -156,7 +220,7 @@ export function UserVerification() {
       <TakePicture
         cameraRef={camRef}
         onTakePicture={takePicture}
-        onlyType={type}
+        onlyType={typeCam}
         handleBack={() => setCameraIsOpen(false)}
       />
     );
@@ -177,8 +241,8 @@ export function UserVerification() {
         onFinish={() => setCameraIsOpen(true)}
         onNext={() => {
           setCameraIsOpen(true);
-          setType(() => {
-            active === 0 ? setType(1) : setType(0);
+          setTypeCam(() => {
+            active === 0 ? setTypeCam(1) : setTypeCam(null);
           });
         }}
         showBackButton={false}

@@ -1,11 +1,12 @@
 /* eslint-disable no-else-return */
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Dimensions, ImageBackground, Text, View } from 'react-native';
+import { Alert, Dimensions, ImageBackground, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Camera } from 'expo-camera';
 
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { useTheme } from 'styled-components';
 
 import { BackButton } from '../BackButton';
 import {
@@ -14,6 +15,9 @@ import {
   ItemsContainer,
   TakePictureIcon,
   GoBack,
+  Container,
+  BottomTab,
+  Text,
 } from './styles';
 
 interface Props {
@@ -142,6 +146,8 @@ const PhotoPreview = ({
   stepDone,
   previewVisibilityOnRetake,
 }: PhotoPreviewPros) => {
+  const theme = useTheme();
+
   return (
     <ImageBackground
       source={{ uri: photoUri }}
@@ -150,60 +156,40 @@ const PhotoPreview = ({
         zIndex: 99,
       }}
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          padding: 15,
-          justifyContent: 'flex-end',
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
+      <Container>
+        <BottomTab>
           <TouchableOpacity
             onPress={previewVisibilityOnRetake}
+            activeOpacity={0.9}
             style={{
               width: 130,
               height: 40,
+              backgroundColor: theme.colors.cinza_apagado,
 
               alignItems: 'center',
-              borderRadius: 4,
+              justifyContent: 'center',
+              borderRadius: 10,
             }}
           >
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 20,
-              }}
-            >
-              Re-take
-            </Text>
+            <Text>Repetir</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={stepDone}
+            activeOpacity={0.9}
             style={{
               width: 130,
               height: 40,
+              backgroundColor: theme.colors.green_dark_1,
 
               alignItems: 'center',
-              borderRadius: 4,
+              justifyContent: 'center',
+              borderRadius: 10,
             }}
           >
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: 20,
-              }}
-            >
-              save photo
-            </Text>
+            <Text>Próximo</Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </BottomTab>
+      </Container>
     </ImageBackground>
   );
 };

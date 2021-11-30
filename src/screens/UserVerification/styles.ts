@@ -1,4 +1,4 @@
-import { RFValue } from 'react-native-responsive-fontsize';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
@@ -45,18 +45,28 @@ export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.green_main};
   font-size: ${RFValue(30)}px;
   font-family: ${({ theme }) => theme.fonts.archivo};
+  margin-top: 15px;
+`;
+
+export const Tutorials = styled.View`
+  justify-content: center;
+  margin-bottom: -25px;
+`;
+
+export const TextContent = styled.View`
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
 `;
 
 export const Text = styled.Text`
   color: ${({ theme }) => theme.colors.cinza_apagado};
   font-family: ${({ theme }) => theme.fonts.medium_500};
   font-size: ${RFValue(15)}px;
-  text-align: center;
-
-  margin-top: 15px;
+  margin: 15px 0 0 10px;
 `;
 
 export const Image = styled.Image`
-  height: 60%;
-  width: 90%;
+  height: ${RFPercentage(6)}%;
+  width: ${RFPercentage(20)}%;
 `;

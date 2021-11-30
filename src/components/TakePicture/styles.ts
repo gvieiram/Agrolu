@@ -40,3 +40,22 @@ export const GoBack = styled.View`
   padding: 0 35px;
   margin-top: 40px;
 `;
+
+export const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  padding: 15px;
+  justify-content: flex-end;
+`;
+
+export const BottomTab = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+export const Text = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  color: ${({ theme }) => theme.colors.white};
+`;
