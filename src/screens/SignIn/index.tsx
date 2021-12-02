@@ -93,7 +93,9 @@ export default function SignIn() {
 
             <TouchableOpacity
               activeOpacity={0.7}
-              // onPress={() => navigation.navigate('ChangePassword')}
+              onPress={() =>
+                navigation.dispatch(CommonActions.navigate('ForgotPassStepOne'))
+              }
             >
               <TextPassword>Esqueci minha senha</TextPassword>
             </TouchableOpacity>

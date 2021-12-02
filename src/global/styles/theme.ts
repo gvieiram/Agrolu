@@ -3,6 +3,7 @@ export default {
     white: '#FFFFFF',
     creme: '#EBE8E4',
     creme_background: '#F3F0EB',
+    creme_background_opacity: 'rgba(243, 240, 235, 0.1)',
     cinza: '#E0E0E0',
     gray_background: '#E5E5E5',
     gray_line_input: '#F4F5F6',
