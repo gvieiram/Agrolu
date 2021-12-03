@@ -10,6 +10,7 @@ import { useTheme } from 'styled-components';
 
 import UserApi from '../../services/api/UserApi';
 import { PasswordRegex } from '../../utils/Regex';
+import AlertError from '../AlertError';
 import { InputForm } from '../Inputs/InputForm';
 import PasswordRule from '../PasswordRule';
 import { Container, Label, Error, ButtonForm } from './styles';
@@ -59,7 +60,7 @@ export default function ExchangePassword() {
       password_confirmation: data.passwordConfirm,
     })
       .then(() => Alert.alert('Senha Alterada!'))
-      .catch(error => console.log(error.response));
+      .catch(error => AlertError(error));
   }
 
   const {

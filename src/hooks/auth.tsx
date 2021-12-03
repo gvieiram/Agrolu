@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
+import AlertError from '../components/AlertError';
 import api from '../services/api';
 
 interface User {
@@ -123,7 +124,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         setData({ token, user, signed: true });
       })
       .catch(error => {
-        console.log('ERROR! ', error.response);
+        AlertError(error);
 
         setData({ token: null, user: null, signed: false });
       });

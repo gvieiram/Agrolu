@@ -1,7 +1,12 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 import React, { ReactElement, useEffect, useState } from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import {
+  Share as Sharing,
+  Alert,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import {
@@ -128,15 +133,43 @@ export function AnnouncementDetails(): ReactElement {
   }
 
   function handleDeletion() {
-    AnnouncementApi.destroy(announcement.id)
-      .then(() =>
-        navigation.dispatch(
-          CommonActions.navigate({
-            name: 'Home',
-          }),
-        ),
-      )
-      .catch(error => console.log(error.response.data || error.message));
+    Alert.alert(
+      'Tem certeza?',
+      'Seu anúncio será excluído para sempre',
+      [
+        {
+          text: 'Sim',
+          onPress: () =>
+            AnnouncementApi.destroy(announcement.id)
+              .then(() =>
+                navigation.dispatch(
+                  CommonActions.navigate({
+                    name: 'Home',
+                  }),
+                ),
+              )
+              .catch(error =>
+                console.log(error.response.data || error.message),
+              ),
+        },
+        {
+          text: 'Não',
+          style: 'cancel',
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  }
+
+  async function handleShare() {
+    // RNFetchBlob.fetch('GET', announcement.images[0].url).then(async response =>
+    //   Sharing.share({
+    //     url: `data:image/png;base64,${response.data}`,
+    //     message: `${announcement.title} por R$ ${announcement.price}/dia`,
+    //   }),
+    // );
   }
 
   useEffect(() => {
@@ -190,7 +223,12 @@ export function AnnouncementDetails(): ReactElement {
                 </TouchableOpacity>
               )}
 
-              <Share name="ios-share" size={24} />
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => handleShare()}
+              >
+                <Share name="ios-share" size={24} />
+              </TouchableOpacity>
             </IconsContainer>
           </HeaderContent>
         </Header>

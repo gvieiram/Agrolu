@@ -12,6 +12,7 @@ import {
 } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import AlertError from '../../components/AlertError';
 import ButtonGradient from '../../components/ButtonGradient';
 import { Checkbox } from '../../components/Checkbox';
 import { InputPicker } from '../../components/Inputs/InputPicker';
@@ -174,7 +175,7 @@ export function EditAnnouncement() {
           }),
         ),
       )
-      .catch(error => console.log('ERROR', error.response));
+      .catch(error => AlertError(error));
   };
 
   useEffect(() => {

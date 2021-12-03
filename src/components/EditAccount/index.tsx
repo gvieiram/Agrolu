@@ -17,6 +17,7 @@ import { UserResponse } from '../../dtos/response/UserResponseDTO';
 import CityApi from '../../services/api/CityApi';
 import StateApi from '../../services/api/StateApi';
 import UserApi from '../../services/api/UserApi';
+import AlertError from '../AlertError';
 import { Checkbox } from '../Checkbox';
 import { InputForm } from '../Inputs/InputForm';
 import { InputPicker } from '../Inputs/InputPicker';
@@ -58,7 +59,7 @@ export function EditAccount() {
       complement,
       number,
       receive_notification: receive_notification ? 1 : 0,
-    });
+    }).catch(error => AlertError(error));
   }
 
   function getCitiesByState(stateId: number) {

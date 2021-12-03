@@ -15,6 +15,7 @@ import {
 } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import AlertError from '../../../components/AlertError';
 import { InputForm } from '../../../components/Inputs/InputForm';
 import PasswordRule from '../../../components/PasswordRule';
 import api from '../../../services/api';
@@ -147,14 +148,7 @@ export default function SignUpStepTwo() {
           }),
         );
       })
-      .catch(error => {
-        console.log(error);
-
-        Alert.alert(
-          'Opa',
-          'Não foi possível cadastrar a sua conta, tente novamente mais tarde!',
-        );
-      });
+      .catch(error => AlertError(error));
   }
 
   return (

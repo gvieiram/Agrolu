@@ -8,6 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import AlertError from '../../components/AlertError';
 import Stepper from '../../components/Steps';
 import { TakePicture, PhotoPreview } from '../../components/TakePicture';
 import UserApi from '../../services/api/UserApi';
@@ -125,13 +126,9 @@ export function UserVerification() {
         );
       })
       .catch(error => {
-        Alert.alert(
-          'Erro',
-          'Houve um erro ao registrar suas fotos\nTente novamente!!\n💡 Não se esqueça de tirar fotos nítidas',
-        );
+        AlertError(error);
         setActive(p => p - 2);
         setCapturedPhotos(null);
-        console.log(error.response.data);
       });
   }
 

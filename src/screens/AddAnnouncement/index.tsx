@@ -10,6 +10,7 @@ import { Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import AlertError from '../../components/AlertError';
 import ButtonGradient from '../../components/ButtonGradient';
 import { Checkbox } from '../../components/Checkbox';
 import { InputPicker } from '../../components/Inputs/InputPicker';
@@ -166,7 +167,7 @@ export function AddAnnouncement() {
           }),
         ),
       )
-      .catch(error => console.log(error.response));
+      .catch(error => AlertError(error));
   };
 
   useEffect(() => {
