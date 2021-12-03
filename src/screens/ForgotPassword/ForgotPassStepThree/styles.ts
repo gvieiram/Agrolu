@@ -30,8 +30,7 @@ export const BackButton = styled(BackBtn)`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${Platform.OS === 'ios' ? 10 : getStatusBarHeight() + 10};
-  margin-bottom: ${RFValue(50)}px;
+  margin-bottom: ${RFValue(25)}px;
 `;
 
 export const Title = styled.Text`
@@ -46,6 +45,14 @@ export const Subtitle = styled.Text`
   font-family: ${({ theme }) => theme.fonts.light_300};
   line-height: ${RFValue(20)}px;
   margin-top: 16px;
+`;
+
+export const Label = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.creme};
+
+  margin: 8px 0 5px 0;
 `;
 
 export const Form = styled.View`
@@ -71,5 +78,13 @@ export const ResendCode = styled.Text`
 `;
 
 export const ButtonForm = styled(Button)`
-  /* margin-top: 65px; */
+  margin-top: 30px;
+`;
+
+export const Error = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  font-size: ${RFValue(14)}px;
+  color: ${({ theme }) => theme.colors.error_dark};
+
+  margin-bottom: 10px;
 `;

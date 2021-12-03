@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 import { Alert } from 'react-native';
 
 export default function AlertError(error) {

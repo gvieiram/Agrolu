@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { Input } from '../../../components/Inputs/Input';
+import PasswordApi from '../../../services/api/PasswordApi';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -20,14 +21,12 @@ import {
   Subtitle,
   Form,
   ButtonForm,
-  ResendCode,
 } from './styles';
 
 export default function ForgotPassStepOne() {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
-  console.log(email);
 
   function handleBack() {
     navigation.goBack();
@@ -44,9 +43,15 @@ export default function ForgotPassStepOne() {
       const data = { email };
       await schema.validate(data);
 
-      navigation.dispatch(
-        CommonActions.navigate('ForgotPassStepTwo', { user: email }),
-      );
+      PasswordApi.requestResetPassword({
+        email,
+      })
+        .then(() => {
+          navigation.dispatch(
+            CommonActions.navigate('ForgotPassStepTwo', { user: data }),
+          );
+        })
+        .catch(error => console.log(error.response));
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         return Alert.alert('Erro', error.message);
@@ -86,15 +91,6 @@ export default function ForgotPassStepOne() {
               value={email}
             />
           </Form>
-
-          <TouchableOpacity
-            activeOpacity={0.7}
-            // onPress={() =>
-            // navigation.dispatch(CommonActions.navigate('ForgotPassStepOne'))
-            // }
-          >
-            <ResendCode>Reenviar código</ResendCode>
-          </TouchableOpacity>
 
           <ButtonForm title="Enviar" onPress={handleNextStep} />
         </Container>

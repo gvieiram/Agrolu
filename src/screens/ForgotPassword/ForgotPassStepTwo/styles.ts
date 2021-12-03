@@ -56,7 +56,7 @@ export const Form = styled.View`
   border-radius: 10px;
   align-items: center;
   justify-content: space-around;
-  margin: 25px 0 65px 0;
+  margin: 25px 0 10px 0;
 `;
 
 export const CodeInput = styled(TextInput)`
@@ -64,7 +64,7 @@ export const CodeInput = styled(TextInput)`
   width: 40px;
   text-align: center;
   font-size: ${RFValue(22)}px;
-  color: ${({ theme }) => theme.colors.green_main};
+  color: ${({ theme }) => theme.colors.white};
   font-family: ${({ theme }) => theme.fonts.bold_700};
 
   border-bottom-width: 1.5px;
@@ -85,7 +85,7 @@ export const ResendCode = styled.Text`
   text-align: right;
   margin-right: 3px;
 
-  margin-bottom: 65px;
+  margin-bottom: 55px;
 `;
 
 export const ButtonForm = styled(Button)`

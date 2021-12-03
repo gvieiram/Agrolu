@@ -1,11 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { Alert, Keyboard, Platform } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
 
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 
+import PasswordApi from '../../../services/api/PasswordApi';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -17,10 +25,19 @@ import {
   Form,
   ButtonForm,
   CodeInput,
+  ResendCode,
 } from './styles';
+
+interface Params {
+  user: {
+    email: string;
+  };
+}
 
 export default function ForgotPassStepThree() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { user } = route.params as Params;
 
   const input_1 = useRef(null);
   const input_2 = useRef(null);
@@ -41,10 +58,25 @@ export default function ForgotPassStepThree() {
 
   async function handleNextStep() {
     const data = value + value_02 + value_03 + value_04 + value_05 + value_06;
-    console.log(data);
 
-    // todo
-    navigation.dispatch(CommonActions.navigate('ForgotPassStepThree'));
+    const code = +data;
+
+    PasswordApi.checkCode({
+      code,
+      email: user.email,
+    })
+      .then(() =>
+        navigation.dispatch(
+          CommonActions.navigate('ForgotPassStepThree', { user }),
+        ),
+      )
+      .catch(error => console.log(error.response));
+  }
+
+  function sendCode() {
+    PasswordApi.requestResetPassword({
+      email: user.email,
+    }).catch(error => console.log(error.response));
   }
 
   return (
@@ -64,7 +96,7 @@ export default function ForgotPassStepThree() {
 
           <Title>Recuperação de senha</Title>
           <Subtitle>
-            Agora digite o código que você recebeu em seu e-mail.
+            Agora digite o código que você recebeu por sms em seu celular.
           </Subtitle>
 
           <Form>
@@ -146,6 +178,11 @@ export default function ForgotPassStepThree() {
               }}
             />
           </Form>
+
+          <TouchableOpacity activeOpacity={0.7} onPress={() => sendCode()}>
+            <ResendCode>Reenviar código</ResendCode>
+          </TouchableOpacity>
+
           <ButtonForm title="Enviar" onPress={handleNextStep} />
         </Container>
       </TouchableWithoutFeedback>
