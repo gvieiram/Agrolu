@@ -50,7 +50,7 @@ export const Subtitle = styled.Text`
 
 export const Form = styled.View`
   width: 100%;
-  margin: 25px 0 0 0;
+  margin: 25px 0 65px 0;
 `;
 
 export const Text = styled.Text`
@@ -58,16 +58,6 @@ export const Text = styled.Text`
   font-size: ${RFValue(18)}px;
   font-family: ${({ theme }) => theme.fonts.regular_400};
   margin: 0 6px 0 6px;
-`;
-
-export const ResendCode = styled.Text`
-  color: ${({ theme }) => theme.colors.green_main};
-  font-size: ${RFValue(12)}px;
-  font-family: ${({ theme }) => theme.fonts.regular_400};
-  text-align: right;
-  margin-right: 3px;
-
-  margin-bottom: 65px;
 `;
 
 export const ButtonForm = styled(Button)`

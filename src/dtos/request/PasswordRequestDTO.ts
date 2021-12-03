@@ -3,11 +3,13 @@ export interface RequestResetPasswordRequest {
 }
 
 export interface CheckCodeRequest {
-  code: number;
+  code: string;
   email: string;
 }
 
 export interface ResetPasswordRequest {
   email: string;
   password: string;
+  password_confirmation: string;
+  code: string;
 }

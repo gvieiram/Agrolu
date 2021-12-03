@@ -1,15 +1,24 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Alert, Keyboard, Platform } from 'react-native';
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
 
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import { useTheme } from 'styled-components';
 
-import { Input } from '../../../components/Inputs/Input';
+import { InputForm } from '../../../components/Inputs/InputForm';
+import PasswordRule from '../../../components/PasswordRule';
+import PasswordApi from '../../../services/api/PasswordApi';
+import { PasswordRegex } from '../../../utils/Regex';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -17,37 +26,96 @@ import {
   BackButton,
   Logo,
   Title,
-  Subtitle,
   Form,
+  Label,
   ButtonForm,
-  ResendCode,
+  Error,
 } from './styles';
 
-export default function ForgotPassStepThree() {
+interface FormData {
+  newPassword: string;
+  passwordConfirm: string;
+}
+
+interface Params {
+  user: {
+    email: string;
+    code: string;
+  };
+}
+
+const createSchemaPassword = (
+  yup: Yup.StringSchema<string, Record<string, any>, string>,
+) => {
+  yup = yup.required('Senha é obrigatória');
+
+  PasswordRegex.map(validator => {
+    yup = yup.matches(validator.regex, validator.messageError);
+  });
+
+  return yup;
+};
+
+const schema = Yup.object().shape({
+  newPassword: createSchemaPassword(Yup.string()),
+  passwordConfirm: Yup.string()
+    .required('Senha de confirmação é obrigatória')
+    .test('passwords-match', 'Senhas não correspondem', function (value) {
+      return this.parent.newPassword === value;
+    }),
+});
+
+export default function SignUpStepTwo() {
+  const theme = useTheme();
+  const route = useRoute();
+  const { user } = route.params as Params;
+
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  console.log(email);
+  const [newPassword, setNewPassword] = useState('');
+
+  function handleExchange(form: FormData) {
+    const data = {
+      password: form.newPassword,
+      password_confirmation: form.passwordConfirm,
+      code: user.code,
+      email: user.email,
+    };
+
+    PasswordApi.resetPassword({
+      email: user.email,
+      password: data.password,
+      password_confirmation: data.password_confirmation,
+      code: data.code,
+    })
+      .then(() => {
+        navigation.dispatch(
+          CommonActions.navigate('Confirmation', {
+            title: `Senha\nalteada!`,
+            message: `Agora você já pode realizar o login!\nEstá esperando o que?`,
+            nextScreenRoute: 'SignIn',
+            buttonTitle: 'Vamos lá!',
+          }),
+        );
+      })
+      .catch(error => console.log(error.response));
+  }
+
   function handleBack() {
     navigation.goBack();
   }
-  async function handleNextStep() {
-    try {
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .required('E-mail obrigatório.')
-          .email('Digite um e-mail válido'),
-      });
-      const data = { email };
-      await schema.validate(data);
-      navigation.dispatch(
-        CommonActions.navigate('ForgotPassStepTwo', { user: email }),
-      );
-    } catch (error) {
-      if (error instanceof Yup.ValidationError) {
-        return Alert.alert('Erro', error.message);
-      }
-    }
-  }
+
+  const {
+    setValue,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const handleConfirmNewPassword = (value: React.SetStateAction<string>) => {
+    setValue('newPassword', value);
+    setNewPassword(value);
+  };
+
   return (
     <ContainerKeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
@@ -61,30 +129,55 @@ export default function ForgotPassStepThree() {
             </Header>
           ) : null}
           <Logo />
+
           <Title>Recuperação de senha</Title>
-          <Subtitle>
-            Agora digite o código que você recebeu em seu e-mail.
-          </Subtitle>
+
           <Form>
-            <Input
-              iconName="alternate-email"
-              placeholder="E-mail"
-              keyboardType="email-address"
-              autoCorrect={false}
-              autoCapitalize="none"
-              onChangeText={setEmail}
-              value={email}
+            <Label>Para finalizar o processo, digite uma nova senha</Label>
+            <InputForm
+              inputType="password"
+              iconName="vpn-key"
+              name="newPassword"
+              control={control}
+              placeholder="Nova Senha"
+              isEditable
+              isErrored={errors.newPassword}
+              error={errors.newPassword && errors.newPassword.message}
+              onChangeText={text => handleConfirmNewPassword(text)}
             />
+            {errors.newPassword && (
+              <Error>{errors.newPassword && errors.newPassword.message}</Error>
+            )}
+
+            <Label>Digite novamente a nova senha</Label>
+            <InputForm
+              inputType="password"
+              iconName="vpn-key"
+              name="passwordConfirm"
+              control={control}
+              placeholder="Repetir Senha"
+              isEditable
+              isErrored={errors.passwordConfirm}
+              error={errors.passwordConfirm && errors.passwordConfirm.message}
+              onChangeText={text => setValue('passwordConfirm', text)}
+            />
+            {errors.passwordConfirm && (
+              <Error>
+                {errors.passwordConfirm && errors.passwordConfirm.message}
+              </Error>
+            )}
           </Form>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            // onPress={() =>
-            // navigation.dispatch(CommonActions.navigate('ForgotPassStepOne'))
-            // }
-          >
-            <ResendCode>Reenviar código</ResendCode>
-          </TouchableOpacity>
-          <ButtonForm title="Enviar" onPress={handleNextStep} />
+
+          {PasswordRegex.map((validator, index) => (
+            <PasswordRule
+              text={validator.description}
+              value={newPassword}
+              regex={validator.regex}
+              key={index}
+            />
+          ))}
+
+          <ButtonForm title="Próximo" onPress={handleSubmit(handleExchange)} />
         </Container>
       </TouchableWithoutFeedback>
     </ContainerKeyboardAvoidingView>
