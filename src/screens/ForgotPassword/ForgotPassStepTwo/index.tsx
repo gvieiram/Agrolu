@@ -57,17 +57,20 @@ export default function ForgotPassStepThree() {
   }
 
   async function handleNextStep() {
-    const data = value + value_02 + value_03 + value_04 + value_05 + value_06;
+    const code = value + value_02 + value_03 + value_04 + value_05 + value_06;
 
-    const code = +data;
-
-    PasswordApi.checkCode({
+    const data = {
       code,
       email: user.email,
+    };
+
+    PasswordApi.checkCode({
+      code: data.code,
+      email: data.email,
     })
       .then(() =>
         navigation.dispatch(
-          CommonActions.navigate('ForgotPassStepThree', { user }),
+          CommonActions.navigate('ForgotPassStepThree', { user: data }),
         ),
       )
       .catch(error => console.log(error.response));

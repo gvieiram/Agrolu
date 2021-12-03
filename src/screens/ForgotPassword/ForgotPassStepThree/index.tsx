@@ -33,7 +33,6 @@ import {
 } from './styles';
 
 interface FormData {
-  oldPassword: string;
   newPassword: string;
   passwordConfirm: string;
 }
@@ -41,6 +40,7 @@ interface FormData {
 interface Params {
   user: {
     email: string;
+    code: string;
   };
 }
 
@@ -75,18 +75,22 @@ export default function SignUpStepTwo() {
 
   function handleExchange(form: FormData) {
     const data = {
-      newPassword: form.newPassword,
-      passwordConfirm: form.passwordConfirm,
+      password: form.newPassword,
+      password_confirmation: form.passwordConfirm,
+      code: user.code,
+      email: user.email,
     };
 
     PasswordApi.resetPassword({
       email: user.email,
-      password: data.newPassword,
+      password: data.password,
+      password_confirmation: data.password_confirmation,
+      code: data.code,
     })
       .then(() => {
         navigation.dispatch(
           CommonActions.navigate('Confirmation', {
-            title: `Sua senha\nfoi alteada com\nsucesso!`,
+            title: `Senha\nalteada!`,
             message: `Agora você já pode realizar o login!\nEstá esperando o que?`,
             nextScreenRoute: 'SignIn',
             buttonTitle: 'Vamos lá!',
