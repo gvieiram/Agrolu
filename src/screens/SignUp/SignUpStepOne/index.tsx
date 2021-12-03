@@ -128,7 +128,7 @@ export default function SignUpStepOne() {
             <ButtonForm title="Próximo" onPress={handleNextStep} />
           </Form>
 
-          <LineView>
+          {/* <LineView>
             <Line />
             <Text>ou</Text>
             <Line />
@@ -142,7 +142,7 @@ export default function SignUpStepOne() {
             <SocialButton activeOpacity={0.7}>
               <IconFacebook />
             </SocialButton>
-          </SocialContainer>
+          </SocialContainer> */}
         </Container>
       </TouchableWithoutFeedback>
     </ContainerKeyboardAvoidingView>
