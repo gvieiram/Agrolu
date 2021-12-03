@@ -1,7 +1,7 @@
 /* eslint-disable object-shorthand */
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert } from 'react-native';
+import { Alert, TouchableOpacity } from 'react-native';
 
 import AppLoading from 'expo-app-loading';
 
@@ -17,6 +17,7 @@ import { UserResponse } from '../../dtos/response/UserResponseDTO';
 import CityApi from '../../services/api/CityApi';
 import StateApi from '../../services/api/StateApi';
 import UserApi from '../../services/api/UserApi';
+import viaCepApi from '../../services/viaCepApi';
 import AlertError from '../AlertError';
 import { Checkbox } from '../Checkbox';
 import { InputForm } from '../Inputs/InputForm';
@@ -59,20 +60,23 @@ export function EditAccount() {
       complement,
       number,
       receive_notification: receive_notification ? 1 : 0,
-    }).catch(error => AlertError(error));
+    }).catch(error => console.log(error));
   }
 
-  function getCitiesByState(stateId: number) {
-    StateApi.find(stateId).then(response => setCities(response.data.cities));
+  function getCitiesByState(stateId: number, cityId?: number) {
+    StateApi.find(stateId).then(response => {
+      setCities(response.data.cities);
+      handleChange('city_id', cityId);
+    });
   }
 
-  function getStates() {
+  function getStates(data: UserResponse) {
     StateApi.all().then(response => {
       setStates(response.data);
 
-      if (user.city) {
-        setStateSelected(user.city.state_id);
-        getCitiesByState(user.city.state_id);
+      if (data.city) {
+        setStateSelected(data.city.state_id);
+        getCitiesByState(data.city.state_id, data.city_id);
       }
     });
   }
@@ -81,17 +85,28 @@ export function EditAccount() {
     UserApi.me().then(response => {
       const { data } = response;
       setUser(data);
-      getStates();
+      getStates(data);
     });
   }
 
+  const handleCep = async (value: string) => {
+    handleChange('cep', value);
+
+    const regex = /^[0-9]{5}-[0-9]{3}$/;
+
+    if (regex.test(value)) {
+      const cep = await viaCepApi(value);
+      const city = await CityApi.find(Number(cep.data.ibge));
+      setStateSelected(city.data.state_id);
+      getCitiesByState(city.data.state_id, city.data.id);
+    }
+  };
+
   useEffect(() => {
     getProfile();
-
-    return () => setUser(null);
   }, []);
 
-  if (!user) {
+  if (!user || !states || !cities) {
     return <AppLoading />;
   }
 
@@ -166,7 +181,7 @@ export function EditAccount() {
         maxLength={9}
         value={user.cep}
         onChangeText={text => {
-          handleChange('cep', text);
+          handleCep(text);
         }}
       />
 
@@ -255,7 +270,9 @@ export function EditAccount() {
         }
       />
 
-      <ButtonForm title="Salvar Alterações" onPress={handleEditAccount()} />
+      <TouchableOpacity activeOpacity={0.7} onPress={() => handleEditAccount()}>
+        <ButtonForm title="Salvar Alterações" />
+      </TouchableOpacity>
     </Container>
   );
 }

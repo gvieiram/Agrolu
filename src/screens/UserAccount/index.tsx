@@ -5,6 +5,8 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
 
+import AppLoading from 'expo-app-loading';
+
 import { MaterialCommunityIcons as FaceIcon } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
@@ -145,6 +147,10 @@ export function UserAccount() {
       return 'Alterar Senha';
     }
     return 'Minha Conta';
+  }
+
+  if (!user) {
+    return <AppLoading />;
   }
 
   return (
