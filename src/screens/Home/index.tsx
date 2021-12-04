@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { RefreshControl, TouchableOpacity } from 'react-native';
 
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  CommonActions,
+} from '@react-navigation/native';
 import axios from 'axios';
 import { useTheme } from 'styled-components';
 
@@ -108,31 +112,33 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    async function getAnnouncements() {
-      setLoading(true);
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getAnnouncements() {
+        setLoading(true);
 
-      AnnouncementApi.all(params)
-        .then(response => {
-          setAnnouncements([...announcements, ...response.data.data]);
+        AnnouncementApi.all(params)
+          .then(response => {
+            setAnnouncements([...announcements, ...response.data.data]);
 
-          if (response.data.next_page_url === null) {
-            setEndItems(true);
-          } else {
-            setEndItems(false);
-          }
-        })
-        .catch(error => console.log(error.response))
-        .finally(() => setLoading(false));
-    }
+            if (response.data.next_page_url === null) {
+              setEndItems(true);
+            } else {
+              setEndItems(false);
+            }
+          })
+          .catch(error => console.log(error.response))
+          .finally(() => setLoading(false));
+      }
 
-    getAnnouncements();
+      getAnnouncements();
 
-    return () => {
-      setAnnouncements([]);
-      axios.CancelToken.source().cancel();
-    };
-  }, [params.name, params.page]);
+      return () => {
+        setAnnouncements([]);
+        axios.CancelToken.source().cancel();
+      };
+    }, [params.name, params.page]),
+  );
 
   return (
     <Container>
