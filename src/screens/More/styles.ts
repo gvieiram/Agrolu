@@ -1,4 +1,5 @@
 // import FastImage from 'react-native-fast-image';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
@@ -16,6 +17,7 @@ export const Header = styled.View`
   background-color: ${({ theme }) => theme.colors.green_dark_main};
   justify-content: flex-end;
   padding: 15px;
+  margin-bottom: 17px;
 `;
 
 export const HeaderContent = styled.View`
@@ -35,22 +37,35 @@ export const HeaderTitle = styled.Text`
   color: ${({ theme }) => theme.colors.green_main};
 `;
 
-export const MessagesContainer = styled.View`
+export const BtnContainer = styled(TouchableOpacity)`
+  padding: 0 16px;
+  height: 55px;
   flex-direction: row;
-  margin: 24px 16px 24px 16px;
 `;
 
-export const Image = styled.Image`
-  height: 100px;
-  width: 82px;
+export const Content = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-width: 1px;
+  border-bottom-color: ${({ theme }) => theme.colors.gray_line_dark};
 `;
 
-export const AnnouncementTitle = styled.Text`
-  font-size: ${RFValue(20)}px;
-  font-family: ${({ theme }) => theme.fonts.medium_500};
+export const Description = styled.View`
+  flex-direction: row;
+`;
+
+export const Title = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
   color: ${({ theme }) => theme.colors.preto_titulo};
+  margin-left: 12px;
 `;
 
-export const Time = styled.Text``;
-export const Name = styled.Text``;
-export const LastMessage = styled.Text``;
+export const Line = styled.View`
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.gray_line_dark};
+
+  margin: 25px 0;
+`;
