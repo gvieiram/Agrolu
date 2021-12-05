@@ -7,6 +7,7 @@ import AnnouncementSaved from '../screens/AnnouncementSaved';
 import { Chat } from '../screens/Chat';
 import Confirmation from '../screens/Confirmation';
 import { EditAnnouncement } from '../screens/EditAnnouncement';
+import { PostDetails } from '../screens/PostDetails';
 import UserAnnouncements from '../screens/UserAnnouncements';
 import { UserVerification } from '../screens/UserVerification';
 import { AppTabRoutes } from './app.tab.routes';
@@ -29,6 +30,7 @@ export function AppStackRoutes() {
       <Screen name="UserAnnouncements" component={UserAnnouncements} />
       <Screen name="UserVerification" component={UserVerification} />
       <Screen name="Confirmation" component={Confirmation} />
+      <Screen name="PostDetails" component={PostDetails} />
     </Navigator>
   );
 }

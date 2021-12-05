@@ -16,7 +16,8 @@ import {
   Container,
   HeaderContent,
   HeaderTitle,
-  Thumbnail,
+  ImagePreview,
+  ImageBlog,
   BtnContainer,
   Title,
   TextContent,
@@ -25,7 +26,7 @@ import {
   Publication,
 } from './styles';
 
-export const Blog = () => {
+export function PostDetails() {
   const navigation = useNavigation();
 
   const [posts, setPosts] = useState<PostsResponse[]>([]);
@@ -35,7 +36,7 @@ export const Blog = () => {
   function handlePostDetails(post: PostResponse) {
     navigation.dispatch(
       CommonActions.navigate({
-        name: 'PostDetails',
+        name: 'AnnouncementDetails',
         params: {
           post,
         },
@@ -54,13 +55,10 @@ export const Blog = () => {
   const Posts = item => {
     return (
       <BtnContainer onPress={() => handlePostDetails(item)} activeOpacity={0.7}>
-        <Thumbnail
-          // source={{uri: item.thumbnail}}
-          source={{
-            uri: 'https://www.epagri.sc.gov.br/wp-content/uploads/2020/07/sementes-crioulas-epagri.jpg',
-          }}
-          resizeMode="cover"
-        />
+        <ImagePreview>
+          {/*
+        <ImageBlog /> */}
+        </ImagePreview>
         <Description>
           <TextContent>
             <Title numberOfLines={1}>Titulo</Title>
@@ -115,7 +113,7 @@ export const Blog = () => {
         <Load />
       ) : (
         <FlatList
-          data={[{ title: 'teste' }, { title: 'Linha correta: data={posts}' }]}
+          data={posts}
           keyExtractor={item => String(item)}
           renderItem={({ item }) => Posts(item)}
           ListHeaderComponent={Header}
@@ -123,4 +121,4 @@ export const Blog = () => {
       )}
     </Container>
   );
-};
+}

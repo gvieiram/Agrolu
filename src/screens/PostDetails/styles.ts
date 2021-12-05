@@ -33,11 +33,17 @@ export const BtnContainer = styled(TouchableOpacity)`
   border-bottom-color: ${({ theme }) => theme.colors.gray_line_dark};
 `;
 
-export const Thumbnail = styled.Image`
+export const ImagePreview = styled.View`
+  height: 110px;
+  width: 110px;
+  background-color: ${({ theme }) => theme.colors.gray_line_dark};
+  border-radius: 10px;
+`;
+
+export const ImageBlog = styled.Image`
   height: 110px;
   width: 110px;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.colors.gray_line_dark};
 `;
 
 export const Description = styled.View`
