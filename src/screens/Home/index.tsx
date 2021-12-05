@@ -1,6 +1,9 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, TouchableOpacity } from 'react-native';
+import { FlatList, RefreshControl, Text, TouchableOpacity } from 'react-native';
 
+import Slider from '@react-native-community/slider';
 import {
   useFocusEffect,
   useNavigation,
@@ -10,12 +13,21 @@ import axios from 'axios';
 import { useTheme } from 'styled-components';
 
 import Announcement from '../../components/Announcement';
+import { CustomSlider } from '../../components/CustomSlider';
+import { InputPicker } from '../../components/Inputs/InputPicker';
 import { Load } from '../../components/Load';
 import { SearchBar } from '../../components/Search';
 import { Params } from '../../dtos/request/AnnouncementRequestDTO';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
+import {
+  CategoryResponse,
+  Type,
+} from '../../dtos/response/CategoryResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
+import CategoryApi from '../../services/api/CategoryApi';
 import { convertToSlug } from '../../utils/Regex';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 import {
   Container,
   Header,
@@ -25,6 +37,10 @@ import {
   Filter,
   AnnouncementList,
   TextEndItems,
+  FiltersButtons,
+  FiltersContent,
+  FiltersTitle,
+  FilterText,
 } from './styles';
 
 const wait = (timeout: number) => {
@@ -44,6 +60,19 @@ export default function Home() {
   const [params, setParams] = useState<Params>({ page: 1 } as Params);
   const [endItems, setEndItems] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [filtersScreen, setFiltersScreen] = useState(false);
+  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [types, setTypes] = useState<Type[]>([]);
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
+  const [type_id, setType] = useState(null);
+  const [price, setPrice] = useState(0);
+
+  const priceFormatted = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(price);
 
   const handleChangeParams = (name, value) => {
     setParams(prevState => ({
@@ -126,6 +155,19 @@ export default function Home() {
             } else {
               setEndItems(false);
             }
+
+            CategoryApi.all()
+              .then(categoryResponse => {
+                setCategories(categoryResponse.data);
+
+                const category = categoryResponse.data.find(item => item.types);
+                setTypes(category.types);
+              })
+              .catch(error => {
+                if (error.response) {
+                  alert(error.response.data.message);
+                }
+              });
           })
           .catch(error => console.log(error.response))
           .finally(() => setLoading(false));
@@ -165,37 +207,90 @@ export default function Home() {
               <Like name="favorite-border" size={24} />
             </TouchableOpacity>
 
-            <Filter name="filter-outline" size={24} />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setFiltersScreen(!filtersScreen)}
+            >
+              <Filter name="filter-outline" size={24} />
+            </TouchableOpacity>
           </IconsContainer>
         </HeaderContent>
       </Header>
 
-      {loading ? (
-        <Load />
+      {!filtersScreen ? (
+        loading ? (
+          <Load />
+        ) : (
+          <AnnouncementList
+            data={announcements}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <Announcement
+                data={item}
+                onPress={() => handleAnnouncementDetails(item)}
+                visitorsActive
+                iconActive
+              />
+            )}
+            onEndReached={handleEndReached}
+            onEndReachedThreshold={0}
+            ListFooterComponent={!loading ? loadMore : null}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={theme.colors.green_linear_dark_opaque}
+                colors={[theme.colors.green_linear_dark_opaque]}
+              />
+            }
+          />
+        )
       ) : (
-        <AnnouncementList
-          data={announcements}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <Announcement
-              data={item}
-              onPress={() => handleAnnouncementDetails(item)}
-              visitorsActive
-              iconActive
+        <FiltersContent>
+          <FiltersTitle>Categoria</FiltersTitle>
+          <FiltersButtons>
+            <InputPicker
+              selectedValue={selectedCategory}
+              onValueChange={value => {
+                setSelectedCategory(value);
+                const category = categories.find(item => item.id === value);
+                setTypes(category.types);
+              }}
+              labelDisable="Todos"
+              items={
+                categories
+                  ? categories.map(item => {
+                      return { label: item.name, value: item.id };
+                    })
+                  : []
+              }
             />
-          )}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0}
-          ListFooterComponent={!loading ? loadMore : null}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={theme.colors.green_linear_dark_opaque}
-              colors={[theme.colors.green_linear_dark_opaque]}
+          </FiltersButtons>
+
+          <FiltersTitle>Tipo</FiltersTitle>
+          <FiltersButtons>
+            <InputPicker
+              selectedValue={selectedType}
+              onValueChange={value => {
+                setSelectedType(value);
+
+                setType(value);
+              }}
+              labelDisable="Todos"
+              items={
+                types
+                  ? types.map(item => {
+                      return { label: item.name, value: item.id };
+                    })
+                  : []
+              }
             />
-          }
-        />
+          </FiltersButtons>
+
+          <FiltersTitle>Valor</FiltersTitle>
+          <Text>{`Até ${priceFormatted}`}</Text>
+          <CustomSlider onValueChange={value => setPrice(value)} />
+        </FiltersContent>
       )}
     </Container>
   );

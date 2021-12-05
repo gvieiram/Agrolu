@@ -1,4 +1,5 @@
 import { FlatList } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -53,4 +54,40 @@ export const TextEndItems = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular_400};
   color: ${({ theme }) => theme.colors.gray_line_dark};
   text-align: center;
+`;
+
+export const FiltersContent = styled.View`
+  padding: 15px;
+`;
+
+export const FiltersTitle = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.preto_titulo};
+  margin-top: 15px;
+`;
+
+export const FiltersButtons = styled.View`
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+`;
+
+// export const FilterButton = styled(TouchableOpacity)`
+//   /* background-color: ${({ theme }) => theme.colors.green_main}; */
+//   flex-grow: 1;
+//   flex-basis: 0;
+
+//   border-radius: 10px;
+//   border-width: 1px;
+//   border-color: ${({ theme }) => theme.colors.green_main};
+//   align-items: center;
+
+//   padding: 3px 20px;
+//   margin-top: 15px;
+// `;
+
+export const FilterText = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  color: ${({ theme }) => theme.colors.green_main};
 `;

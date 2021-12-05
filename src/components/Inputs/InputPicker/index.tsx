@@ -27,12 +27,6 @@ export function InputPicker({ items, labelDisable, itemKey, ...rest }: Props) {
         dropdownIconColor={theme.colors.green_dark_2}
         {...rest}
       >
-        <Picker.Item
-          enabled={false}
-          label={labelDisable}
-          style={{ color: theme.colors.input_text }}
-        />
-
         {items.map((item, index) => {
           return (
             <Picker.Item
