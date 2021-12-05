@@ -37,7 +37,7 @@ export function ImageSlider({ imagesUrl }: Props) {
 
       <FlatList
         data={imagesUrl}
-        keyExtractor={item => item.id}
+        keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
           <ImageWrapper>
             <Image source={{ uri: item.url }} resizeMode="cover" />

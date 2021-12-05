@@ -2,22 +2,34 @@
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 
 import { BackButton as IconBack } from '../../components/BackButton';
+
+interface Props {
+  blogActivated?: boolean;
+}
 
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.cinza};
 `;
 
-export const Header = styled.View`
+export const Header = styled.View<Props>`
   width: 100%;
   height: 115px;
   background-color: ${({ theme }) => theme.colors.green_dark_main};
   justify-content: flex-end;
   padding: 15px;
-  margin-bottom: 17px;
+
+  ${props =>
+    props.blogActivated
+      ? css`
+          margin-bottom: 0;
+        `
+      : css`
+          margin-bottom: 17px;
+        `}
 `;
 
 export const HeaderContent = styled.View`

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import Button from '../../components/Button';
 import theme from '../../global/styles/theme';
 import { useAuth } from '../../hooks/auth';
+import { Blog } from '../Blog';
 import {
   Container,
   Header,
@@ -23,6 +24,7 @@ import {
 export function More() {
   const navigation = useNavigation();
   const { signOut } = useAuth();
+  const [blogIsActive, setBlogIsActive] = useState(false);
 
   function handleBack() {
     navigation.goBack();
@@ -33,7 +35,7 @@ export function More() {
       key: '1',
       title: 'Blog de dicas',
       iconName: 'comment',
-      onPress: () => null,
+      onPress: () => setBlogIsActive(true),
     },
     {
       key: '2',
@@ -51,38 +53,50 @@ export function More() {
 
   return (
     <Container>
-      <Header>
-        <HeaderContent>
-          <BackButton onPress={handleBack} />
+      {!blogIsActive ? (
+        <Header blogActivated={false}>
+          <HeaderContent>
+            <BackButton onPress={handleBack} />
+            <HeaderTitle>Mais</HeaderTitle>
+          </HeaderContent>
+        </Header>
+      ) : (
+        <Header blogActivated>
+          <HeaderContent>
+            <BackButton onPress={() => setBlogIsActive(false)} />
+            <HeaderTitle>Blog</HeaderTitle>
+          </HeaderContent>
+        </Header>
+      )}
 
-          <HeaderTitle>Mais</HeaderTitle>
-        </HeaderContent>
-      </Header>
+      {!blogIsActive ? (
+        <FlatList
+          data={data}
+          keyExtractor={item => item.key}
+          renderItem={({ item }) => (
+            <BtnContainer onPress={item.onPress} activeOpacity={0.7}>
+              <Content>
+                <Description>
+                  <MaterialIcons
+                    name={item.iconName}
+                    size={24}
+                    color={theme.colors.green_dark_1}
+                  />
+                  <Title>{item.title}</Title>
+                </Description>
 
-      <FlatList
-        data={data}
-        keyExtractor={item => item.key}
-        renderItem={({ item }) => (
-          <BtnContainer onPress={item.onPress} activeOpacity={0.7}>
-            <Content>
-              <Description>
                 <MaterialIcons
-                  name={item.iconName}
+                  name="chevron-right"
                   size={24}
                   color={theme.colors.green_dark_1}
                 />
-                <Title>{item.title}</Title>
-              </Description>
-
-              <MaterialIcons
-                name="chevron-right"
-                size={24}
-                color={theme.colors.green_dark_1}
-              />
-            </Content>
-          </BtnContainer>
-        )}
-      />
+              </Content>
+            </BtnContainer>
+          )}
+        />
+      ) : (
+        <Blog />
+      )}
     </Container>
   );
 }
