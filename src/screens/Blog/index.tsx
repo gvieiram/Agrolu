@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { FlatList } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  CommonActions,
+} from '@react-navigation/native';
 
 import { Load } from '../../components/Load';
 import {
@@ -28,16 +32,15 @@ import {
 export const Blog = () => {
   const navigation = useNavigation();
 
-  const [posts, setPosts] = useState<PostsResponse[]>([]);
-  const [endItems, setEndItems] = useState(false);
+  const [posts, setPosts] = useState<PostResponse[]>([]);
   const [loading, setLoading] = useState(false);
 
-  function handlePostDetails(post: PostResponse) {
+  function handlePostDetails(id: number) {
     navigation.dispatch(
       CommonActions.navigate({
         name: 'PostDetails',
         params: {
-          post,
+          id,
         },
       }),
     );
@@ -53,28 +56,21 @@ export const Blog = () => {
 
   const Posts = item => {
     return (
-      <BtnContainer onPress={() => handlePostDetails(item)} activeOpacity={0.7}>
-        <Thumbnail
-          // source={{uri: item.thumbnail}}
-          source={{
-            uri: 'https://www.epagri.sc.gov.br/wp-content/uploads/2020/07/sementes-crioulas-epagri.jpg',
-          }}
-          resizeMode="cover"
-        />
+      <BtnContainer
+        onPress={() => handlePostDetails(item.id)}
+        activeOpacity={0.7}
+      >
+        <Thumbnail source={{ uri: item.thumbnail }} resizeMode="cover" />
         <Description>
           <TextContent>
-            <Title numberOfLines={1}>Titulo</Title>
+            <Title numberOfLines={1}>{item.title}</Title>
           </TextContent>
           <TextContent>
-            <Text numberOfLines={2}>
-              Rica em antioxidante: Confira os benefícios de 16 frutas
-              vermelhas.
-            </Text>
+            <Text numberOfLines={2}>{item.text}</Text>
           </TextContent>
           <TextContent>
             <Publication numberOfLines={1}>
-              {/* {`Publicado em ${item.created_date}`} */}
-              Publicado em ...
+              {`Publicado em ${item.created_date}`}
             </Publication>
           </TextContent>
         </Description>
@@ -87,27 +83,22 @@ export const Blog = () => {
     );
   };
 
-  useEffect(() => {
-    async function getPosts() {
-      setLoading(true);
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getPosts() {
+        setLoading(true);
 
-      PostApi.all()
-        .then(response => {
-          console.log(response.data.data);
-          setPosts([...posts, ...response.data.data]); // Erro pq o array ta vazio (Eu acho)
+        PostApi.all()
+          .then(response => setPosts(response.data))
+          .catch(error => console.log(error.response))
+          .finally(() => setLoading(false));
+      }
 
-          if (response.data.next_page_url === null) {
-            setEndItems(true);
-          } else {
-            setEndItems(false);
-          }
-        })
-        .catch(error => console.log(error.response))
-        .finally(() => setLoading(false));
-    }
+      getPosts();
 
-    getPosts();
-  }, []);
+      return () => setPosts([]);
+    }, []),
+  );
 
   return (
     <Container>
@@ -115,8 +106,8 @@ export const Blog = () => {
         <Load />
       ) : (
         <FlatList
-          data={[{ title: 'teste' }, { title: 'Linha correta: data={posts}' }]}
-          keyExtractor={item => String(item)}
+          data={posts}
+          keyExtractor={item => String(item.id)}
           renderItem={({ item }) => Posts(item)}
           ListHeaderComponent={Header}
         />

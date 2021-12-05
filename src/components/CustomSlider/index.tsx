@@ -15,7 +15,8 @@ export const CustomSlider = ({ ss, ...rest }: Props) => {
       <Slider
         style={{ height: 40, width: '100%' }}
         minimumValue={0}
-        maximumValue={1000}
+        step={100}
+        maximumValue={10000}
         minimumTrackTintColor={theme.colors.green_main}
         maximumTrackTintColor="# 000000"
         thumbImage={require('../../assets/img/tractor.png')}

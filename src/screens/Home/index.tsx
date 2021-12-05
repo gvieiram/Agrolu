@@ -1,7 +1,13 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
-import { FlatList, RefreshControl, Text, TouchableOpacity } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
 import Slider from '@react-native-community/slider';
 import {
@@ -28,6 +34,7 @@ import CategoryApi from '../../services/api/CategoryApi';
 import { convertToSlug } from '../../utils/Regex';
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
+import { InputPrice } from '../AddAnnouncement/styles';
 import {
   Container,
   Header,
@@ -42,6 +49,9 @@ import {
   FiltersTitle,
   FilterText,
 } from './styles';
+import StateApi from '../../services/api/StateApi';
+import { StatesResponse } from '../../dtos/response/StateResponseDTO';
+import { CityResponse } from '../../dtos/response/CityResponseDTO';
 
 const wait = (timeout: number) => {
   return new Promise(resolve => {
@@ -57,22 +67,15 @@ export default function Home() {
     [],
   );
   const [loading, setLoading] = useState(true);
+  const [initialMount, setInitialMount] = useState(true);
   const [params, setParams] = useState<Params>({ page: 1 } as Params);
   const [endItems, setEndItems] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [filtersScreen, setFiltersScreen] = useState(false);
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
   const [types, setTypes] = useState<Type[]>([]);
-
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedType, setSelectedType] = useState(null);
-  const [type_id, setType] = useState(null);
-  const [price, setPrice] = useState(0);
-
-  const priceFormatted = new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(price);
+  const [states, setStates] = useState<StatesResponse[]>([]);
+  const [cities, setCities] = useState<CityResponse[]>([]);
 
   const handleChangeParams = (name, value) => {
     setParams(prevState => ({
@@ -81,32 +84,10 @@ export default function Home() {
     }));
   };
 
-  // async function getAnnouncements(isPaginate = false) {
-  //   AnnouncementApi.all(params)
-  //     .then(response => {
-  //       if (isPaginate) {
-  //         setAnnouncements([...announcements, ...response.data.data]);
-  //       } else {
-  //         setAnnouncements(response.data.data);
-  //       }
-
-  //       if (response.data.next_page_url === null) {
-  //         handleChangeParams('page', params.page);
-  //         setEndItems(true);
-  //       } else {
-  //         handleChangeParams('page', params.page + 1);
-  //         setEndItems(false);
-  //       }
-  //     })
-  //     .catch(error => console.log(error.response))
-  //     .finally(() => setLoading(false));
-  // }
-
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
 
     setAnnouncements([]);
-    setParams({ page: 1 });
 
     wait(2000).then(() => setRefreshing(false));
   }, []);
@@ -141,34 +122,107 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    async function getCategories() {
+      CategoryApi.all()
+        .then(categoryResponse => {
+          setCategories(categoryResponse.data);
+        })
+        .catch(error => {
+          if (error.response) {
+            alert(error.response.data.message);
+          }
+        });
+    }
+
+    getCategories();
+  }, []);
+
+  useEffect(() => {
+    async function getStates() {
+      StateApi.all()
+        .then(response => setStates(response.data))
+        .catch(error => console.log(error.response));
+    }
+
+    getStates();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getCitiesByState() {
+        if (params.state) {
+          StateApi.find(params.state)
+            .then(response => setCities(response.data.cities))
+            .catch(error => console.log(error.response));
+        }
+      }
+
+      getCitiesByState();
+
+      return () => setCities([]);
+    }, [params.state]),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getTypesByCategory() {
+        if (params.category) {
+          const category = categories.find(item => item.id === params.category);
+          setTypes(category.types);
+        }
+      }
+
+      getTypesByCategory();
+
+      return () => setTypes([]);
+    }, [params.category]),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getAnnouncements() {
+        if (!initialMount) {
+          setLoading(true);
+          AnnouncementApi.all(params)
+            .then(response => {
+              setAnnouncements([...announcements, ...response.data.data]);
+
+              if (response.data.next_page_url === null) {
+                setEndItems(true);
+              } else {
+                setEndItems(false);
+              }
+            })
+            .catch(error => console.log(error.response))
+            .finally(() => setLoading(false));
+        } else {
+          setInitialMount(false);
+        }
+      }
+
+      getAnnouncements();
+
+      return () => {
+        setAnnouncements([]);
+        axios.CancelToken.source().cancel();
+      };
+    }, [params.page]),
+  );
+
   useFocusEffect(
     React.useCallback(() => {
       async function getAnnouncements() {
         setLoading(true);
 
+        if (refreshing) {
+          setParams({ page: 1 });
+        } else {
+          handleChangeParams('page', 1);
+        }
+
         AnnouncementApi.all(params)
-          .then(response => {
-            setAnnouncements([...announcements, ...response.data.data]);
-
-            if (response.data.next_page_url === null) {
-              setEndItems(true);
-            } else {
-              setEndItems(false);
-            }
-
-            CategoryApi.all()
-              .then(categoryResponse => {
-                setCategories(categoryResponse.data);
-
-                const category = categoryResponse.data.find(item => item.types);
-                setTypes(category.types);
-              })
-              .catch(error => {
-                if (error.response) {
-                  alert(error.response.data.message);
-                }
-              });
-          })
+          .then(response => setAnnouncements(response.data.data))
           .catch(error => console.log(error.response))
           .finally(() => setLoading(false));
       }
@@ -179,7 +233,15 @@ export default function Home() {
         setAnnouncements([]);
         axios.CancelToken.source().cancel();
       };
-    }, [params.name, params.page]),
+    }, [
+      params.name,
+      params.priceTo,
+      params.priceFrom,
+      params.category,
+      params.type,
+      params.city,
+      refreshing,
+    ]),
   );
 
   return (
@@ -189,7 +251,7 @@ export default function Home() {
           <SearchBar
             platform="ios"
             placeholder="Procurar"
-            onCancel={() => setParams({ page: 1 })}
+            onCancel={() => setRefreshing(true)}
             onChangeText={text => handleSearch(text)}
             value={params.name}
           />
@@ -228,7 +290,6 @@ export default function Home() {
               <Announcement
                 data={item}
                 onPress={() => handleAnnouncementDetails(item)}
-                visitorsActive
                 iconActive
               />
             )}
@@ -246,51 +307,105 @@ export default function Home() {
           />
         )
       ) : (
-        <FiltersContent>
-          <FiltersTitle>Categoria</FiltersTitle>
-          <FiltersButtons>
-            <InputPicker
-              selectedValue={selectedCategory}
-              onValueChange={value => {
-                setSelectedCategory(value);
-                const category = categories.find(item => item.id === value);
-                setTypes(category.types);
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <FiltersContent>
+            <FiltersTitle>Categoria</FiltersTitle>
+            <FiltersButtons>
+              <InputPicker
+                selectedValue={params.category}
+                onValueChange={value => handleChangeParams('category', value)}
+                labelDisable="Escolha uma categoria"
+                items={
+                  categories
+                    ? categories.map(item => {
+                        return { label: item.name, value: item.id };
+                      })
+                    : []
+                }
+              />
+            </FiltersButtons>
+
+            <FiltersTitle>Tipo</FiltersTitle>
+            <FiltersButtons>
+              <InputPicker
+                selectedValue={params.type}
+                onValueChange={value => handleChangeParams('type', value)}
+                labelDisable="Escolha um tipo"
+                items={
+                  types
+                    ? types.map(item => {
+                        return { label: item.name, value: item.id };
+                      })
+                    : []
+                }
+              />
+            </FiltersButtons>
+
+            <FiltersTitle>Estado</FiltersTitle>
+            <FiltersButtons>
+              <InputPicker
+                selectedValue={params.state}
+                onValueChange={value => handleChangeParams('state', value)}
+                labelDisable="Escolha um estado"
+                items={
+                  states
+                    ? states.map(item => {
+                        return { label: item.name, value: item.id };
+                      })
+                    : []
+                }
+              />
+            </FiltersButtons>
+
+            <FiltersTitle>Cidade</FiltersTitle>
+            <FiltersButtons>
+              <InputPicker
+                selectedValue={params.city}
+                onValueChange={value => handleChangeParams('city', value)}
+                labelDisable={
+                  cities.length === 0
+                    ? 'Escolha um estado primeiro'
+                    : 'Escolha um estado'
+                }
+                items={
+                  cities
+                    ? cities.map(item => {
+                        return { label: item.name, value: item.id };
+                      })
+                    : []
+                }
+              />
+            </FiltersButtons>
+
+            <FiltersTitle>Valor</FiltersTitle>
+            <InputPrice
+              type="money"
+              value={params.priceFrom === undefined ? '0' : params.priceFrom}
+              maxLength={13}
+              options={{
+                unit: 'R$ ',
               }}
-              labelDisable="Todos"
-              items={
-                categories
-                  ? categories.map(item => {
-                      return { label: item.name, value: item.id };
-                    })
-                  : []
+              includeRawValueInChangeText
+              onChangeText={(maskedText, rawText) =>
+                handleChangeParams('priceFrom', rawText)
               }
             />
-          </FiltersButtons>
 
-          <FiltersTitle>Tipo</FiltersTitle>
-          <FiltersButtons>
-            <InputPicker
-              selectedValue={selectedType}
-              onValueChange={value => {
-                setSelectedType(value);
-
-                setType(value);
+            <FiltersTitle>até</FiltersTitle>
+            <InputPrice
+              type="money"
+              value={params.priceTo === undefined ? '0' : params.priceTo}
+              maxLength={13}
+              options={{
+                unit: 'R$ ',
               }}
-              labelDisable="Todos"
-              items={
-                types
-                  ? types.map(item => {
-                      return { label: item.name, value: item.id };
-                    })
-                  : []
+              includeRawValueInChangeText
+              onChangeText={(maskedText, rawText) =>
+                handleChangeParams('priceTo', rawText)
               }
             />
-          </FiltersButtons>
-
-          <FiltersTitle>Valor</FiltersTitle>
-          <Text>{`Até ${priceFormatted}`}</Text>
-          <CustomSlider onValueChange={value => setPrice(value)} />
-        </FiltersContent>
+          </FiltersContent>
+        </ScrollView>
       )}
     </Container>
   );

@@ -57,7 +57,8 @@ export const TextEndItems = styled.Text`
 `;
 
 export const FiltersContent = styled.View`
-  padding: 15px;
+  padding: 0 16px 0 16px;
+  margin-bottom: 110px;
 `;
 
 export const FiltersTitle = styled.Text`

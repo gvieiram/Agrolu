@@ -27,13 +27,20 @@ export function InputPicker({ items, labelDisable, itemKey, ...rest }: Props) {
         dropdownIconColor={theme.colors.green_dark_2}
         {...rest}
       >
-        {items.map((item, index) => {
+        <Picker.Item
+          label={labelDisable}
+          value={null}
+          key={0}
+          enabled={false}
+          color="gray"
+        />
+        {items.map(item => {
           return (
             <Picker.Item
               label={item.label}
               value={item.value}
               key={item.value || itemKey}
-              color={item.color}
+              color="black"
             />
           );
         })}
