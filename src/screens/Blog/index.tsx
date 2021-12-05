@@ -43,6 +43,25 @@ export const Blog = () => {
     );
   }
 
+  const data = [
+    {
+      id: 1,
+      title: 'Sementes crioulas',
+      text: 'A Epagri está promovendo um curso on-line para propiciar um espaçode valorização e incentivo à preservação e às trocas de sementes crioulas. A capacitação será feita em quatro etapas e a próxima será na quinta-feira, 30 de julho, quando vai abordar a tecnologia de produção dessas sementes e as relações entre guardiões e o ensino. O curso é gratuito e direcionado aos guardiões de sementes, agricultores, estudantes e técnicos.\n\nSementes crioulas são aquelas tradicionais, ou seja, que foram mantidas e selecionadas por várias décadas através dos agricultores tradicionais do mundo todo e que não possuem restrição para a sua multiplicação. A coordenadora do curso, extensionista Rose Gerber, ressalta que a essas sementes protegem o meio ambiente e promovem a soberania alimentar e economia na propriedade rural, além de preservar a cultura dos povos originários. “As sementes crioulas guardam a natureza das nossas terras. Preservar e multiplicar essas riquezas ancestrais de alto material genético é o grande desafio dos guardiões de sementes”, afirma.',
+      thumbnail:
+        'https://www.epagri.sc.gov.br/wp-content/uploads/2020/07/sementes-crioulas-epagri.jpg',
+      reference: 'https://bityli.com/JjBcBI',
+    },
+    {
+      id: 2,
+      title: 'Sementes crioulas',
+      text: 'A Epagri está promovendo um curso on-line para propiciar um espaçode valorização e incentivo à preservação e às trocas de sementes crioulas. A capacitação será feita em quatro etapas e a próxima será na quinta-feira, 30 de julho, quando vai abordar a tecnologia de produção dessas sementes e as relações entre guardiões e o ensino. O curso é gratuito e direcionado aos guardiões de sementes, agricultores, estudantes e técnicos.\n\nSementes crioulas são aquelas tradicionais, ou seja, que foram mantidas e selecionadas por várias décadas através dos agricultores tradicionais do mundo todo e que não possuem restrição para a sua multiplicação. A coordenadora do curso, extensionista Rose Gerber, ressalta que a essas sementes protegem o meio ambiente e promovem a soberania alimentar e economia na propriedade rural, além de preservar a cultura dos povos originários. “As sementes crioulas guardam a natureza das nossas terras. Preservar e multiplicar essas riquezas ancestrais de alto material genético é o grande desafio dos guardiões de sementes”, afirma.',
+      thumbnail:
+        'https://www.epagri.sc.gov.br/wp-content/uploads/2020/07/sementes-crioulas-epagri.jpg',
+      reference: 'https://bityli.com/JjBcBI',
+    },
+  ];
+
   const Header = () => {
     return (
       <HeaderContent>
@@ -51,31 +70,21 @@ export const Blog = () => {
     );
   };
 
-  const Posts = item => {
+  const Posts = (item: PostResponse) => {
     return (
       <BtnContainer onPress={() => handlePostDetails(item)} activeOpacity={0.7}>
-        <Thumbnail
-          // source={{uri: item.thumbnail}}
-          source={{
-            uri: 'https://www.epagri.sc.gov.br/wp-content/uploads/2020/07/sementes-crioulas-epagri.jpg',
-          }}
-          resizeMode="cover"
-        />
+        <Thumbnail source={{ uri: item.thumbnail }} resizeMode="cover" />
         <Description>
           <TextContent>
-            <Title numberOfLines={1}>Titulo</Title>
+            <Title numberOfLines={1}>{item.title}</Title>
           </TextContent>
           <TextContent>
-            <Text numberOfLines={2}>
-              Rica em antioxidante: Confira os benefícios de 16 frutas
-              vermelhas.
-            </Text>
+            <Text numberOfLines={3}>{item.text}</Text>
           </TextContent>
           <TextContent>
-            <Publication numberOfLines={1}>
-              {/* {`Publicado em ${item.created_date}`} */}
-              Publicado em ...
-            </Publication>
+            {/* <Publication numberOfLines={1}>
+              {`Publicado em ${item.created_date}`}
+            </Publication> */}
           </TextContent>
         </Description>
         <MaterialIcons
@@ -115,7 +124,7 @@ export const Blog = () => {
         <Load />
       ) : (
         <FlatList
-          data={[{ title: 'teste' }, { title: 'Linha correta: data={posts}' }]}
+          data={data} // Data setado pra teste, correto: data={data}
           keyExtractor={item => String(item)}
           renderItem={({ item }) => Posts(item)}
           ListHeaderComponent={Header}
