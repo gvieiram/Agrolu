@@ -77,6 +77,7 @@ export function AddAnnouncement() {
   const [display_phone, setDisplayPhone] = useState(false);
   const [has_operator, setHasOperator] = useState(false);
   const [price, setPrice] = useState('0');
+  const [uriInspection, setUriInspection] = useState(null);
   const [inspectionSelected, setInspectionSelected] =
     useState<InspectionsProps>(null);
 
@@ -87,6 +88,7 @@ export function AddAnnouncement() {
   const handlePickDocument = async () => {
     const result = await DocumentPicker.getDocumentAsync({
       type: 'application/pdf',
+      copyToCacheDirectory: false,
     });
 
     if (result.type === 'success') {
@@ -208,10 +210,7 @@ export function AddAnnouncement() {
           }),
         ),
       )
-      .catch(error => {
-        // AlertError(error);
-        console.log(error);
-      });
+      .catch(error => AlertError(error));
   };
 
   useFocusEffect(
@@ -424,18 +423,6 @@ export function AddAnnouncement() {
               color={theme.colors.green_main}
             />
             <DocText>Anexar vistoria de segurança</DocText>
-          </DocumentContainer>
-
-          <DocumentContainer
-            activeOpacity={0.7}
-            onPress={() => console.log(inspectionSelected)}
-          >
-            <MaterialIcons
-              name="attach-file"
-              size={24}
-              color={theme.colors.green_main}
-            />
-            <DocText>verificar array</DocText>
           </DocumentContainer>
 
           <ButtonGradient title="Anunciar já" onPress={() => handleSubmit()} />

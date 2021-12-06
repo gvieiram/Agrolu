@@ -311,19 +311,15 @@ export function AnnouncementDetails(): ReactElement {
               <Type>
                 <TitleType>CEP</TitleType>
 
-                <DescriptionType>88180-000</DescriptionType>
+                <DescriptionType>{announcement.advertiser.cep}</DescriptionType>
               </Type>
 
               <Type>
                 <TitleType>Município</TitleType>
 
-                <DescriptionType>Antônio Carlos</DescriptionType>
-              </Type>
-
-              <Type>
-                <TitleType>Bairro</TitleType>
-
-                <DescriptionType>Usina</DescriptionType>
+                <DescriptionType>
+                  {announcement.advertiser.city.name}
+                </DescriptionType>
               </Type>
               <Line />
             </Location>

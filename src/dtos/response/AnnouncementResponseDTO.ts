@@ -45,9 +45,16 @@ interface Type {
   category: Category;
 }
 
+interface City {
+  id: number;
+  name: string;
+}
+
 export interface Advertiser {
   id: number;
   name: string;
+  cep: string;
+  city: City;
   verified?: boolean;
   created_at: string;
   created_date: string;
