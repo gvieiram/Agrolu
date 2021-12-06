@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Image as Images, ScrollView, View } from 'react-native';
+import { Alert, Image as Images, ScrollView, View } from 'react-native';
 
 import { AssetsSelector } from 'expo-images-picker';
 import { Asset, MediaType } from 'expo-media-library';
@@ -64,7 +64,8 @@ export function EditAnnouncement() {
   const [display_phone, setDisplayPhone] = useState(false);
   const [has_operator, setHasOperator] = useState(false);
   const [announcement, setAnnouncement] = useState<AnnouncementResponse>(null);
-  const [available, setAvailable] = useState(false);
+  const [initialAvailable, setInitialAvailable] = useState(null);
+  const [available, setAvailable] = useState(null);
   const [price, setPrice] = useState('0');
 
   function handleBack() {
@@ -162,8 +163,8 @@ export function EditAnnouncement() {
       need_transport: need_transport ? '1' : '0',
       display_phone: display_phone ? '1' : '0',
       has_operator: has_operator ? '1' : '0',
-      available: available ? '1' : '0',
-      price: '400.0',
+      available: initialAvailable,
+      price,
     })
       .then(response =>
         navigation.dispatch(
@@ -189,13 +190,19 @@ export function EditAnnouncement() {
           setDescription(data.description);
           setPrice(data.price);
           setSelectedCategory(data.type.category_id);
+          setInitialAvailable(data.available);
+          if (data.available) {
+            setAvailable(true);
+          } else {
+            setAvailable(false);
+          }
 
           CategoryApi.all()
             .then(categoryResponse => {
               setCategories(categoryResponse.data);
 
               const category = categoryResponse.data.find(
-                item => item.id == data.type.category_id,
+                item => item.id === data.type.category_id,
               );
               setTypes(category.types);
               setType(data.type_id);
@@ -309,7 +316,7 @@ export function EditAnnouncement() {
               selectedValue={selectedCategory}
               onValueChange={value => {
                 setSelectedCategory(value);
-                const category = categories.find(item => item.id == value);
+                const category = categories.find(item => item.id === value);
                 setTypes(category.types);
               }}
               labelDisable="Selecione uma categoria"
@@ -353,16 +360,29 @@ export function EditAnnouncement() {
             />
 
             <Checkbox
-              text="Indicar disponibilidade"
-              status={available ? 'checked' : 'unchecked'}
-              onPress={() => setAvailable(!available)}
+              text="Operador disponível"
+              status={has_operator ? 'checked' : 'unchecked'}
+              onPress={() => setHasOperator(!has_operator)}
             />
 
             <Checkbox
-              text="Operador disponível"
+              text="Indicar disponibilidade"
               style={{ marginBottom: 40 }}
-              status={has_operator ? 'checked' : 'unchecked'}
-              onPress={() => setHasOperator(!has_operator)}
+              status={available ? 'checked' : 'unchecked'}
+              onPress={() => {
+                if (initialAvailable === 1) {
+                  setAvailable(false);
+                  setInitialAvailable(0);
+
+                  Alert.alert(
+                    'Atenção!!',
+                    'Ao desabilitar este campo, seu anúncio aparecerá como indisponível',
+                  );
+                } else if (initialAvailable === 0) {
+                  setAvailable(true);
+                  setInitialAvailable(1);
+                }
+              }}
             />
 
             <ButtonGradient

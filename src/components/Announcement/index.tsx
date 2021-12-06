@@ -46,7 +46,9 @@ export default function Announcement({ data, ...rest }: Props): ReactElement {
           {`${data.created_date} às ${data.created_time}`}
         </Publication>
 
-        <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
+        <Status available={data.available}>
+          {data.available ? 'Disponível' : 'Indisponível'}
+        </Status>
       </Details>
     </Container>
   );

@@ -4,6 +4,10 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
+interface Props {
+  available: boolean;
+}
+
 export const Container = styled(RectButton)`
   height: 110px;
   width: 100%;
@@ -64,11 +68,12 @@ export const Publication = styled.Text`
   color: ${({ theme }) => theme.colors.preto_titulo};
 `;
 
-export const Status = styled.Text`
+export const Status = styled.Text<Props>`
   font-family: ${({ theme }) => theme.fonts.medium_500};
   font-size: ${RFValue(9)}px;
-  color: ${({ theme }) => theme.colors.success_main};
-  margin-top: 5px;
+  color: ${({ theme, available }) =>
+    available ? theme.colors.success_main : theme.colors.warning_main};
+  margin: 3px 0;
 `;
 
 export const IconActive = styled.View`
