@@ -45,6 +45,7 @@ interface Params {
     name: string;
     email: string;
     identity: string;
+    phone: string;
   };
 }
 
@@ -136,6 +137,7 @@ export default function SignUpStepTwo() {
         name: user.name,
         email: user.email,
         document: user.identity,
+        phone: user.phone,
         password: data.password,
       })
       .then(() => {
@@ -148,7 +150,7 @@ export default function SignUpStepTwo() {
           }),
         );
       })
-      .catch(error => AlertError(error));
+      .catch(error => AlertError(error.data));
   }
 
   return (
@@ -158,11 +160,9 @@ export default function SignUpStepTwo() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
-          {Platform.OS === 'ios' ? (
-            <Header>
-              <BackButton onPress={handleBack} />
-            </Header>
-          ) : null}
+          <Header>
+            <BackButton onPress={handleBack} />
+          </Header>
 
           <Logo />
 
@@ -190,6 +190,9 @@ export default function SignUpStepTwo() {
               inputType="password"
               isEditable
             />
+            {errors.password && (
+              <Error>{errors.password && errors.password.message}</Error>
+            )}
 
             <InputForm
               iconName="vpn-key"
@@ -205,9 +208,6 @@ export default function SignUpStepTwo() {
               <Error>
                 {errors.passwordConfirm && errors.passwordConfirm.message}
               </Error>
-            )}
-            {errors.password && (
-              <Error>{errors.password && errors.password.message}</Error>
             )}
           </Form>
 
