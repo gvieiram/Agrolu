@@ -10,7 +10,7 @@ interface Props extends TextInputMaskProps {
   iconName: React.ComponentProps<typeof MaterialIcons>['name'];
 }
 
-export function InputCpf({ iconName, ...rest }: Props) {
+export function InputMask({ iconName, ...rest }: Props) {
   const theme = useTheme();
   return (
     <Container>
