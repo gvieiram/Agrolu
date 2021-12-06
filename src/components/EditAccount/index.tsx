@@ -8,6 +8,8 @@ import AppLoading from 'expo-app-loading';
 import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useFocusEffect, useNavigation } from '@react-navigation/core';
+import { CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import { UpdateRequest } from '../../dtos/request/UserRequestDTO';
@@ -25,11 +27,13 @@ import { InputPicker } from '../Inputs/InputPicker';
 import { Container, Label, Error, ButtonForm, Title } from './styles';
 
 export function EditAccount() {
+  const navigation = useNavigation();
   const theme = useTheme();
   const [user, setUser] = useState<UserResponse>(null);
   const [cities, setCities] = useState<CityResponse[]>([]);
   const [states, setStates] = useState<StatesResponse[]>([]);
   const [stateSelected, setStateSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { control } = useForm();
 
   const handleChange = (name, value) => {
@@ -51,6 +55,8 @@ export function EditAccount() {
       receive_notification,
     } = user;
 
+    setLoading(true);
+
     UserApi.update({
       email,
       phone,
@@ -60,7 +66,19 @@ export function EditAccount() {
       complement,
       number,
       receive_notification: receive_notification ? 1 : 0,
-    }).catch(error => console.log(error));
+    })
+      .then(response => {
+        setLoading(false);
+
+        Alert.alert('Aviso', 'Suas alterações foram salvas!');
+
+        navigation.dispatch(
+          CommonActions.navigate({
+            name: 'UserAccount',
+          }),
+        );
+      })
+      .catch(error => AlertError(error));
   }
 
   function getCitiesByState(stateId: number, cityId?: number) {
@@ -81,14 +99,6 @@ export function EditAccount() {
     });
   }
 
-  function getProfile() {
-    UserApi.me().then(response => {
-      const { data } = response;
-      setUser(data);
-      getStates(data);
-    });
-  }
-
   const handleCep = async (value: string) => {
     handleChange('cep', value);
 
@@ -102,11 +112,23 @@ export function EditAccount() {
     }
   };
 
-  useEffect(() => {
-    getProfile();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      async function getProfile() {
+        UserApi.me().then(response => {
+          const { data } = response;
+          setUser(data);
+          getStates(data);
+        });
+      }
 
-  if (!user || !states || !cities) {
+      getProfile();
+
+      return () => setUser(null);
+    }, []),
+  );
+
+  if (!user || states.length === 0 || loading) {
     return <AppLoading />;
   }
 
