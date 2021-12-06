@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import * as Linking from 'expo-linking';
+
 import { MaterialIcons } from '@expo/vector-icons';
 import {
   CommonActions,
@@ -190,6 +192,10 @@ export function AnnouncementDetails(): ReactElement {
     getAnnouncementById();
   }, [ad.id]);
 
+  const handleNavigateToLink = () => {
+    Linking.openURL(announcement.inspections[0].url);
+  };
+
   if (announcement) {
     return (
       <Container>
@@ -263,11 +269,16 @@ export function AnnouncementDetails(): ReactElement {
           <AnnouncementContent>
             <AnnouncementTitle>{ad.title}</AnnouncementTitle>
             <Price>{`R$ ${ad.price}/dia`}</Price>
-            <Survey>
-              <SurveyIcon />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => handleNavigateToLink()}
+            >
+              <Survey>
+                <SurveyIcon />
 
-              <SurveyTitle>Verificar vistoria</SurveyTitle>
-            </Survey>
+                <SurveyTitle>Verificar vistoria</SurveyTitle>
+              </Survey>
+            </TouchableOpacity>
             <Information>
               {announcement.tags.map(tag => {
                 if (tag.has) {
