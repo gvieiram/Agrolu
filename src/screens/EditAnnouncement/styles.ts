@@ -101,3 +101,16 @@ export const ContainerImageSelection = styled.View`
   flex: 1;
   margin-top: 40px;
 `;
+
+export const DocumentContainer = styled(TouchableOpacity)`
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 0 40px 5px;
+`;
+
+export const DocText = styled.Text`
+  margin-left: 8px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  font-size: ${RFValue(16)}px;
+  text-decoration: underline;
+`;

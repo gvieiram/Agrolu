@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Alert, Image as Images, ScrollView, View } from 'react-native';
 
+import * as DocumentPicker from 'expo-document-picker';
 import { AssetsSelector } from 'expo-images-picker';
 import { Asset, MediaType } from 'expo-media-library';
 
@@ -38,10 +39,18 @@ import {
   InputTitle,
   InputDescription,
   ContainerImageSelection,
+  DocumentContainer,
+  DocText,
 } from './styles';
 
 interface Params {
   ad: AnnouncementResponse;
+}
+
+interface InspectionsProps {
+  uri: string;
+  name: string;
+  type: 'cancel' | 'success';
 }
 
 export function EditAnnouncement() {
@@ -67,10 +76,25 @@ export function EditAnnouncement() {
   const [initialAvailable, setInitialAvailable] = useState(null);
   const [available, setAvailable] = useState(null);
   const [price, setPrice] = useState('0');
+  const [inspectionSelected, setInspectionSelected] =
+    useState<InspectionsProps>(null);
 
   function handleBack() {
     navigation.goBack();
   }
+
+  const handlePickDocument = async () => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type: 'application/pdf',
+      copyToCacheDirectory: false,
+    });
+
+    if (result.type === 'success') {
+      setInspectionSelected(result);
+    } else {
+      setInspectionSelected(null);
+    }
+  };
 
   async function handleSelectPhotos() {
     navigation.dispatch(CommonActions.navigate('AddImages'));
@@ -353,11 +377,11 @@ export function EditAnnouncement() {
               onPress={() => setNeedTransport(!need_transport)}
             />
 
-            <Checkbox
+            {/* <Checkbox
               text="Exibir meu telefone neste anúncio"
               status={display_phone ? 'checked' : 'unchecked'}
               onPress={() => setDisplayPhone(!display_phone)}
-            />
+            /> */}
 
             <Checkbox
               text="Operador disponível"
@@ -384,6 +408,18 @@ export function EditAnnouncement() {
                 }
               }}
             />
+
+            {/* <DocumentContainer
+              activeOpacity={0.7}
+              onPress={() => handlePickDocument()}
+            >
+              <MaterialIcons
+                name="attach-file"
+                size={24}
+                color={theme.colors.green_main}
+              />
+              <DocText>Anexar vistoria de segurança</DocText>
+            </DocumentContainer> */}
 
             <ButtonGradient
               title="Salvar alterações"

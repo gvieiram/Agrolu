@@ -362,7 +362,7 @@ export function AnnouncementDetails(): ReactElement {
 
               <Entered>{`Entrou na Agrolu em ${announcement.advertiser.created_date}`}</Entered>
 
-              <Status>
+              {/* <Status>
                 <MaterialIcons
                   name="fiber-manual-record"
                   size={14}
@@ -376,9 +376,9 @@ export function AnnouncementDetails(): ReactElement {
 
                 <StatusText>
                   Online
-                  {/* {user.status ? 'Online' : 'Offline'} */}
+                  {user.status ? 'Online' : 'Offline'}
                 </StatusText>
-              </Status>
+              </Status> */}
             </Advertiser>
           </AnnouncementContent>
         </ScrollView>

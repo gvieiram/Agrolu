@@ -183,7 +183,7 @@ export function AddAnnouncement() {
     formData.append('description', description);
     formData.append('type_id', type_id);
     formData.append('need_transport', need_transport ? '1' : '0');
-    formData.append('display_phone', display_phone ? '1' : '0');
+    // formData.append('display_phone', display_phone ? '1' : '0');
     formData.append('has_operator', has_operator ? '1' : '0');
     formData.append('price', price);
     images.map((image: Asset) => {
@@ -401,11 +401,11 @@ export function AddAnnouncement() {
             onPress={() => setNeedTransport(!need_transport)}
           />
 
-          <Checkbox
+          {/* <Checkbox
             text="Exibir meu telefone neste anúncio"
             status={display_phone ? 'checked' : 'unchecked'}
             onPress={() => setDisplayPhone(!display_phone)}
-          />
+          /> */}
 
           <Checkbox
             text="Operador disponível"
