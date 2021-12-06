@@ -103,29 +103,8 @@ export default function Announcement({
             {`${data.created_date} às ${data.created_time}`}
           </Publication>
 
-          {visitorsActive ? (
-            <Visitors>
-              <MaterialIcons
-                name="supervisor-account"
-                size={16}
-                color={theme.colors.cinza_apagado}
-              />
-              <NumberOfVisitors>
-                {data.visits === 1
-                  ? `${data.visits} visita`
-                  : `${data.visits} visitas`}
-              </NumberOfVisitors>
-            </Visitors>
-          ) : (
-            <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
-          )}
+          <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
         </Details>
-
-        <IconActive>
-          {iconActive ? (
-            <Bolt width={28} height={28} fill={theme.colors.green_main} />
-          ) : null}
-        </IconActive>
       </>
     </ContainerSlider>
   );

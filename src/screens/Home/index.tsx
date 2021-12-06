@@ -290,7 +290,6 @@ export default function Home() {
               <Announcement
                 data={item}
                 onPress={() => handleAnnouncementDetails(item)}
-                iconActive
               />
             )}
             onEndReached={handleEndReached}
