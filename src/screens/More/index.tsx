@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Text } from 'react-native';
+import { Alert, FlatList, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -41,7 +41,7 @@ export function More() {
       key: '2',
       title: 'Sobre a Agrolu',
       iconName: 'info',
-      onPress: () => null,
+      onPress: () => Alert.alert('Sobre a Agrolu', 'Versão: 0.0.1'),
     },
     {
       key: '3',

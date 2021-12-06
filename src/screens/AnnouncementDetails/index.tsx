@@ -82,7 +82,7 @@ export function AnnouncementDetails(): ReactElement {
   const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   function handleBack() {
-    navigation.goBack();
+    navigation.dispatch(CommonActions.navigate('Home'));
   }
 
   async function handleChat() {
