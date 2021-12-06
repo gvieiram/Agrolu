@@ -4,7 +4,11 @@ import { GiftedChat } from 'react-native-gifted-chat';
 
 import 'dayjs/locale/pt-br';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+} from '@react-navigation/native';
 import Echo from 'laravel-echo';
 import _ from 'lodash';
 import Pusher from 'pusher-js/react-native';
@@ -128,9 +132,13 @@ export function Chat() {
     setLoad(true);
   }
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchMessages();
+
+      return () => setMessages([]);
+    }, []),
+  );
 
   const onSend = useCallback((newMessages = []) => {
     newMessages.map(newMessage =>

@@ -34,7 +34,7 @@ export default function Message({ data, ...rest }: Props): ReactElement {
           </Title>
           <Time>{data.last_message.created_time}</Time>
         </AnnouncementInfoText>
-        <UserName>{data.advertisement.advertiser.name}</UserName>
+        <UserName>{data.title}</UserName>
         <MessageText>{data.last_message.message}</MessageText>
       </TextSection>
     </MessagesContainer>

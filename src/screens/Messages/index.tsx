@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList } from 'react-native';
 
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {
+  useNavigation,
+  CommonActions,
+  useFocusEffect,
+} from '@react-navigation/native';
 
 import Message from '../../components/Message';
 import { Room } from '../../dtos/ChatDTO';
@@ -34,9 +38,13 @@ export function Messages() {
       .catch(error => console.log(error.response.data));
   };
 
-  useEffect(() => {
-    fetchRooms();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchRooms();
+
+      return () => setRooms([]);
+    }, []),
+  );
 
   function handleChat(room: Room) {
     navigation.dispatch(
