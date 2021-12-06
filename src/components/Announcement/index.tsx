@@ -23,89 +23,31 @@ import {
 
 interface Props extends RectButtonProps {
   data: AnnouncementResponse;
-  cardSlider?: boolean;
-  iconActive?: boolean;
-  visitorsActive?: boolean;
-  onLongPress?: (event: GestureResponderEvent) => void;
-  delayLongPress?: null | number;
 }
 
-export default function Announcement({
-  data,
-  cardSlider,
-  iconActive,
-  visitorsActive,
-  ...rest
-}: Props): ReactElement {
+export default function Announcement({ data, ...rest }: Props): ReactElement {
   const theme = useTheme();
 
-  if (!cardSlider) {
-    return (
-      <Container rippleColor={theme.colors.creme_background} {...rest}>
-        <Image
-          source={{
-            uri: data.first_image.url,
-          }}
-          resizeMode="cover"
-        />
-
-        <Details>
-          <Description numberOfLines={1}>{data.title}</Description>
-
-          <Price>{`R$ ${data.price}/dia`}</Price>
-
-          <Publication>
-            {`${data.created_date} às ${data.created_time}`}
-          </Publication>
-
-          {visitorsActive && data.owns ? (
-            <Visitors>
-              <MaterialIcons
-                name="supervisor-account"
-                size={16}
-                color={theme.colors.cinza_apagado}
-              />
-              <NumberOfVisitors>
-                {data.visits === 1
-                  ? `${data.visits} visita`
-                  : `${data.visits} visitas`}
-              </NumberOfVisitors>
-            </Visitors>
-          ) : (
-            <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
-          )}
-        </Details>
-
-        {iconActive && data.owns && data.turbo ? (
-          <IconActive>
-            <Bolt width={28} height={28} fill={theme.colors.green_main} />
-          </IconActive>
-        ) : null}
-      </Container>
-    );
-  }
   return (
-    <ContainerSlider underlayColor="#dfdfdf" {...rest} onLongPress={e => e}>
-      <>
-        <Image
-          source={{
-            uri: data.first_image.url,
-          }}
-          resizeMode="cover"
-        />
+    <Container rippleColor={theme.colors.creme_background} {...rest}>
+      <Image
+        source={{
+          uri: data.first_image.url,
+        }}
+        resizeMode="cover"
+      />
 
-        <Details>
-          <Description numberOfLines={1}>{data.title}</Description>
+      <Details>
+        <Description numberOfLines={1}>{data.title}</Description>
 
-          <Price>{`R$ ${data.price}/dia`}</Price>
+        <Price>{`R$ ${data.price}/dia`}</Price>
 
-          <Publication>
-            {`${data.created_date} às ${data.created_time}`}
-          </Publication>
+        <Publication>
+          {`${data.created_date} às ${data.created_time}`}
+        </Publication>
 
-          <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
-        </Details>
-      </>
-    </ContainerSlider>
+        <Status>{data.available ? 'Disponível' : 'Indisponível'}</Status>
+      </Details>
+    </Container>
   );
 }

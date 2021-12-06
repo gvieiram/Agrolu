@@ -229,12 +229,12 @@ export function AnnouncementDetails(): ReactElement {
                 </TouchableOpacity>
               )}
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => handleShare()}
               >
                 <Share name="ios-share" size={24} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </IconsContainer>
           </HeaderContent>
         </Header>
@@ -269,16 +269,14 @@ export function AnnouncementDetails(): ReactElement {
           <AnnouncementContent>
             <AnnouncementTitle>{ad.title}</AnnouncementTitle>
             <Price>{`R$ ${ad.price}/dia`}</Price>
-            <TouchableOpacity
+            <Survey
               activeOpacity={0.7}
               onPress={() => handleNavigateToLink()}
+              disabled={!announcement.inspections[0]}
             >
-              <Survey>
-                <SurveyIcon />
-
-                <SurveyTitle>Verificar vistoria</SurveyTitle>
-              </Survey>
-            </TouchableOpacity>
+              <SurveyIcon />
+              <SurveyTitle>Verificar vistoria</SurveyTitle>
+            </Survey>
             <Information>
               {announcement.tags.map(tag => {
                 if (tag.has) {

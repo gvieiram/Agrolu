@@ -1,15 +1,8 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { RefreshControl, ScrollView, TouchableOpacity } from 'react-native';
 
-import Slider from '@react-native-community/slider';
 import {
   useFocusEffect,
   useNavigation,
@@ -19,7 +12,6 @@ import axios from 'axios';
 import { useTheme } from 'styled-components';
 
 import Announcement from '../../components/Announcement';
-import { CustomSlider } from '../../components/CustomSlider';
 import { InputPicker } from '../../components/Inputs/InputPicker';
 import { Load } from '../../components/Load';
 import { SearchBar } from '../../components/Search';
@@ -29,11 +21,11 @@ import {
   CategoryResponse,
   Type,
 } from '../../dtos/response/CategoryResponseDTO';
+import { CityResponse } from '../../dtos/response/CityResponseDTO';
+import { StatesResponse } from '../../dtos/response/StateResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import CategoryApi from '../../services/api/CategoryApi';
-import { convertToSlug } from '../../utils/Regex';
-import 'intl';
-import 'intl/locale-data/jsonp/pt-BR';
+import StateApi from '../../services/api/StateApi';
 import { InputPrice } from '../AddAnnouncement/styles';
 import {
   Container,
@@ -49,9 +41,6 @@ import {
   FiltersTitle,
   FilterText,
 } from './styles';
-import StateApi from '../../services/api/StateApi';
-import { StatesResponse } from '../../dtos/response/StateResponseDTO';
-import { CityResponse } from '../../dtos/response/CityResponseDTO';
 
 const wait = (timeout: number) => {
   return new Promise(resolve => {

@@ -89,7 +89,7 @@ export const Price = styled.Text`
   color: ${({ theme }) => theme.colors.preto_titulo};
 `;
 
-export const Survey = styled.View`
+export const Survey = styled(TouchableOpacity)`
   flex-direction: row;
   align-items: center;
   margin: 25px 0 20px 0;
