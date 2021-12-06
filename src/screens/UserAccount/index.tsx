@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, Platform, Text } from 'react-native';
 import {
   ScrollView,
@@ -13,7 +13,9 @@ import { useTheme } from 'styled-components';
 
 import { EditAccount } from '../../components/EditAccount';
 import ExchangePassword from '../../components/ExchangePassword';
+import { UserResponse } from '../../dtos/response/UserResponseDTO';
 import { useAuth } from '../../hooks/auth';
+import UserApi from '../../services/api/UserApi';
 import {
   ContainerKeyboardAvoidingView,
   Container,
@@ -38,12 +40,24 @@ import {
 
 export function UserAccount() {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const [user, setUser] = useState<UserResponse>(null);
   const theme = useTheme();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit' | 'options'>(
     'options',
   );
+
+  useEffect(() => {
+    function getUser() {
+      UserApi.me().then(response => setUser(response.data));
+    }
+
+    getUser();
+  }, []);
+
+  if (!user) {
+    return <AppLoading />;
+  }
 
   function handleOptionChange(
     optionSelected: 'dataEdit' | 'passwordEdit' | 'options',
@@ -111,23 +125,25 @@ export function UserAccount() {
           <CardIcon name="favorite" size={32} />
           <CardText>Anúncios favoritos</CardText>
         </Card>
-        <Card
-          activeOpacity={0.7}
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.navigate({
-                name: 'UserVerification',
-              }),
-            )
-          }
-        >
-          <FaceIcon
-            name="face-recognition"
-            size={32}
-            color={theme.colors.green_dark_1}
-          />
-          <CardText>Verificar documento</CardText>
-        </Card>
+        {user.verified ? null : (
+          <Card
+            activeOpacity={0.7}
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: 'UserVerification',
+                }),
+              )
+            }
+          >
+            <FaceIcon
+              name="face-recognition"
+              size={32}
+              color={theme.colors.green_dark_1}
+            />
+            <CardText>Verificar documento</CardText>
+          </Card>
+        )}
         <Card
           activeOpacity={0.7}
           onPress={() => handleOptionChange('passwordEdit')}

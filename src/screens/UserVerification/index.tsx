@@ -4,13 +4,17 @@ import React, { useState, useRef } from 'react';
 import { Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
+import AppLoading from 'expo-app-loading';
+
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import AlertError from '../../components/AlertError';
+import { Load } from '../../components/Load';
 import Stepper from '../../components/Steps';
 import { TakePicture, PhotoPreview } from '../../components/TakePicture';
+import { useAuth } from '../../hooks/auth';
 import UserApi from '../../services/api/UserApi';
 import {
   Container,
@@ -43,6 +47,8 @@ export function UserVerification() {
   const [selfieImg, setSelfieImg] = useState(null);
   const [documentFrontImg, setDocumentFrontImg] = useState(null);
   const [documentBackImg, setDocumentBackImg] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   function setCapturedPhotos(param: string | null) {
     if (active === 0 && param) {
@@ -93,6 +99,8 @@ export function UserVerification() {
   }
 
   function onDone() {
+    setLoading(true);
+
     const formData = new FormData();
     const selfieParams = fileParams(selfieImg);
     const docFrontParams = fileParams(documentFrontImg);
@@ -127,9 +135,10 @@ export function UserVerification() {
       })
       .catch(error => {
         AlertError(error);
-        setActive(p => p - 2);
+        setActive(0);
         setCapturedPhotos(null);
-      });
+      })
+      .finally(() => setLoading(false));
   }
 
   const Steps = props => {
@@ -220,6 +229,20 @@ export function UserVerification() {
         onlyType={typeCam}
         handleBack={() => setCameraIsOpen(false)}
       />
+    );
+  }
+
+  if (loading) {
+    return (
+      <Container>
+        <Header>
+          <HeaderContent>
+            <ButtonBack onPress={handleBack} />
+            <HeaderTitle>Verificar Documento</HeaderTitle>
+          </HeaderContent>
+        </Header>
+        <Load />
+      </Container>
     );
   }
 

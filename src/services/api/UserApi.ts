@@ -1,5 +1,4 @@
 import {
-  CheckDocumentRequest,
   ReportRequest,
   ResetMyPasswordRequest,
   UpdateRequest,
@@ -8,7 +7,7 @@ import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDT
 import { UserResponse } from '../../dtos/response/UserResponseDTO';
 import api from '../api';
 
-const checkDocument = (images: CheckDocumentRequest) =>
+const checkDocument = (images: FormData) =>
   api.post('users/me/check-document', images, {
     headers: {
       'Content-Type': 'multipart/form-data',

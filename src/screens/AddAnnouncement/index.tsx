@@ -1,13 +1,24 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useMemo, useEffect } from 'react';
-import { Image as Images, ScrollView, StatusBar, View } from 'react-native';
+import {
+  Alert,
+  Image as Images,
+  ScrollView,
+  StatusBar,
+  View,
+} from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 
+import AppLoading from 'expo-app-loading';
 import { AssetsSelector } from 'expo-images-picker';
 import { Asset, MediaType } from 'expo-media-library';
 
 import { Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  CommonActions,
+} from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import AlertError from '../../components/AlertError';
@@ -20,6 +31,7 @@ import {
 } from '../../dtos/response/CategoryResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import CategoryApi from '../../services/api/CategoryApi';
+import UserApi from '../../services/api/UserApi';
 import {
   Container,
   ContainerContent,
@@ -40,6 +52,7 @@ import {
 export function AddAnnouncement() {
   const theme = useTheme();
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
@@ -170,6 +183,48 @@ export function AddAnnouncement() {
       .catch(error => AlertError(error));
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      function isVerified() {
+        setIsLoading(true);
+
+        UserApi.me().then(response => {
+          const { data } = response;
+
+          setIsLoading(false);
+
+          if (!data.verified) {
+            navigation.dispatch(
+              CommonActions.navigate({
+                name: 'UserAccount',
+              }),
+            );
+
+            Alert.alert(
+              'Aviso',
+              'Sua conta não é verificada!\nPor favor, verifique sua conta em "Verificar documento"',
+            );
+          }
+
+          if (data.cep === null || data.city_id === null) {
+            navigation.dispatch(
+              CommonActions.navigate({
+                name: 'UserAccount',
+              }),
+            );
+
+            Alert.alert(
+              'Aviso',
+              'Complete as informações de endereço do seu perfil em "Editar perfil"',
+            );
+          }
+        });
+      }
+
+      isVerified();
+    }, []),
+  );
+
   useEffect(() => {
     function getCategories() {
       CategoryApi.all()
@@ -182,7 +237,6 @@ export function AddAnnouncement() {
           }
         });
     }
-
     getCategories();
   }, []);
 
@@ -211,6 +265,10 @@ export function AddAnnouncement() {
         />
       </ContainerImageSelection>
     );
+  }
+
+  if (isLoading) {
+    return <AppLoading />;
   }
 
   return (
