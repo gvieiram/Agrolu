@@ -8,8 +8,11 @@ import AppLoading from 'expo-app-loading';
 import * as Yup from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useFocusEffect, useNavigation } from '@react-navigation/core';
-import { CommonActions } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  CommonActions,
+} from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import { UpdateRequest } from '../../dtos/request/UserRequestDTO';

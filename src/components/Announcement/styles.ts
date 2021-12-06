@@ -68,6 +68,7 @@ export const Status = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium_500};
   font-size: ${RFValue(9)}px;
   color: ${({ theme }) => theme.colors.success_main};
+  margin-top: 5px;
 `;
 
 export const IconActive = styled.View`
