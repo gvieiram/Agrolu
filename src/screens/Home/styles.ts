@@ -9,7 +9,7 @@ import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDT
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.creme};
+  background-color: ${({ theme }) => theme.colors.creme_background};
 `;
 
 export const Header = styled.View`

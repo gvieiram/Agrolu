@@ -9,7 +9,7 @@ import { BackButton } from '../../components/BackButton';
 
 export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
   flex: 1;
-  /* background: ${({ theme }) => theme.colors.green_background}; */
+  background: ${({ theme }) => theme.colors.creme_background};
 `;
 
 export const Container = styled.View``;
