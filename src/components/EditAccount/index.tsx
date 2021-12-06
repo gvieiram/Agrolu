@@ -67,9 +67,7 @@ export function EditAccount() {
       number,
       receive_notification: receive_notification ? 1 : 0,
     })
-      .then(response => {
-        setLoading(false);
-
+      .then(() => {
         Alert.alert('Aviso', 'Suas alterações foram salvas!');
 
         navigation.dispatch(
@@ -78,7 +76,8 @@ export function EditAccount() {
           }),
         );
       })
-      .catch(error => AlertError(error));
+      .catch(error => AlertError(error))
+      .finally(() => setLoading(false));
   }
 
   function getCitiesByState(stateId: number, cityId?: number) {
