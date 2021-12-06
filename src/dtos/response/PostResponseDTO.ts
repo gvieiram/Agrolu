@@ -10,4 +10,5 @@ export interface PostResponse {
   text: string;
   reference: string;
   thumbnail: string;
+  created_date: string;
 }

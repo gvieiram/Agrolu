@@ -12,7 +12,7 @@ interface Props {
 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.cinza};
+  background-color: ${({ theme }) => theme.colors.creme};
 `;
 
 export const Header = styled.View<Props>`

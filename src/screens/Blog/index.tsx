@@ -35,12 +35,12 @@ export const Blog = () => {
   const [posts, setPosts] = useState<PostResponse[]>([]);
   const [loading, setLoading] = useState(false);
 
-  function handlePostDetails(id: number) {
+  function handlePostDetails(post: PostResponse) {
     navigation.dispatch(
       CommonActions.navigate({
         name: 'PostDetails',
         params: {
-          id,
+          post,
         },
       }),
     );
@@ -54,19 +54,16 @@ export const Blog = () => {
     );
   };
 
-  const Posts = item => {
+  const Posts = (item: PostResponse) => {
     return (
-      <BtnContainer
-        onPress={() => handlePostDetails(item.id)}
-        activeOpacity={0.7}
-      >
+      <BtnContainer onPress={() => handlePostDetails(item)} activeOpacity={0.7}>
         <Thumbnail source={{ uri: item.thumbnail }} resizeMode="cover" />
         <Description>
           <TextContent>
             <Title numberOfLines={1}>{item.title}</Title>
           </TextContent>
           <TextContent>
-            <Text numberOfLines={2}>{item.text}</Text>
+            <Text numberOfLines={3}>{item.text}</Text>
           </TextContent>
           <TextContent>
             <Publication numberOfLines={1}>
