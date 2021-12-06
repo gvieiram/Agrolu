@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -22,6 +22,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from './src/global/styles/theme';
 import { AppProvider } from './src/hooks';
 import { Routes } from './src/routes';
+import UserApi from './src/services/api/UserApi';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -82,11 +83,12 @@ export default function App() {
   }
 
   useEffect(() => {
-    SecureStore.getItemAsync('expo_push_token').then(token => {
+    SecureStore.getItemAsync('expoPushToken').then(token => {
       if (!token) {
         registerForPushNotificationsAsync().then(newToken => {
           if (newToken) {
-            SecureStore.setItemAsync('expo_push_token', newToken);
+            SecureStore.setItemAsync('expoPushToken', newToken);
+            UserApi.storeToken(newToken);
           }
         });
       }
