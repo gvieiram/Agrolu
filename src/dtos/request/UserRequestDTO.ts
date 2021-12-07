@@ -24,4 +24,5 @@ export interface UpdateRequest {
   complement: string;
   number: number;
   receive_notification: number;
+  cultivation: number;
 }

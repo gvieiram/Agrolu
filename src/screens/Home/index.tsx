@@ -40,6 +40,7 @@ import {
   FiltersContent,
   FiltersTitle,
   FilterText,
+  BackButton,
 } from './styles';
 
 const wait = (timeout: number) => {
@@ -237,13 +238,17 @@ export default function Home() {
     <Container>
       <Header>
         <HeaderContent>
-          <SearchBar
-            platform="ios"
-            placeholder="Procurar"
-            onCancel={() => setRefreshing(true)}
-            onChangeText={text => handleSearch(text)}
-            value={params.name}
-          />
+          {!filtersScreen ? (
+            <SearchBar
+              platform="ios"
+              placeholder="Procurar"
+              onCancel={() => setRefreshing(true)}
+              onChangeText={text => handleSearch(text)}
+              value={params.name}
+            />
+          ) : (
+            <BackButton onPress={() => setFiltersScreen(false)} />
+          )}
 
           <IconsContainer>
             <TouchableOpacity
@@ -282,7 +287,7 @@ export default function Home() {
               />
             )}
             onEndReached={handleEndReached}
-            onEndReachedThreshold={0}
+            onEndReachedThreshold={0.1}
             ListFooterComponent={!loading ? loadMore : null}
             refreshControl={
               <RefreshControl

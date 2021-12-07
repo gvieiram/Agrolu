@@ -56,6 +56,7 @@ export function EditAccount() {
       complement,
       number,
       receive_notification,
+      cultivation,
     } = user;
 
     setLoading(true);
@@ -69,6 +70,7 @@ export function EditAccount() {
       complement,
       number,
       receive_notification: receive_notification ? 1 : 0,
+      cultivation: cultivation ? 1 : 0,
     })
       .then(() => {
         Alert.alert('Aviso', 'Suas alterações foram salvas!');
@@ -293,6 +295,15 @@ export function EditAccount() {
           handleChange('receive_notification', !user.receive_notification)
         }
       />
+
+      {user.receive_notification ? (
+        <Checkbox
+          text="Quero receber notificações sobre cultivação!"
+          textStyle={{ color: theme.colors.green_dark_main, fontSize: 15 }}
+          status={user.cultivation ? 'checked' : 'unchecked'}
+          onPress={() => handleChange('cultivation', !user.cultivation)}
+        />
+      ) : null}
 
       <TouchableOpacity activeOpacity={0.7} onPress={() => handleEditAccount()}>
         <ButtonForm title="Salvar Alterações" />

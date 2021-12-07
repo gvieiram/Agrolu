@@ -23,7 +23,7 @@ export const Container = styled.View`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${Platform.OS === 'ios' ? 0 : getStatusBarHeight() + 10};
+  margin-top: ${RFValue(15)}px;
   margin-bottom: ${RFValue(15)}px;
 `;
 
@@ -116,7 +116,7 @@ export const IconFacebook = styled(LogoFacebook)`
 
 export const Header = styled.View`
   width: 100%;
-  margin-top: ${getStatusBarHeight() + 15};
+  margin-top: ${getStatusBarHeight() + 30};
 `;
 
 export const BackButton = styled(BackBtn)`
