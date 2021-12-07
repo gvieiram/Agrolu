@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleProp, TextStyle } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components';
@@ -9,9 +10,10 @@ interface Props {
   text: string;
   value: string;
   regex: RegExp;
+  styleText?: StyleProp<TextStyle>;
 }
 
-export default function PasswordRule({ text, value, regex }: Props) {
+export default function PasswordRule({ text, value, regex, styleText }: Props) {
   const theme = useTheme();
   const validate: boolean = regex.test(value);
 
@@ -22,7 +24,7 @@ export default function PasswordRule({ text, value, regex }: Props) {
         size={18}
         color={validate ? theme.colors.success_main : theme.colors.error_dark}
       />
-      <Text>{text}</Text>
+      <Text style={styleText}>{text}</Text>
     </PasswordRules>
   );
 }

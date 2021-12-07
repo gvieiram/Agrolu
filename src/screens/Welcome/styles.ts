@@ -50,26 +50,6 @@ export const ContainerNextPage = styled.View`
   padding: 0 ${RFValue(10)}px;
 `;
 
-export const DivText = styled.View`
-  flex-direction: row;
-  margin-top: ${RFValue(20)}px;
-`;
-
-export const Text = styled.Text`
-  color: ${({ theme }) => theme.colors.cinza_apagado};
-  font-size: ${RFValue(14)}px;
-  font-family: ${({ theme }) => theme.fonts.regular_400};
-  margin-right: 6px;
-`;
-
-export const LinkCadastro = styled.Text`
-  color: ${({ theme }) => theme.colors.green_main};
-  font-size: ${RFValue(14)}px;
-  font-family: ${({ theme }) => theme.fonts.regular_400};
-  text-decoration-line: underline;
-  margin-bottom: 30px;
-`;
-
 export const Button = styled(TouchableOpacity)`
   width: 100%;
   height: ${RFValue(55)}px;

@@ -4,6 +4,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
+import AlertError from '../components/AlertError';
 import api from '../services/api';
 
 interface User {
@@ -13,7 +14,9 @@ interface User {
   name: string;
   cep?: string;
   ibge?: string;
-  neighborhood?: string;
+  complement?: string;
+  public_place?: string;
+  phone?: string;
   online: boolean;
   photo?: string;
   receive_notification: boolean;
@@ -26,6 +29,7 @@ interface User {
 interface AuthState {
   token: string;
   user: User;
+  signed: boolean;
 }
 
 interface SignInCredentials {
@@ -34,8 +38,11 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: User;
+  user: User | null;
+  token: string | null;
+  signed: boolean;
   signIn: (credentials: SignInCredentials) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -51,40 +58,86 @@ async function getSecureToken(key) {
 
   return JSON.parse(item);
 }
+// SecureStore.deleteItemAsync
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<AuthState>({} as AuthState);
+  const [load, setLoad] = useState(false);
   const authPromise = getSecureToken('auth');
 
-  authPromise.then(auth => {
-    api.defaults.headers.authorization = `Bearer ${auth.token}`;
+  if (!load) {
+    authPromise.then(auth => {
+      if (!auth) {
+        setData({ token: null, user: null, signed: false });
+      } else {
+        api
+          .get('users/me', {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          })
+          .then(response => {
+            const user = response.data as User;
 
-    api.get('users/me').then(response => {
-      setData({ token: auth.token, user: response.data });
+            api.defaults.headers.authorization = `Bearer ${auth.token}`;
+
+            setData({ token: auth.token, user, signed: true });
+          })
+          .catch(error => {
+            console.log('ERROR! ', error.response);
+
+            if (error.response.status === 401) {
+              setData({ token: null, user: null, signed: false });
+            }
+          });
+      }
     });
-  });
+
+    setLoad(true);
+  }
+
+  async function signOut() {
+    api
+      .post('auth/logout')
+      .then(() => {
+        SecureStore.deleteItemAsync('auth');
+
+        setData({ token: null, user: null, signed: false });
+      })
+      .catch(error => console.log('ERROR! ', error.response));
+  }
 
   async function signIn({ email, password }: SignInCredentials) {
-    const response = await api.post('auth/login', {
-      email,
-      password,
-    });
+    api
+      .post('auth/login', {
+        email,
+        password,
+      })
+      .then(response => {
+        const { token, user } = response.data as AuthState;
 
-    const { token, user } = response.data;
+        api.defaults.headers.authorization = `Bearer ${token}`;
 
-    api.defaults.headers.authorization = `Bearer ${token}`;
+        storeSecureToken('auth', { token, user });
+        setData({ token, user, signed: true });
+      })
+      .catch(error => {
+        AlertError(error);
 
-    storeSecureToken('auth', { token, user });
-    setData({ token, user });
+        setData({ token: null, user: null, signed: false });
+      });
   }
 
   return (
     <AuthContext.Provider
       value={{
         user: data.user,
+        token: data.token,
+        signed: data.signed,
         signIn,
+        signOut,
       }}
     >
       {children}

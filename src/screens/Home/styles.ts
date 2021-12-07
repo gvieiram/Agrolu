@@ -1,12 +1,16 @@
 import { FlatList } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 
+import { BackButton as IconBack } from '../../components/BackButton';
+import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
+
 export const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.creme};
+  background-color: ${({ theme }) => theme.colors.creme_background};
 `;
 
 export const Header = styled.View`
@@ -14,7 +18,7 @@ export const Header = styled.View`
   height: 115px;
   background-color: ${({ theme }) => theme.colors.green_dark_main};
   justify-content: flex-end;
-  padding: 15px;
+  padding: 15px 15px 10px 15px;
 `;
 
 export const HeaderContent = styled.View`
@@ -22,32 +26,34 @@ export const HeaderContent = styled.View`
   flex-direction: row;
 `;
 
-export const Search = styled.View`
-  height: 36px;
-  width: 70%;
-  background-color: ${({ theme }) => theme.colors.green_light_main};
-  border-radius: 10px;
-
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-
-  padding: 0 15px;
-`;
-
-export const Text = styled.Text`
-  font-size: ${RFValue(20)}px;
-  font-family: ${({ theme }) => theme.fonts.regular_400};
-  color: ${({ theme }) => theme.colors.green_linear_dark_opaque};
-`;
-
-export const SearchIcon = styled(MaterialIcons)`
-  color: ${({ theme }) => theme.colors.green_linear_dark_opaque};
+export const BackButton = styled(IconBack)`
+  position: absolute;
+  z-index: 1;
+  left: 3px;
 `;
 
 export const IconsContainer = styled.View`
   flex-direction: row;
   align-items: center;
+`;
+
+export const HeaderContentFilter = styled.View`
+  flex-direction: row;
+  margin-bottom: 10px;
+`;
+
+export const IconsContainerFilter = styled.View`
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 50px;
+`;
+
+export const FilterHeaderTitle = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.green_main};
 `;
 
 export const Like = styled(MaterialIcons)`
@@ -59,10 +65,70 @@ export const Filter = styled(MaterialCommunityIcons)`
   color: ${({ theme }) => theme.colors.green_main};
 `;
 
-export const AnnouncementList = styled(FlatList).attrs({
+export const AnnouncementList = styled(
+  FlatList as new () => FlatList<AnnouncementResponse>,
+).attrs({
   contentContainerStyle: {
     padding: 15,
     paddingBottom: 90,
   },
   showsVerticalScrollIndicator: false,
 })``;
+
+export const TextEndItems = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.gray_line_dark};
+  text-align: center;
+`;
+
+export const FiltersContent = styled.View`
+  padding: 0 16px 0 16px;
+  margin-bottom: 110px;
+`;
+
+export const FiltersTitle = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.preto_titulo};
+  margin-top: 15px;
+`;
+
+export const FiltersSubtitle = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.cinza_apagado};
+  margin-top: 5px;
+  padding-left: 5px;
+`;
+
+export const FiltersButtons = styled.View`
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+`;
+
+// export const FilterButton = styled(TouchableOpacity)`
+//   /* background-color: ${({ theme }) => theme.colors.green_main}; */
+//   flex-grow: 1;
+//   flex-basis: 0;
+
+//   border-radius: 10px;
+//   border-width: 1px;
+//   border-color: ${({ theme }) => theme.colors.green_main};
+//   align-items: center;
+
+//   padding: 3px 20px;
+//   margin-top: 15px;
+// `;
+
+export const FilterText = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.medium_500};
+  color: ${({ theme }) => theme.colors.green_main};
+`;
+
+export const ClearFilter = styled.Text`
+  font-size: ${RFValue(17)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.green_main};
+`;

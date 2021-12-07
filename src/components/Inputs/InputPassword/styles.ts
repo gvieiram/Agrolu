@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const IconContainer = styled.View`
-  height: ${RFValue(50)}px;
+  height: ${RFValue(55)}px;
   width: ${RFValue(56)}px;
   background-color: ${({ theme }) => theme.colors.white};
   justify-content: center;
@@ -40,14 +40,11 @@ export const Text = styled(TextInput)`
   font-size: ${RFValue(15)}px;
   color: ${({ theme }) => theme.colors.title_item_gray};
 
-  /* border-bottom-right-radius: 10px; */
-  /* border-top-right-radius: 10px; */
   padding: 0 23px;
 `;
 
 export const ChangePasswordVisibilityButton = styled.View`
   height: ${RFValue(55)}px;
-  /* width: ${RFValue(56)}px; */
   background-color: ${({ theme }) => theme.colors.white};
   justify-content: center;
   align-items: center;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 
 import { BlurView } from 'expo-blur';
 
@@ -11,10 +12,11 @@ import IconHome from '../assets/img/home.svg';
 import IconMore from '../assets/img/more.svg';
 import IconPerson from '../assets/img/person.svg';
 import IconWechat from '../assets/img/wechat.svg';
-import { AddAnnouncement } from '../screens/AddAnnoucement';
-import { AnnouncementDetails } from '../screens/AnnouncementDetails';
+import { AddAnnouncement } from '../screens/AddAnnouncement';
 import Home from '../screens/Home';
-import { AppStackRoutes } from './app.stack.routes';
+import { Messages } from '../screens/Messages';
+import { More } from '../screens/More';
+import { UserAccount } from '../screens/UserAccount';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -35,7 +37,7 @@ export function AppTabRoutes() {
           position: 'absolute',
           height: 58,
           alignItems: 'center',
-          bottom: 15,
+          bottom: Platform.OS === 'ios' ? 30 : 15,
           zIndex: 10,
           marginHorizontal: 30,
           backgroundColor: theme.colors.green_dark_main,
@@ -45,6 +47,7 @@ export function AppTabRoutes() {
           shadowOpacity: 0.3,
           elevation: 5,
           shadowOffset: { width: 0, height: 8 },
+          padding: Platform.OS === 'ios' ? 8 : 0,
         },
         tabBarItemStyle: {
           height: 40,
@@ -53,7 +56,7 @@ export function AppTabRoutes() {
 
           justifyContent: 'center',
           alignItems: 'center',
-          alignSelf: 'center',
+          alignSelf: Platform.OS === 'ios' ? 'auto' : 'center',
 
           marginHorizontal: 5,
         },
@@ -69,11 +72,38 @@ export function AppTabRoutes() {
         }}
       />
       <Screen
-        name="AddAnnoucement"
+        name="UserAccount"
+        component={UserAccount}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <IconPerson width={32} height={32} fill={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="AddAnnouncement"
         component={AddAnnouncement}
         options={{
           tabBarIcon: ({ color }) => (
             <IconAdd width={32} height={32} fill={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="MessagesRoom"
+        component={Messages}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <IconWechat width={32} height={32} fill={color} />
+          ),
+        }}
+      />
+      <Screen
+        name="More"
+        component={More}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <IconMore width={32} height={32} fill={color} />
           ),
         }}
       />

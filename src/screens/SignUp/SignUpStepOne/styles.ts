@@ -1,4 +1,5 @@
-import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
@@ -7,6 +8,7 @@ import styled from 'styled-components/native';
 import LogoFacebook from '../../../assets/img/facebook.svg';
 import LogoGoogle from '../../../assets/img/google.svg';
 import LogoSVG from '../../../assets/img/logoHorizontal.svg';
+import { BackButton as BackBtn } from '../../../components/BackButton';
 import Button from '../../../components/Button';
 
 export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
@@ -21,7 +23,7 @@ export const Container = styled.View`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${getStatusBarHeight() + 10}px;
+  margin-top: ${RFValue(15)}px;
   margin-bottom: ${RFValue(15)}px;
 `;
 
@@ -110,4 +112,14 @@ export const IconGoogle = styled(LogoGoogle)`
 export const IconFacebook = styled(LogoFacebook)`
   width: 35px;
   height: 35px;
+`;
+
+export const Header = styled.View`
+  width: 100%;
+  margin-top: ${getStatusBarHeight() + 30};
+`;
+
+export const BackButton = styled(BackBtn)`
+  align-self: flex-start;
+  margin-left: -25px;
 `;
