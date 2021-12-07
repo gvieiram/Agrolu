@@ -3,13 +3,33 @@
   "expo": {
     "name": "Agrolu",
     "slug": "Agrolu",
-    "version": "1.0.0",
+    "version": "0.0.1",
+    "platforms":[
+      "android",
+      "ios"
+    ],
+    "orientation": "portrait",
+    "icon":"./assets/icon.png",
+
     "assetBundlePatterns": [
       "**/*"
     ],
+    "ios": {
+      "bundleIdentifier": "com.agrolu.agrolu",
+      "buildNumber": "0.0.1"
+    },
+    "android": {
+      "package": "com.agrolu.agrolu",
+      "versionCode": "0.0.1",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F8F8FA"
+      }
+    },
     "splash": {
+      "image": "./assets/splash-colored.png",
       "backgroundColor": "#00412C",
-      "resizeMode": "cover"
+      "resizeMode": "contain"
     }
   }
 }
