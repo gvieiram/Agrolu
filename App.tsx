@@ -83,14 +83,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    SecureStore.getItemAsync('expoPushToken').then(token => {
-      if (!token) {
-        registerForPushNotificationsAsync().then(newToken => {
-          if (newToken) {
-            SecureStore.setItemAsync('expoPushToken', newToken);
-            UserApi.storeToken(newToken);
-          }
-        });
+    SecureStore.deleteItemAsync('expoPushToken');
+    registerForPushNotificationsAsync().then(newToken => {
+      if (newToken) {
+        SecureStore.setItemAsync('expoPushToken', newToken);
+        UserApi.storeToken(newToken);
       }
     });
     notificationListener.current =
