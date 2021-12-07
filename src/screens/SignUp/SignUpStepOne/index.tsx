@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import { Input } from '../../../components/Inputs/Input';
-import { InputCpf } from '../../../components/Inputs/InputCpf';
+import { InputMask } from '../../../components/Inputs/InputMask';
 import {
   Container,
   ContainerKeyboardAvoidingView,
@@ -26,6 +26,8 @@ import {
   ActiveScreen,
   StepOne,
   StepTwo,
+  Header,
+  BackButton,
 } from './styles';
 
 export default function SignUpStepOne() {
@@ -34,10 +36,22 @@ export default function SignUpStepOne() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [identity, setIdentity] = useState('');
+  const [phone, setPhone] = useState('');
+
+  function handleBack() {
+    navigation.dispatch(CommonActions.navigate('SignIn'));
+  }
 
   async function handleNextStep() {
     try {
       const schema = Yup.object().shape({
+        phone: Yup.string()
+          .required('Telefone é obrigatório')
+          .test(
+            'Phone tests',
+            'Telefone deve conter DDD + 9 números',
+            val => val.length === 15,
+          ),
         identity: Yup.string()
           .required('CPF é obrigatório')
           .test(
@@ -51,7 +65,7 @@ export default function SignUpStepOne() {
         name: Yup.string().required('Nome é obrigatório'),
       });
 
-      const data = { name, email, identity };
+      const data = { name, email, identity, phone };
       await schema.validate(data);
 
       navigation.dispatch(
@@ -71,6 +85,10 @@ export default function SignUpStepOne() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
+          <Header>
+            <BackButton onPress={handleBack} />
+          </Header>
+
           <Logo />
 
           <Title>Crie sua{'\n'}conta</Title>
@@ -88,7 +106,7 @@ export default function SignUpStepOne() {
           <Form>
             <Input
               iconName="person"
-              placeholder="Nome"
+              placeholder="Nome completo"
               autoCapitalize="words"
               onChangeText={setName}
               value={name}
@@ -104,19 +122,30 @@ export default function SignUpStepOne() {
               value={email}
             />
 
-            <InputCpf
+            <InputMask
               type="cpf"
               iconName="credit-card"
               placeholder="CPF"
+              maxLength={14}
               keyboardType="numeric"
               value={identity}
               onChangeText={text => setIdentity(text)}
             />
 
+            <InputMask
+              type="cel-phone"
+              iconName="phone"
+              placeholder="Telefone com DDD"
+              maxLength={15}
+              keyboardType="numeric"
+              value={phone}
+              onChangeText={text => setPhone(text)}
+            />
+
             <ButtonForm title="Próximo" onPress={handleNextStep} />
           </Form>
 
-          <LineView>
+          {/* <LineView>
             <Line />
             <Text>ou</Text>
             <Line />
@@ -130,7 +159,7 @@ export default function SignUpStepOne() {
             <SocialButton activeOpacity={0.7}>
               <IconFacebook />
             </SocialButton>
-          </SocialContainer>
+          </SocialContainer> */}
         </Container>
       </TouchableWithoutFeedback>
     </ContainerKeyboardAvoidingView>

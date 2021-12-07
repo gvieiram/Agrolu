@@ -3,13 +3,20 @@ export default {
     white: '#FFFFFF',
     creme: '#EBE8E4',
     creme_background: '#F3F0EB',
+    creme_background_opacity: 'rgba(243, 240, 235, 0.1)',
     cinza: '#E0E0E0',
+    gray_background: '#E5E5E5',
     gray_line_input: '#F4F5F6',
     gray_line_dark: '#BBBCBD',
     cinza_apagado: '#929292',
     title_item_gray: '#575757',
+    input_text: '#737373',
+    border_input: '#dddddd',
     preto_titulo: '#151515',
+    black: '#000000',
     opacityColor: 'rgba(0, 0, 0, 0.7)',
+    opacityColorCamera: 'rgba(0, 0, 0, 0.4)',
+    opacityColorCamera_2: 'rgba(0, 0, 0, 0.2)',
 
     chumbo: '#283739',
     green_main: '#A0BF1D',
@@ -21,12 +28,14 @@ export default {
     green_dark_main: '#00412C',
     green_light_main: '#005137',
     green_background: '#002519',
+    green_dark_opaque: '#3A7563',
 
     green_linear_light: '#A2C11C',
     green_linear_dark: '#2C5D63',
     green_linear_dark_opaque: '#70998c',
 
     error_light: '#F83B3A',
+    error_light_2: '#ee4747',
     error_main: '#DB0028',
     error_dark: '#A80505',
 
@@ -43,11 +52,8 @@ export default {
     warning_dark: '#F57C00',
 
     // lightGreen: '#59A985',
-    // darkGreen: '#3A7563',
     // green_light_1: '#BFE131',
     // beige: '#E6D3A7',
-    // gray: '#737373',
-    // gray_background: '#E5E5E5',
 
     // green_opaque: '#283739',
     // green_dark: '#00412C',

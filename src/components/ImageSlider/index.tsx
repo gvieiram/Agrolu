@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FlatList, ViewToken } from 'react-native';
 
+import { Image as ImageAnnouncement } from '../../dtos/response/AnnouncementResponseDTO';
 import {
   Container,
   ImageIndexes,
@@ -10,7 +11,7 @@ import {
 } from './styles';
 
 interface Props {
-  imagesUrl: string[];
+  imagesUrl: ImageAnnouncement[];
 }
 
 interface ChangeImageProps {
@@ -29,17 +30,17 @@ export function ImageSlider({ imagesUrl }: Props) {
   return (
     <Container>
       <ImageIndexes>
-        {imagesUrl.map((_, index) => (
-          <ImageIndex key={String(index)} active={index === imageIndex} />
+        {imagesUrl.map((item, index) => (
+          <ImageIndex key={String(item.id)} active={index === imageIndex} />
         ))}
       </ImageIndexes>
 
       <FlatList
         data={imagesUrl}
-        keyExtractor={key => key}
+        keyExtractor={item => String(item.id)}
         renderItem={({ item }) => (
           <ImageWrapper>
-            <Image source={{ uri: item }} resizeMode="cover" />
+            <Image source={{ uri: item.url }} resizeMode="cover" />
           </ImageWrapper>
         )}
         horizontal

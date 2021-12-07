@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert, Keyboard, Platform } from 'react-native';
+import { Alert, Keyboard, Platform, ScrollView } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
@@ -15,6 +15,7 @@ import {
 } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
+import AlertError from '../../../components/AlertError';
 import { InputForm } from '../../../components/Inputs/InputForm';
 import PasswordRule from '../../../components/PasswordRule';
 import api from '../../../services/api';
@@ -30,6 +31,8 @@ import {
   StepOne,
   StepTwo,
   Error,
+  Header,
+  BackButton,
 } from './styles';
 
 interface FormData {
@@ -42,6 +45,7 @@ interface Params {
     name: string;
     email: string;
     identity: string;
+    phone: string;
   };
 }
 
@@ -106,6 +110,10 @@ export default function SignUpStepTwo() {
   const route = useRoute();
   const { user } = route.params as Params;
 
+  function handleBack() {
+    navigation.dispatch(CommonActions.navigate('SignUpStepOne'));
+  }
+
   const {
     setValue,
     control,
@@ -129,6 +137,7 @@ export default function SignUpStepTwo() {
         name: user.name,
         email: user.email,
         document: user.identity,
+        phone: user.phone,
         password: data.password,
       })
       .then(() => {
@@ -141,23 +150,20 @@ export default function SignUpStepTwo() {
           }),
         );
       })
-      .catch(error => {
-        console.log(error);
-
-        Alert.alert(
-          'Opa',
-          'Não foi possível cadastrar a sua conta, tente novamente mais tarde!',
-        );
-      });
+      .catch(error => AlertError(error.data));
   }
 
   return (
-    <ContainerKeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
-      enabled
-    >
+    // <ContainerKeyboardAvoidingView
+    //   behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
+    //   enabled
+    // >
+    <ScrollView showsVerticalScrollIndicator={false}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
+          <Header>
+            <BackButton onPress={handleBack} />
+          </Header>
           <Logo />
 
           <Title>Crie sua{'\n'}conta</Title>
@@ -181,7 +187,12 @@ export default function SignUpStepTwo() {
               isErrored={errors.password}
               error={errors.password && errors.password.message}
               onChangeText={text => handlePassword(text)}
+              inputType="password"
+              isEditable
             />
+            {errors.password && (
+              <Error>{errors.password && errors.password.message}</Error>
+            )}
 
             <InputForm
               iconName="vpn-key"
@@ -190,14 +201,13 @@ export default function SignUpStepTwo() {
               placeholder="Repetir Senha"
               isErrored={errors.passwordConfirm}
               error={errors.passwordConfirm && errors.passwordConfirm.message}
+              inputType="password"
+              isEditable
             />
             {errors.passwordConfirm && (
               <Error>
                 {errors.passwordConfirm && errors.passwordConfirm.message}
               </Error>
-            )}
-            {errors.password && (
-              <Error>{errors.password && errors.password.message}</Error>
             )}
           </Form>
 
@@ -213,6 +223,7 @@ export default function SignUpStepTwo() {
           <ButtonForm title="Próximo" onPress={handleSubmit(handleRegister)} />
         </Container>
       </TouchableWithoutFeedback>
-    </ContainerKeyboardAvoidingView>
+    </ScrollView>
+    // </ContainerKeyboardAvoidingView>
   );
 }

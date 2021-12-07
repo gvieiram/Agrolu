@@ -62,6 +62,8 @@
       "consistent-return": "warn",
       "react/no-array-index-key": "warn",
       "react/prop-types": "warn",
+      "no-useless-return": "off",
+      "array-callback-return": "warn",
       "import-helpers/order-imports": [   // Organizando os Imports
         "warn",
         {

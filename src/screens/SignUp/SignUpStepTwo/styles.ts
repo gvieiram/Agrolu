@@ -1,14 +1,14 @@
-import { KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import styled from 'styled-components/native';
 
 import LogoSVG from '../../../assets/img/logoHorizontal.svg';
+import { BackButton as BackBtn } from '../../../components/BackButton';
 import Button from '../../../components/Button';
 
 export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
-  flex: 1;
   background: ${({ theme }) => theme.colors.green_background};
 `;
 
@@ -19,7 +19,6 @@ export const Container = styled.View`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${getStatusBarHeight() + 10}px;
   margin-bottom: ${RFValue(15)}px;
 `;
 
@@ -74,7 +73,7 @@ export const Text = styled.Text`
 `;
 
 export const ButtonForm = styled(Button)`
-  margin-top: 30px;
+  margin: 30px 0 50px 0;
 `;
 
 export const Error = styled.Text`
@@ -83,4 +82,14 @@ export const Error = styled.Text`
   color: ${({ theme }) => theme.colors.error_dark};
 
   margin-bottom: 10px;
+`;
+
+export const Header = styled.View`
+  width: 100%;
+  margin-top: ${getStatusBarHeight() + 30}px;
+`;
+
+export const BackButton = styled(BackBtn)`
+  align-self: flex-start;
+  margin-left: -25px;
 `;
