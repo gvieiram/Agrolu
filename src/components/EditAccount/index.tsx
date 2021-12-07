@@ -1,7 +1,8 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable object-shorthand */
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, Text, TouchableOpacity } from 'react-native';
 
 import AppLoading from 'expo-app-loading';
 
@@ -17,9 +18,11 @@ import { useTheme } from 'styled-components';
 
 import { UpdateRequest } from '../../dtos/request/UserRequestDTO';
 import { CityResponse } from '../../dtos/response/CityResponseDTO';
+import { CultivationResponse } from '../../dtos/response/CultivationResponseDTO';
 import { StatesResponse } from '../../dtos/response/StateResponseDTO';
 import { UserResponse } from '../../dtos/response/UserResponseDTO';
 import CityApi from '../../services/api/CityApi';
+import CultivationApi from '../../services/api/CultivationApi';
 import StateApi from '../../services/api/StateApi';
 import UserApi from '../../services/api/UserApi';
 import viaCepApi from '../../services/viaCepApi';
@@ -38,6 +41,7 @@ export function EditAccount() {
   const [stateSelected, setStateSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const { control } = useForm();
+  const [cultivations, setCultivations] = useState<CultivationResponse[]>([]);
 
   const handleChange = (name, value) => {
     setUser(prevState => ({
@@ -59,6 +63,8 @@ export function EditAccount() {
       cultivation,
     } = user;
 
+    console.log('Ao salvar: ', user.cultivation);
+
     setLoading(true);
 
     UserApi.update({
@@ -70,7 +76,7 @@ export function EditAccount() {
       complement,
       number,
       receive_notification: receive_notification ? 1 : 0,
-      cultivation: cultivation ? 1 : 0,
+      cultivation,
     })
       .then(() => {
         Alert.alert('Aviso', 'Suas alterações foram salvas!');
@@ -103,6 +109,12 @@ export function EditAccount() {
     });
   }
 
+  async function getCultivations(data: UserResponse) {
+    CultivationApi.all().then(response => {
+      setCultivations(response.data.data);
+    });
+  }
+
   const handleCep = async (value: string) => {
     handleChange('cep', value);
 
@@ -123,6 +135,7 @@ export function EditAccount() {
           const { data } = response;
           setUser(data);
           getStates(data);
+          getCultivations(data);
         });
       }
 
@@ -288,7 +301,7 @@ export function EditAccount() {
       <Title>Notificações</Title>
       <Checkbox
         text="Quero receber notificações com dicas de colheita"
-        style={{ marginTop: 20 }}
+        style={{ marginVertical: 20 }}
         textStyle={{ color: theme.colors.green_dark_main, fontSize: 15 }}
         status={user.receive_notification ? 'checked' : 'unchecked'}
         onPress={() =>
@@ -297,11 +310,19 @@ export function EditAccount() {
       />
 
       {user.receive_notification ? (
-        <Checkbox
-          text="Quero receber notificações sobre cultivação!"
-          textStyle={{ color: theme.colors.green_dark_main, fontSize: 15 }}
-          status={user.cultivation ? 'checked' : 'unchecked'}
-          onPress={() => handleChange('cultivation', !user.cultivation)}
+        <InputPicker
+          labelDisable="Selecione a cultivação"
+          selectedValue={user.cultivation}
+          items={
+            cultivations
+              ? cultivations.map(item => {
+                  return { label: item.cultura, value: item.id };
+                })
+              : []
+          }
+          onValueChange={value => {
+            handleChange('cultivation', value);
+          }}
         />
       ) : null}
 
