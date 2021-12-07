@@ -110,7 +110,6 @@ export default function UserAnnouncements() {
               data={item}
               onPress={() => handleAnnouncementDetails(item)}
               onLongPress={e => e}
-              // delayLongPress={1} // Falta acertar e entender o funcionamento
               iconActive={item.turbo}
               visitorsActive
               cardSlider
