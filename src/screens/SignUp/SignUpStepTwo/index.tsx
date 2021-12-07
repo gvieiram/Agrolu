@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert, Keyboard, Platform } from 'react-native';
+import { Alert, Keyboard, Platform, ScrollView } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 import * as Yup from 'yup';
@@ -154,16 +154,16 @@ export default function SignUpStepTwo() {
   }
 
   return (
-    <ContainerKeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
-      enabled
-    >
+    // <ContainerKeyboardAvoidingView
+    //   behavior={Platform.OS === 'ios' ? 'padding' : 'position'}
+    //   enabled
+    // >
+    <ScrollView showsVerticalScrollIndicator={false}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
           <Header>
             <BackButton onPress={handleBack} />
           </Header>
-
           <Logo />
 
           <Title>Crie sua{'\n'}conta</Title>
@@ -223,6 +223,7 @@ export default function SignUpStepTwo() {
           <ButtonForm title="Próximo" onPress={handleSubmit(handleRegister)} />
         </Container>
       </TouchableWithoutFeedback>
-    </ContainerKeyboardAvoidingView>
+    </ScrollView>
+    // </ContainerKeyboardAvoidingView>
   );
 }

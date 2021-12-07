@@ -9,7 +9,6 @@ import { BackButton as BackBtn } from '../../../components/BackButton';
 import Button from '../../../components/Button';
 
 export const ContainerKeyboardAvoidingView = styled(KeyboardAvoidingView)`
-  flex: 1;
   background: ${({ theme }) => theme.colors.green_background};
 `;
 
@@ -20,7 +19,6 @@ export const Container = styled.View`
 
 export const Logo = styled(LogoSVG)`
   align-self: center;
-  margin-top: ${Platform.OS === 'ios' ? 0 : getStatusBarHeight() + 10};
   margin-bottom: ${RFValue(15)}px;
 `;
 
@@ -75,7 +73,7 @@ export const Text = styled.Text`
 `;
 
 export const ButtonForm = styled(Button)`
-  margin-top: 30px;
+  margin: 30px 0 50px 0;
 `;
 
 export const Error = styled.Text`
@@ -88,7 +86,7 @@ export const Error = styled.Text`
 
 export const Header = styled.View`
   width: 100%;
-  margin-top: ${getStatusBarHeight() + 15};
+  margin-top: ${getStatusBarHeight() + 30}px;
 `;
 
 export const BackButton = styled(BackBtn)`

@@ -5,6 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 
+import { BackButton as IconBack } from '../../components/BackButton';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 
 export const Container = styled.View`
@@ -23,6 +24,12 @@ export const Header = styled.View`
 export const HeaderContent = styled.View`
   justify-content: space-between;
   flex-direction: row;
+`;
+
+export const BackButton = styled(IconBack)`
+  position: absolute;
+  z-index: 1;
+  left: 3px;
 `;
 
 export const IconsContainer = styled.View`
