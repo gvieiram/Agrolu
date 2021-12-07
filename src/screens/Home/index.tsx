@@ -5,6 +5,7 @@ import {
   Platform,
   RefreshControl,
   ScrollView,
+  Text,
   TouchableOpacity,
 } from 'react-native';
 
@@ -43,6 +44,8 @@ import {
   Header,
   HeaderContent,
   IconsContainer,
+  HeaderContentFilter,
+  IconsContainerFilter,
   Like,
   Filter,
   AnnouncementList,
@@ -52,6 +55,9 @@ import {
   FiltersTitle,
   FilterText,
   BackButton,
+  FilterHeaderTitle,
+  ClearFilter,
+  FiltersSubtitle,
 } from './styles';
 
 const wait = (timeout: number) => {
@@ -322,8 +328,8 @@ export default function Home() {
   return (
     <Container>
       <Header>
-        <HeaderContent>
-          {!filtersScreen ? (
+        {!filtersScreen ? (
+          <HeaderContent>
             <SearchBar
               platform="ios"
               placeholder="Procurar"
@@ -331,31 +337,40 @@ export default function Home() {
               onChangeText={text => handleSearch(text)}
               value={params.name}
             />
-          ) : (
+
+            <IconsContainer>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.dispatch(
+                    CommonActions.navigate({
+                      name: 'AnnouncementSaved',
+                    }),
+                  )
+                }
+              >
+                <Like name="favorite-border" size={24} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setFiltersScreen(!filtersScreen)}
+              >
+                <Filter name="filter-outline" size={24} />
+              </TouchableOpacity>
+            </IconsContainer>
+          </HeaderContent>
+        ) : (
+          <HeaderContentFilter>
             <BackButton onPress={() => setFiltersScreen(false)} />
-          )}
-
-          <IconsContainer>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.dispatch(
-                  CommonActions.navigate({
-                    name: 'AnnouncementSaved',
-                  }),
-                )
-              }
-            >
-              <Like name="favorite-border" size={24} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => setFiltersScreen(!filtersScreen)}
-            >
-              <Filter name="filter-outline" size={24} />
-            </TouchableOpacity>
-          </IconsContainer>
-        </HeaderContent>
+            <IconsContainerFilter>
+              <Text />
+              <FilterHeaderTitle>Filtros</FilterHeaderTitle>
+              <TouchableOpacity activeOpacity={0.7} onPress={() => onRefresh()}>
+                <ClearFilter>Limpar</ClearFilter>
+              </TouchableOpacity>
+            </IconsContainerFilter>
+          </HeaderContentFilter>
+        )}
       </Header>
 
       {!filtersScreen ? (
@@ -456,6 +471,7 @@ export default function Home() {
             </FiltersButtons>
 
             <FiltersTitle>Valor</FiltersTitle>
+            <FiltersSubtitle>De:</FiltersSubtitle>
             <InputPrice
               type="money"
               value={params.priceFrom === undefined ? '0' : params.priceFrom}
@@ -469,7 +485,7 @@ export default function Home() {
               }
             />
 
-            <FiltersTitle>até</FiltersTitle>
+            <FiltersSubtitle>Até:</FiltersSubtitle>
             <InputPrice
               type="money"
               value={params.priceTo === undefined ? '0' : params.priceTo}

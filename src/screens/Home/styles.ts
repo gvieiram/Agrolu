@@ -37,6 +37,25 @@ export const IconsContainer = styled.View`
   align-items: center;
 `;
 
+export const HeaderContentFilter = styled.View`
+  flex-direction: row;
+  margin-bottom: 10px;
+`;
+
+export const IconsContainerFilter = styled.View`
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 50px;
+`;
+
+export const FilterHeaderTitle = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.green_main};
+`;
+
 export const Like = styled(MaterialIcons)`
   color: ${({ theme }) => theme.colors.green_main};
   margin-right: 10px;
@@ -75,6 +94,14 @@ export const FiltersTitle = styled.Text`
   margin-top: 15px;
 `;
 
+export const FiltersSubtitle = styled.Text`
+  font-size: ${RFValue(16)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
+  color: ${({ theme }) => theme.colors.cinza_apagado};
+  margin-top: 5px;
+  padding-left: 5px;
+`;
+
 export const FiltersButtons = styled.View`
   /* justify-content: space-between; */
   /* flex-wrap: wrap; */
@@ -97,5 +124,11 @@ export const FiltersButtons = styled.View`
 export const FilterText = styled.Text`
   font-size: ${RFValue(20)}px;
   font-family: ${({ theme }) => theme.fonts.medium_500};
+  color: ${({ theme }) => theme.colors.green_main};
+`;
+
+export const ClearFilter = styled.Text`
+  font-size: ${RFValue(17)}px;
+  font-family: ${({ theme }) => theme.fonts.regular_400};
   color: ${({ theme }) => theme.colors.green_main};
 `;
