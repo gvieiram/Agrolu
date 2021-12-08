@@ -87,7 +87,9 @@ export default function App() {
 
   useEffect(() => {
     SecureStore.deleteItemAsync('expoToken');
+    console.log('chegou aqui primeiro');
     SecureStore.getItemAsync('expoToken').then(token => {
+      console.log(token, signed);
       if (!token && signed) {
         console.log('chegou');
         registerForPushNotificationsAsync().then(newToken => {
