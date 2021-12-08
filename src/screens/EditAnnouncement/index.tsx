@@ -17,6 +17,7 @@ import AlertError from '../../components/AlertError';
 import ButtonGradient from '../../components/ButtonGradient';
 import { Checkbox } from '../../components/Checkbox';
 import { InputPicker } from '../../components/Inputs/InputPicker';
+import { Load } from '../../components/Load';
 import { AnnouncementResponse } from '../../dtos/response/AnnouncementResponseDTO';
 import {
   CategoryResponse,
@@ -58,6 +59,7 @@ export function EditAnnouncement() {
   const navigation = useNavigation();
   const route = useRoute();
   const { ad } = route.params as Params;
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedType, setSelectedType] = useState(null);
@@ -180,6 +182,8 @@ export function EditAnnouncement() {
   );
 
   const handleSubmit = async () => {
+    setIsLoading(true);
+
     AnnouncementApi.update(announcement.id, {
       title,
       description,
@@ -200,7 +204,8 @@ export function EditAnnouncement() {
           }),
         ),
       )
-      .catch(error => AlertError(error));
+      .catch(error => AlertError(error))
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
@@ -273,6 +278,21 @@ export function EditAnnouncement() {
             // Resize={resize}
           />
         </ContainerImageSelection>
+      );
+    }
+
+    if (isLoading) {
+      return (
+        <Container>
+          <Header>
+            <HeaderContent>
+              <BackButton />
+
+              <HeaderTitle>Editar Anúncio</HeaderTitle>
+            </HeaderContent>
+          </Header>
+          <Load />
+        </Container>
       );
     }
 

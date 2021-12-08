@@ -8,11 +8,20 @@ export default function AlertError(error) {
     return Alert.alert('Houve erro', response.data.error);
   }
 
-  let errors = '';
+  if (response.data.errors) {
+    let errors = '';
 
-  Object.keys(response.data.errors).map(
-    i => (errors += `${response.data.errors[i][0]}\n`),
-  );
+    Object.keys(response.data.errors).map(
+      i => (errors += `${response.data.errors[i][0]}\n`),
+    );
 
-  return Alert.alert('Houve erros nos seguintes campos', errors);
+    return Alert.alert('Houve erros nos seguintes campos', errors);
+  }
+
+  if (response.data.message) {
+    return Alert.alert(
+      'Oops',
+      'Houve algum erro interno.\nTente novamento mais tarde',
+    );
+  }
 }

@@ -26,6 +26,7 @@ import AlertError from '../../components/AlertError';
 import ButtonGradient from '../../components/ButtonGradient';
 import { Checkbox } from '../../components/Checkbox';
 import { InputPicker } from '../../components/Inputs/InputPicker';
+import { Load } from '../../components/Load';
 import {
   CategoryResponse,
   Type,
@@ -178,6 +179,7 @@ export function AddAnnouncement() {
   );
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
@@ -193,11 +195,14 @@ export function AddAnnouncement() {
       const type = match ? `image/${match[1]}` : `image`;
       formData.append('images[]', { uri: localUri, name: filename, type });
     });
-    formData.append('inspections[]', {
-      uri: inspectionSelected.uri,
-      name: inspectionSelected.name,
-      type: 'application/pdf',
-    });
+
+    if (inspectionSelected != null) {
+      formData.append('inspections[]', {
+        uri: inspectionSelected.uri,
+        name: inspectionSelected.name,
+        type: 'application/pdf',
+      });
+    }
 
     AnnouncementApi.store(formData)
       .then(response =>
@@ -210,7 +215,8 @@ export function AddAnnouncement() {
           }),
         ),
       )
-      .catch(error => AlertError(error));
+      .catch(error => console.log(error.response))
+      .finally(() => setIsLoading(false));
   };
 
   useFocusEffect(
@@ -251,24 +257,39 @@ export function AddAnnouncement() {
         });
       }
 
+      function getCategories() {
+        CategoryApi.all()
+          .then(response => {
+            setCategories(response.data);
+          })
+          .catch(error => {
+            if (error.response) {
+              alert(error.response.data.message);
+            }
+          });
+      }
+
+      getCategories();
       isVerified();
+
+      return () => {
+        setSelectedCategory(null);
+        setSelectedType(null);
+        setCategories([]);
+        setImages([]);
+        setTitle('');
+        setDescription('');
+        setType(null);
+        setNeedTransport(false);
+        setDisplayPhone(false);
+        setHasOperator(false);
+        setPrice('0');
+        setUriInspection(null);
+        setInspectionSelected(null);
+        setHandleSelectPhotosIsOpen(false);
+      };
     }, []),
   );
-
-  useEffect(() => {
-    function getCategories() {
-      CategoryApi.all()
-        .then(response => {
-          setCategories(response.data);
-        })
-        .catch(error => {
-          if (error.response) {
-            alert(error.response.data.message);
-          }
-        });
-    }
-    getCategories();
-  }, []);
 
   if (handleSelectPhotosIsOpen) {
     return (
@@ -298,7 +319,18 @@ export function AddAnnouncement() {
   }
 
   if (isLoading) {
-    return <AppLoading />;
+    return (
+      <Container>
+        <Header>
+          <HeaderContent>
+            <BackButton />
+
+            <HeaderTitle>Inserir Anúncio</HeaderTitle>
+          </HeaderContent>
+        </Header>
+        <Load />
+      </Container>
+    );
   }
 
   return (
