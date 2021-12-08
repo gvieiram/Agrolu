@@ -21,6 +21,7 @@ import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
 import { AppProvider } from './src/hooks';
+import { useAuth } from './src/hooks/auth';
 import { Routes } from './src/routes';
 import UserApi from './src/services/api/UserApi';
 
@@ -44,6 +45,7 @@ export default function App() {
   const notificationListener = useRef();
   const [notification, setNotification] = useState(false);
   const responseListener = useRef();
+  const { signed } = useAuth();
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -82,8 +84,10 @@ export default function App() {
   }
 
   useEffect(() => {
+    SecureStore.deleteItemAsync('expoToken');
     SecureStore.getItemAsync('expoToken').then(token => {
-      if (!token) {
+      console.log(!token);
+      if (!token && signed) {
         registerForPushNotificationsAsync().then(newToken => {
           if (newToken) {
             UserApi.storeToken(newToken).then(() =>
