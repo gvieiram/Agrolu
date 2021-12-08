@@ -86,13 +86,14 @@ export default function App() {
   useEffect(() => {
     SecureStore.deleteItemAsync('expoToken');
     SecureStore.getItemAsync('expoToken').then(token => {
-      console.log(!token);
       if (!token && signed) {
         registerForPushNotificationsAsync().then(newToken => {
+          console.log(newToken);
           if (newToken) {
-            UserApi.storeToken(newToken).then(() =>
-              SecureStore.setItemAsync('expoToken', newToken),
-            );
+            UserApi.storeToken(newToken).then(response => {
+              SecureStore.setItemAsync('expoToken', newToken);
+              console.log(response.data);
+            });
           }
         });
       }
