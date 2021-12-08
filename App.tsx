@@ -41,7 +41,6 @@ export default function App() {
     Archivo_600SemiBold,
     Marlin_Soft_Basic_Regular: require('./src/assets/fonts/MarlinSoftBasic-Regular.otf'),
   });
-  const [initialMount, setInitialMount] = useState(true);
   const notificationListener = useRef();
   const [notification, setNotification] = useState(false);
   const responseListener = useRef();
@@ -84,7 +83,7 @@ export default function App() {
 
   useEffect(() => {
     SecureStore.getItemAsync('expoToken').then(token => {
-      if (token) {
+      if (!token) {
         registerForPushNotificationsAsync().then(newToken => {
           if (newToken) {
             UserApi.storeToken(newToken).then(() =>
