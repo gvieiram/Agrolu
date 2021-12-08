@@ -86,6 +86,12 @@ function AuthProvider({ children }: AuthProviderProps) {
             api.defaults.headers.authorization = `Bearer ${auth.token}`;
 
             setData({ token: auth.token, user, signed: true });
+
+            expoPushTokenPromise.then(token => {
+              if (token) {
+                UserApi.storeToken(token);
+              }
+            });
           })
           .catch(error => {
             console.log('ERROR! ', error.response);
@@ -94,12 +100,6 @@ function AuthProvider({ children }: AuthProviderProps) {
               setData({ token: null, user: null, signed: false });
             }
           });
-      }
-    });
-
-    expoPushTokenPromise.then(token => {
-      if (token) {
-        UserApi.storeToken(token);
       }
     });
 
