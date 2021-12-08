@@ -98,7 +98,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     });
 
     expoPushTokenPromise.then(token => {
-      if (!token) {
+      if (token) {
         UserApi.storeToken(token);
       }
     });
