@@ -178,10 +178,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    SecureStore.deleteItemAsync('expoPushToken');
     registerForPushNotificationsAsync().then(newToken => {
       if (newToken) {
-        SecureStore.setItemAsync('expoPushToken', newToken);
         UserApi.storeToken(newToken);
       }
     });

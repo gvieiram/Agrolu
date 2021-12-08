@@ -150,7 +150,10 @@ export default function SignUpStepTwo() {
           }),
         );
       })
-      .catch(error => AlertError(error.data));
+      .catch(error => {
+        navigation.dispatch(CommonActions.navigate('SignUpStepOne'));
+        AlertError(error);
+      });
   }
 
   return (
