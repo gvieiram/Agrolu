@@ -17,6 +17,7 @@ import {
   Roboto_500Medium,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
+import axiosRetry from 'axios-retry';
 import { ThemeProvider } from 'styled-components';
 
 import theme from './src/global/styles/theme';
@@ -44,6 +45,7 @@ export default function App() {
   });
   const notificationListener = useRef();
   const [notification, setNotification] = useState(false);
+  const [endFor, setEndFor] = useState(false);
   const responseListener = useRef();
 
   async function registerForPushNotificationsAsync() {
@@ -66,9 +68,9 @@ export default function App() {
       }
 
       token = (await Notifications.getExpoPushTokenAsync()).data;
+    } else {
+      console.log('Must use physical device for Push Notifications');
     }
-
-    console.log('Must use physical device for Push Notifications');
 
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
@@ -85,7 +87,7 @@ export default function App() {
   useEffect(() => {
     registerForPushNotificationsAsync().then(newToken => {
       if (newToken) {
-        UserApi.storeToken(newToken);
+        SecureStore.setItemAsync('expoPushToken', newToken);
       }
     });
 

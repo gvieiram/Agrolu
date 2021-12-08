@@ -6,6 +6,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 
 import AlertError from '../components/AlertError';
 import api from '../services/api';
+import UserApi from '../services/api/UserApi';
 
 interface User {
   id: string;
@@ -66,6 +67,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [data, setData] = useState<AuthState>({} as AuthState);
   const [load, setLoad] = useState(false);
   const authPromise = getSecureToken('auth');
+  const expoPushTokenPromise = SecureStore.getItemAsync('expoPushToken');
 
   if (!load) {
     authPromise.then(auth => {
@@ -92,6 +94,12 @@ function AuthProvider({ children }: AuthProviderProps) {
               setData({ token: null, user: null, signed: false });
             }
           });
+      }
+    });
+
+    expoPushTokenPromise.then(token => {
+      if (!token) {
+        UserApi.storeToken(token);
       }
     });
 
