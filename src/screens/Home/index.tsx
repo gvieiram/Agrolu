@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Platform,
   RefreshControl,
@@ -8,11 +8,6 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-
-import Constants from 'expo-constants';
-import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
-import * as SecureStore from 'expo-secure-store';
 
 import {
   useFocusEffect,
@@ -37,7 +32,6 @@ import { StatesResponse } from '../../dtos/response/StateResponseDTO';
 import AnnouncementApi from '../../services/api/AnnouncementApi';
 import CategoryApi from '../../services/api/CategoryApi';
 import StateApi from '../../services/api/StateApi';
-import UserApi from '../../services/api/UserApi';
 import { InputPrice } from '../AddAnnouncement/styles';
 import {
   Container,
@@ -66,14 +60,6 @@ const wait = (timeout: number) => {
   });
 };
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
 export default function Home() {
   const navigation = useNavigation();
   const theme = useTheme();
@@ -91,10 +77,6 @@ export default function Home() {
   const [types, setTypes] = useState<Type[]>([]);
   const [states, setStates] = useState<StatesResponse[]>([]);
   const [cities, setCities] = useState<CityResponse[]>([]);
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const notificationListener = useRef();
-  const [notification, setNotification] = useState(false);
-  const responseListener = useRef();
 
   const handleChangeParams = (name, value) => {
     setParams(prevState => ({
@@ -140,66 +122,6 @@ export default function Home() {
       handleChangeParams('page', params.page + 1);
     }
   };
-
-  async function registerForPushNotificationsAsync() {
-    let token;
-
-    if (Constants.isDevice) {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-
-      let finalStatus = existingStatus;
-
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-
-      if (finalStatus !== 'granted') {
-        console.log('Failed to get push token for push notification!');
-        return;
-      }
-
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-    }
-
-    console.log('Must use physical device for Push Notifications');
-
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-
-    return token;
-  }
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(newToken => {
-      if (newToken) {
-        UserApi.storeToken(newToken);
-      }
-    });
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener(notifications => {
-        setNotification(notifications);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener(response => {
-        console.log(response);
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current,
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
 
   useEffect(() => {
     async function getCategories() {
