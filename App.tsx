@@ -45,7 +45,6 @@ export default function App() {
   const notificationListener = useRef();
   const [notification, setNotification] = useState(false);
   const responseListener = useRef();
-  const { signed } = useAuth();
 
   async function registerForPushNotificationsAsync() {
     let token;
@@ -80,24 +79,16 @@ export default function App() {
       });
     }
 
-    console.log('cheogouuuu', token);
-
     return token;
   }
 
   useEffect(() => {
-    SecureStore.deleteItemAsync('expoToken');
-    console.log('chegou aqui primeiro');
     SecureStore.getItemAsync('expoToken').then(token => {
-      console.log(token, signed);
-      if (!token && signed) {
-        console.log('chegou');
+      if (!token) {
         registerForPushNotificationsAsync().then(newToken => {
-          console.log(newToken);
           if (newToken) {
-            UserApi.storeToken(newToken).then(response => {
+            UserApi.storeToken(newToken).then(() => {
               SecureStore.setItemAsync('expoToken', newToken);
-              console.log(response.data);
             });
           }
         });
