@@ -83,15 +83,9 @@ export default function App() {
   }
 
   useEffect(() => {
-    SecureStore.getItemAsync('expoToken').then(token => {
-      if (!token) {
-        registerForPushNotificationsAsync().then(newToken => {
-          if (newToken) {
-            UserApi.storeToken(newToken).then(() => {
-              SecureStore.setItemAsync('expoToken', newToken);
-            });
-          }
-        });
+    registerForPushNotificationsAsync().then(newToken => {
+      if (newToken) {
+        UserApi.storeToken(newToken);
       }
     });
 
