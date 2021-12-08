@@ -90,7 +90,7 @@ export default function SignUpStepTwo() {
       .then(() => {
         navigation.dispatch(
           CommonActions.navigate('Confirmation', {
-            title: `Senha\nalteada!`,
+            title: `Senha\nalterada!`,
             message: `Agora você já pode realizar o login!\nEstá esperando o que?`,
             nextScreenRoute: 'SignIn',
             buttonTitle: 'Vamos lá!',
