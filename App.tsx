@@ -80,6 +80,8 @@ export default function App() {
       });
     }
 
+    console.log('cheogouuuu', token);
+
     return token;
   }
 
@@ -87,6 +89,7 @@ export default function App() {
     SecureStore.deleteItemAsync('expoToken');
     SecureStore.getItemAsync('expoToken').then(token => {
       if (!token && signed) {
+        console.log('chegou');
         registerForPushNotificationsAsync().then(newToken => {
           console.log(newToken);
           if (newToken) {
