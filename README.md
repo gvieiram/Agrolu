@@ -1,10 +1,11 @@
-<div style="text-align: center;">
+<div style="text-align: center" align="center">
   <h1 style="line-height: 0">
     Projeto Mobile Agrolu
   </h1>
   <h3 style="line-height: 0">
     Aluguel de Máquinas e Implementos Agrícolas
   </h3>
+  <img width="400px" title="Agrolu" src="docs/welcome.png"/>
 </div>
 
 ***
